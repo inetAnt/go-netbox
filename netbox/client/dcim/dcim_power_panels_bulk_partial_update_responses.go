@@ -27,7 +27,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netbox-community/go-netbox/netbox/models"
+	"github.com/digitalocean/go-netbox/netbox/models"
 )
 
 // DcimPowerPanelsBulkPartialUpdateReader is a Reader for the DcimPowerPanelsBulkPartialUpdate structure.
