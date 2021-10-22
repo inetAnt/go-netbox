@@ -32,7 +32,7 @@ import (
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
-	"github.com/netbox-community/go-netbox/netbox/models"
+	"github.com/digitalocean/go-netbox/netbox/models"
 )
 
 // DcimConsolePortTemplatesListReader is a Reader for the DcimConsolePortTemplatesList structure.

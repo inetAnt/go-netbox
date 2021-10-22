@@ -19,9 +19,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/digitalocean/go-netbox/netbox/client"
 	runtimeclient "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-	"github.com/netbox-community/go-netbox/netbox/client"
 )
 
 func main() {
