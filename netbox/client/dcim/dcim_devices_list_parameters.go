@@ -138,6 +138,12 @@ type DcimDevicesListParams struct {
 	// DeviceTypeIDn.
 	DeviceTypeIDn *string
 
+	/* Exclude.
+
+	   Optional parameter to exclude a field from the results.
+	*/
+	Exclude *string
+
 	// Face.
 	Face *string
 
@@ -744,6 +750,17 @@ func (o *DcimDevicesListParams) WithDeviceTypeIDn(deviceTypeIDn *string) *DcimDe
 // SetDeviceTypeIDn adds the deviceTypeIdN to the dcim devices list params
 func (o *DcimDevicesListParams) SetDeviceTypeIDn(deviceTypeIDn *string) {
 	o.DeviceTypeIDn = deviceTypeIDn
+}
+
+// WithExclude adds the exclude to the dcim devices list params
+func (o *DcimDevicesListParams) WithExclude(exclude *string) *DcimDevicesListParams {
+	o.SetExclude(exclude)
+	return o
+}
+
+// SetExclude adds the exclude to the dcim devices list params
+func (o *DcimDevicesListParams) SetExclude(exclude *string) {
+	o.Exclude = exclude
 }
 
 // WithFace adds the face to the dcim devices list params
@@ -2272,6 +2289,23 @@ func (o *DcimDevicesListParams) WriteToRequest(r runtime.ClientRequest, reg strf
 		if qDeviceTypeIDn != "" {
 
 			if err := r.SetQueryParam("device_type_id__n", qDeviceTypeIDn); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.Exclude != nil {
+
+		// query param exclude
+		var qrExclude string
+
+		if o.Exclude != nil {
+			qrExclude = *o.Exclude
+		}
+		qExclude := qrExclude
+		if qExclude != "" {
+
+			if err := r.SetQueryParam("exclude", qExclude); err != nil {
 				return err
 			}
 		}
