@@ -32,7 +32,7 @@ import (
 
 	strfmt "github.com/go-openapi/strfmt"
 
-	models "github.com/netbox-community/go-netbox/netbox/models"
+	models "github.com/inetAnt/go-netbox/netbox/models"
 )
 
 // NewDcimDeviceTypesUpdateParams creates a new DcimDeviceTypesUpdateParams object
