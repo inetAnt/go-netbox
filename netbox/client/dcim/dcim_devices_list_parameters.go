@@ -95,6 +95,8 @@ type DcimDevicesListParams struct {
 	DeviceBays *string
 	/*DeviceTypeID*/
 	DeviceTypeID *string
+	/*Exclude*/
+	Exclude *string
 	/*Face*/
 	Face *string
 	/*HasPrimaryIP*/
@@ -326,6 +328,17 @@ func (o *DcimDevicesListParams) WithDeviceTypeID(deviceTypeID *string) *DcimDevi
 // SetDeviceTypeID adds the deviceTypeId to the dcim devices list params
 func (o *DcimDevicesListParams) SetDeviceTypeID(deviceTypeID *string) {
 	o.DeviceTypeID = deviceTypeID
+}
+
+// WithExclude adds the exclude to the dcim devices list params
+func (o *DcimDevicesListParams) WithExclude(exclude *string) *DcimDevicesListParams {
+	o.SetExclude(exclude)
+	return o
+}
+
+// SetExclude adds the exclude to the dcim devices list params
+func (o *DcimDevicesListParams) SetExclude(exclude *string) {
+	o.Exclude = exclude
 }
 
 // WithFace adds the face to the dcim devices list params
@@ -951,6 +964,23 @@ func (o *DcimDevicesListParams) WriteToRequest(r runtime.ClientRequest, reg strf
 			}
 		}
 
+	}
+
+	if o.Exclude != nil {
+
+		// query param exclude
+		var qrExclude string
+
+		if o.Exclude != nil {
+			qrExclude = *o.Exclude
+		}
+		qExclude := qrExclude
+		if qExclude != "" {
+
+			if err := r.SetQueryParam("exclude", qExclude); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.Face != nil {
