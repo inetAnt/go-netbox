@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // DcimRearPortTemplatesReadReader is a Reader for the DcimRearPortTemplatesRead structure.
@@ -45,9 +44,15 @@ func (o *DcimRearPortTemplatesReadReader) ReadResponse(response runtime.ClientRe
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewDcimRearPortTemplatesReadDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewDcimRearPortTemplatesReadOK() *DcimRearPortTemplatesReadOK {
 	return &DcimRearPortTemplatesReadOK{}
 }
 
-/*DcimRearPortTemplatesReadOK handles this case with default header values.
+/*
+DcimRearPortTemplatesReadOK describes a response with status code 200, with default header values.
 
 DcimRearPortTemplatesReadOK dcim rear port templates read o k
 */
@@ -64,7 +70,41 @@ type DcimRearPortTemplatesReadOK struct {
 	Payload *models.RearPortTemplate
 }
 
+// IsSuccess returns true when this dcim rear port templates read o k response has a 2xx status code
+func (o *DcimRearPortTemplatesReadOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this dcim rear port templates read o k response has a 3xx status code
+func (o *DcimRearPortTemplatesReadOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this dcim rear port templates read o k response has a 4xx status code
+func (o *DcimRearPortTemplatesReadOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this dcim rear port templates read o k response has a 5xx status code
+func (o *DcimRearPortTemplatesReadOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this dcim rear port templates read o k response a status code equal to that given
+func (o *DcimRearPortTemplatesReadOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the dcim rear port templates read o k response
+func (o *DcimRearPortTemplatesReadOK) Code() int {
+	return 200
+}
+
 func (o *DcimRearPortTemplatesReadOK) Error() string {
+	return fmt.Sprintf("[GET /dcim/rear-port-templates/{id}/][%d] dcimRearPortTemplatesReadOK  %+v", 200, o.Payload)
+}
+
+func (o *DcimRearPortTemplatesReadOK) String() string {
 	return fmt.Sprintf("[GET /dcim/rear-port-templates/{id}/][%d] dcimRearPortTemplatesReadOK  %+v", 200, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *DcimRearPortTemplatesReadOK) readResponse(response runtime.ClientRespon
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDcimRearPortTemplatesReadDefault creates a DcimRearPortTemplatesReadDefault with default headers values
+func NewDcimRearPortTemplatesReadDefault(code int) *DcimRearPortTemplatesReadDefault {
+	return &DcimRearPortTemplatesReadDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+DcimRearPortTemplatesReadDefault describes a response with status code -1, with default header values.
+
+DcimRearPortTemplatesReadDefault dcim rear port templates read default
+*/
+type DcimRearPortTemplatesReadDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this dcim rear port templates read default response has a 2xx status code
+func (o *DcimRearPortTemplatesReadDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this dcim rear port templates read default response has a 3xx status code
+func (o *DcimRearPortTemplatesReadDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this dcim rear port templates read default response has a 4xx status code
+func (o *DcimRearPortTemplatesReadDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this dcim rear port templates read default response has a 5xx status code
+func (o *DcimRearPortTemplatesReadDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this dcim rear port templates read default response a status code equal to that given
+func (o *DcimRearPortTemplatesReadDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the dcim rear port templates read default response
+func (o *DcimRearPortTemplatesReadDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *DcimRearPortTemplatesReadDefault) Error() string {
+	return fmt.Sprintf("[GET /dcim/rear-port-templates/{id}/][%d] dcim_rear-port-templates_read default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimRearPortTemplatesReadDefault) String() string {
+	return fmt.Sprintf("[GET /dcim/rear-port-templates/{id}/][%d] dcim_rear-port-templates_read default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimRearPortTemplatesReadDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *DcimRearPortTemplatesReadDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

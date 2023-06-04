@@ -22,10 +22,10 @@ package ipam
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/go-openapi/runtime"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
 // IpamAggregatesDeleteReader is a Reader for the IpamAggregatesDelete structure.
@@ -42,9 +42,15 @@ func (o *IpamAggregatesDeleteReader) ReadResponse(response runtime.ClientRespons
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewIpamAggregatesDeleteDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -53,18 +59,123 @@ func NewIpamAggregatesDeleteNoContent() *IpamAggregatesDeleteNoContent {
 	return &IpamAggregatesDeleteNoContent{}
 }
 
-/*IpamAggregatesDeleteNoContent handles this case with default header values.
+/*
+IpamAggregatesDeleteNoContent describes a response with status code 204, with default header values.
 
 IpamAggregatesDeleteNoContent ipam aggregates delete no content
 */
 type IpamAggregatesDeleteNoContent struct {
 }
 
+// IsSuccess returns true when this ipam aggregates delete no content response has a 2xx status code
+func (o *IpamAggregatesDeleteNoContent) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this ipam aggregates delete no content response has a 3xx status code
+func (o *IpamAggregatesDeleteNoContent) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this ipam aggregates delete no content response has a 4xx status code
+func (o *IpamAggregatesDeleteNoContent) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this ipam aggregates delete no content response has a 5xx status code
+func (o *IpamAggregatesDeleteNoContent) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this ipam aggregates delete no content response a status code equal to that given
+func (o *IpamAggregatesDeleteNoContent) IsCode(code int) bool {
+	return code == 204
+}
+
+// Code gets the status code for the ipam aggregates delete no content response
+func (o *IpamAggregatesDeleteNoContent) Code() int {
+	return 204
+}
+
 func (o *IpamAggregatesDeleteNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /ipam/aggregates/{id}/][%d] ipamAggregatesDeleteNoContent ", 204)
 }
 
+func (o *IpamAggregatesDeleteNoContent) String() string {
+	return fmt.Sprintf("[DELETE /ipam/aggregates/{id}/][%d] ipamAggregatesDeleteNoContent ", 204)
+}
+
 func (o *IpamAggregatesDeleteNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewIpamAggregatesDeleteDefault creates a IpamAggregatesDeleteDefault with default headers values
+func NewIpamAggregatesDeleteDefault(code int) *IpamAggregatesDeleteDefault {
+	return &IpamAggregatesDeleteDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+IpamAggregatesDeleteDefault describes a response with status code -1, with default header values.
+
+IpamAggregatesDeleteDefault ipam aggregates delete default
+*/
+type IpamAggregatesDeleteDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this ipam aggregates delete default response has a 2xx status code
+func (o *IpamAggregatesDeleteDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this ipam aggregates delete default response has a 3xx status code
+func (o *IpamAggregatesDeleteDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this ipam aggregates delete default response has a 4xx status code
+func (o *IpamAggregatesDeleteDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this ipam aggregates delete default response has a 5xx status code
+func (o *IpamAggregatesDeleteDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this ipam aggregates delete default response a status code equal to that given
+func (o *IpamAggregatesDeleteDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the ipam aggregates delete default response
+func (o *IpamAggregatesDeleteDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *IpamAggregatesDeleteDefault) Error() string {
+	return fmt.Sprintf("[DELETE /ipam/aggregates/{id}/][%d] ipam_aggregates_delete default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *IpamAggregatesDeleteDefault) String() string {
+	return fmt.Sprintf("[DELETE /ipam/aggregates/{id}/][%d] ipam_aggregates_delete default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *IpamAggregatesDeleteDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *IpamAggregatesDeleteDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
 
 	return nil
 }

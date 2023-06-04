@@ -21,18 +21,18 @@ package ipam
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // IpamVlanGroupsListReader is a Reader for the IpamVlanGroupsList structure.
@@ -49,9 +49,15 @@ func (o *IpamVlanGroupsListReader) ReadResponse(response runtime.ClientResponse,
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewIpamVlanGroupsListDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -60,7 +66,8 @@ func NewIpamVlanGroupsListOK() *IpamVlanGroupsListOK {
 	return &IpamVlanGroupsListOK{}
 }
 
-/*IpamVlanGroupsListOK handles this case with default header values.
+/*
+IpamVlanGroupsListOK describes a response with status code 200, with default header values.
 
 IpamVlanGroupsListOK ipam vlan groups list o k
 */
@@ -68,7 +75,41 @@ type IpamVlanGroupsListOK struct {
 	Payload *IpamVlanGroupsListOKBody
 }
 
+// IsSuccess returns true when this ipam vlan groups list o k response has a 2xx status code
+func (o *IpamVlanGroupsListOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this ipam vlan groups list o k response has a 3xx status code
+func (o *IpamVlanGroupsListOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this ipam vlan groups list o k response has a 4xx status code
+func (o *IpamVlanGroupsListOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this ipam vlan groups list o k response has a 5xx status code
+func (o *IpamVlanGroupsListOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this ipam vlan groups list o k response a status code equal to that given
+func (o *IpamVlanGroupsListOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the ipam vlan groups list o k response
+func (o *IpamVlanGroupsListOK) Code() int {
+	return 200
+}
+
 func (o *IpamVlanGroupsListOK) Error() string {
+	return fmt.Sprintf("[GET /ipam/vlan-groups/][%d] ipamVlanGroupsListOK  %+v", 200, o.Payload)
+}
+
+func (o *IpamVlanGroupsListOK) String() string {
 	return fmt.Sprintf("[GET /ipam/vlan-groups/][%d] ipamVlanGroupsListOK  %+v", 200, o.Payload)
 }
 
@@ -88,7 +129,78 @@ func (o *IpamVlanGroupsListOK) readResponse(response runtime.ClientResponse, con
 	return nil
 }
 
-/*IpamVlanGroupsListOKBody ipam vlan groups list o k body
+// NewIpamVlanGroupsListDefault creates a IpamVlanGroupsListDefault with default headers values
+func NewIpamVlanGroupsListDefault(code int) *IpamVlanGroupsListDefault {
+	return &IpamVlanGroupsListDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+IpamVlanGroupsListDefault describes a response with status code -1, with default header values.
+
+IpamVlanGroupsListDefault ipam vlan groups list default
+*/
+type IpamVlanGroupsListDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this ipam vlan groups list default response has a 2xx status code
+func (o *IpamVlanGroupsListDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this ipam vlan groups list default response has a 3xx status code
+func (o *IpamVlanGroupsListDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this ipam vlan groups list default response has a 4xx status code
+func (o *IpamVlanGroupsListDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this ipam vlan groups list default response has a 5xx status code
+func (o *IpamVlanGroupsListDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this ipam vlan groups list default response a status code equal to that given
+func (o *IpamVlanGroupsListDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the ipam vlan groups list default response
+func (o *IpamVlanGroupsListDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *IpamVlanGroupsListDefault) Error() string {
+	return fmt.Sprintf("[GET /ipam/vlan-groups/][%d] ipam_vlan-groups_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *IpamVlanGroupsListDefault) String() string {
+	return fmt.Sprintf("[GET /ipam/vlan-groups/][%d] ipam_vlan-groups_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *IpamVlanGroupsListDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *IpamVlanGroupsListDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+/*
+IpamVlanGroupsListOKBody ipam vlan groups list o k body
 swagger:model IpamVlanGroupsListOKBody
 */
 type IpamVlanGroupsListOKBody struct {
@@ -146,7 +258,6 @@ func (o *IpamVlanGroupsListOKBody) validateCount(formats strfmt.Registry) error 
 }
 
 func (o *IpamVlanGroupsListOKBody) validateNext(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Next) { // not required
 		return nil
 	}
@@ -159,7 +270,6 @@ func (o *IpamVlanGroupsListOKBody) validateNext(formats strfmt.Registry) error {
 }
 
 func (o *IpamVlanGroupsListOKBody) validatePrevious(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Previous) { // not required
 		return nil
 	}
@@ -186,6 +296,42 @@ func (o *IpamVlanGroupsListOKBody) validateResults(formats strfmt.Registry) erro
 			if err := o.Results[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("ipamVlanGroupsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("ipamVlanGroupsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this ipam vlan groups list o k body based on the context it is used
+func (o *IpamVlanGroupsListOKBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := o.contextValidateResults(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (o *IpamVlanGroupsListOKBody) contextValidateResults(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(o.Results); i++ {
+
+		if o.Results[i] != nil {
+			if err := o.Results[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("ipamVlanGroupsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("ipamVlanGroupsListOK" + "." + "results" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

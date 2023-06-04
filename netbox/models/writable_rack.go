@@ -21,17 +21,18 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // WritableRack writable rack
+//
 // swagger:model WritableRack
 type WritableRack struct {
 
@@ -61,18 +62,15 @@ type WritableRack struct {
 	// Read Only: true
 	DeviceCount int64 `json:"device_count,omitempty"`
 
-	// Display name
+	// Display
 	// Read Only: true
-	DisplayName string `json:"display_name,omitempty"`
+	Display string `json:"display,omitempty"`
 
 	// Facility ID
 	// Max Length: 50
 	FacilityID *string `json:"facility_id,omitempty"`
 
-	// Group
-	Group *int64 `json:"group,omitempty"`
-
-	// ID
+	// Id
 	// Read Only: true
 	ID int64 `json:"id,omitempty"`
 
@@ -81,13 +79,19 @@ type WritableRack struct {
 	// Format: date-time
 	LastUpdated strfmt.DateTime `json:"last_updated,omitempty"`
 
+	// Location
+	// Required: true
+	Location *int64 `json:"location"`
+
 	// Name
 	// Required: true
-	// Max Length: 50
+	// Max Length: 100
 	// Min Length: 1
 	Name *string `json:"name"`
 
 	// Outer depth
+	//
+	// Outer dimension of rack (depth)
 	// Maximum: 32767
 	// Minimum: 0
 	OuterDepth *int64 `json:"outer_depth,omitempty"`
@@ -97,6 +101,8 @@ type WritableRack struct {
 	OuterUnit string `json:"outer_unit,omitempty"`
 
 	// Outer width
+	//
+	// Outer dimension of rack (width)
 	// Maximum: 32767
 	// Minimum: 0
 	OuterWidth *int64 `json:"outer_width,omitempty"`
@@ -106,6 +112,8 @@ type WritableRack struct {
 	PowerfeedCount int64 `json:"powerfeed_count,omitempty"`
 
 	// Role
+	//
+	// Functional role
 	Role *int64 `json:"role,omitempty"`
 
 	// Serial number
@@ -121,7 +129,7 @@ type WritableRack struct {
 	Status string `json:"status,omitempty"`
 
 	// tags
-	Tags []string `json:"tags"`
+	Tags []*NestedTag `json:"tags,omitempty"`
 
 	// Tenant
 	Tenant *int64 `json:"tenant,omitempty"`
@@ -131,14 +139,21 @@ type WritableRack struct {
 	Type string `json:"type,omitempty"`
 
 	// Height (U)
+	//
+	// Height in rack units
 	// Maximum: 100
 	// Minimum: 1
 	UHeight int64 `json:"u_height,omitempty"`
 
+	// Url
+	// Read Only: true
+	// Format: uri
+	URL strfmt.URI `json:"url,omitempty"`
+
 	// Width
 	//
 	// Rail-to-rail width
-	// Enum: [19 23]
+	// Enum: [10 19 21 23]
 	Width int64 `json:"width,omitempty"`
 }
 
@@ -159,6 +174,10 @@ func (m *WritableRack) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateLastUpdated(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateLocation(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -202,6 +221,10 @@ func (m *WritableRack) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateURL(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateWidth(formats); err != nil {
 		res = append(res, err)
 	}
@@ -213,12 +236,11 @@ func (m *WritableRack) Validate(formats strfmt.Registry) error {
 }
 
 func (m *WritableRack) validateAssetTag(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AssetTag) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("asset_tag", "body", string(*m.AssetTag), 50); err != nil {
+	if err := validate.MaxLength("asset_tag", "body", *m.AssetTag, 50); err != nil {
 		return err
 	}
 
@@ -226,7 +248,6 @@ func (m *WritableRack) validateAssetTag(formats strfmt.Registry) error {
 }
 
 func (m *WritableRack) validateCreated(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Created) { // not required
 		return nil
 	}
@@ -239,12 +260,11 @@ func (m *WritableRack) validateCreated(formats strfmt.Registry) error {
 }
 
 func (m *WritableRack) validateFacilityID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.FacilityID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("facility_id", "body", string(*m.FacilityID), 50); err != nil {
+	if err := validate.MaxLength("facility_id", "body", *m.FacilityID, 50); err != nil {
 		return err
 	}
 
@@ -252,12 +272,20 @@ func (m *WritableRack) validateFacilityID(formats strfmt.Registry) error {
 }
 
 func (m *WritableRack) validateLastUpdated(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LastUpdated) { // not required
 		return nil
 	}
 
 	if err := validate.FormatOf("last_updated", "body", "date-time", m.LastUpdated.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WritableRack) validateLocation(formats strfmt.Registry) error {
+
+	if err := validate.Required("location", "body", m.Location); err != nil {
 		return err
 	}
 
@@ -270,11 +298,11 @@ func (m *WritableRack) validateName(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("name", "body", string(*m.Name), 1); err != nil {
+	if err := validate.MinLength("name", "body", *m.Name, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("name", "body", string(*m.Name), 50); err != nil {
+	if err := validate.MaxLength("name", "body", *m.Name, 100); err != nil {
 		return err
 	}
 
@@ -282,16 +310,15 @@ func (m *WritableRack) validateName(formats strfmt.Registry) error {
 }
 
 func (m *WritableRack) validateOuterDepth(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.OuterDepth) { // not required
 		return nil
 	}
 
-	if err := validate.MinimumInt("outer_depth", "body", int64(*m.OuterDepth), 0, false); err != nil {
+	if err := validate.MinimumInt("outer_depth", "body", *m.OuterDepth, 0, false); err != nil {
 		return err
 	}
 
-	if err := validate.MaximumInt("outer_depth", "body", int64(*m.OuterDepth), 32767, false); err != nil {
+	if err := validate.MaximumInt("outer_depth", "body", *m.OuterDepth, 32767, false); err != nil {
 		return err
 	}
 
@@ -321,14 +348,13 @@ const (
 
 // prop value enum
 func (m *WritableRack) validateOuterUnitEnum(path, location string, value string) error {
-	if err := validate.Enum(path, location, value, writableRackTypeOuterUnitPropEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, writableRackTypeOuterUnitPropEnum, true); err != nil {
 		return err
 	}
 	return nil
 }
 
 func (m *WritableRack) validateOuterUnit(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.OuterUnit) { // not required
 		return nil
 	}
@@ -342,16 +368,15 @@ func (m *WritableRack) validateOuterUnit(formats strfmt.Registry) error {
 }
 
 func (m *WritableRack) validateOuterWidth(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.OuterWidth) { // not required
 		return nil
 	}
 
-	if err := validate.MinimumInt("outer_width", "body", int64(*m.OuterWidth), 0, false); err != nil {
+	if err := validate.MinimumInt("outer_width", "body", *m.OuterWidth, 0, false); err != nil {
 		return err
 	}
 
-	if err := validate.MaximumInt("outer_width", "body", int64(*m.OuterWidth), 32767, false); err != nil {
+	if err := validate.MaximumInt("outer_width", "body", *m.OuterWidth, 32767, false); err != nil {
 		return err
 	}
 
@@ -359,12 +384,11 @@ func (m *WritableRack) validateOuterWidth(formats strfmt.Registry) error {
 }
 
 func (m *WritableRack) validateSerial(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Serial) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("serial", "body", string(m.Serial), 50); err != nil {
+	if err := validate.MaxLength("serial", "body", m.Serial, 50); err != nil {
 		return err
 	}
 
@@ -412,14 +436,13 @@ const (
 
 // prop value enum
 func (m *WritableRack) validateStatusEnum(path, location string, value string) error {
-	if err := validate.Enum(path, location, value, writableRackTypeStatusPropEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, writableRackTypeStatusPropEnum, true); err != nil {
 		return err
 	}
 	return nil
 }
 
 func (m *WritableRack) validateStatus(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Status) { // not required
 		return nil
 	}
@@ -433,15 +456,24 @@ func (m *WritableRack) validateStatus(formats strfmt.Registry) error {
 }
 
 func (m *WritableRack) validateTags(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Tags) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Tags); i++ {
+		if swag.IsZero(m.Tags[i]) { // not required
+			continue
+		}
 
-		if err := validate.MinLength("tags"+"."+strconv.Itoa(i), "body", string(m.Tags[i]), 1); err != nil {
-			return err
+		if m.Tags[i] != nil {
+			if err := m.Tags[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("tags" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("tags" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
 		}
 
 	}
@@ -463,32 +495,31 @@ func init() {
 
 const (
 
-	// WritableRackTypeNr2PostFrame captures enum value "2-post-frame"
-	WritableRackTypeNr2PostFrame string = "2-post-frame"
+	// WritableRackTypeNr2DashPostDashFrame captures enum value "2-post-frame"
+	WritableRackTypeNr2DashPostDashFrame string = "2-post-frame"
 
-	// WritableRackTypeNr4PostFrame captures enum value "4-post-frame"
-	WritableRackTypeNr4PostFrame string = "4-post-frame"
+	// WritableRackTypeNr4DashPostDashFrame captures enum value "4-post-frame"
+	WritableRackTypeNr4DashPostDashFrame string = "4-post-frame"
 
-	// WritableRackTypeNr4PostCabinet captures enum value "4-post-cabinet"
-	WritableRackTypeNr4PostCabinet string = "4-post-cabinet"
+	// WritableRackTypeNr4DashPostDashCabinet captures enum value "4-post-cabinet"
+	WritableRackTypeNr4DashPostDashCabinet string = "4-post-cabinet"
 
-	// WritableRackTypeWallFrame captures enum value "wall-frame"
-	WritableRackTypeWallFrame string = "wall-frame"
+	// WritableRackTypeWallDashFrame captures enum value "wall-frame"
+	WritableRackTypeWallDashFrame string = "wall-frame"
 
-	// WritableRackTypeWallCabinet captures enum value "wall-cabinet"
-	WritableRackTypeWallCabinet string = "wall-cabinet"
+	// WritableRackTypeWallDashCabinet captures enum value "wall-cabinet"
+	WritableRackTypeWallDashCabinet string = "wall-cabinet"
 )
 
 // prop value enum
 func (m *WritableRack) validateTypeEnum(path, location string, value string) error {
-	if err := validate.Enum(path, location, value, writableRackTypeTypePropEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, writableRackTypeTypePropEnum, true); err != nil {
 		return err
 	}
 	return nil
 }
 
 func (m *WritableRack) validateType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Type) { // not required
 		return nil
 	}
@@ -502,16 +533,27 @@ func (m *WritableRack) validateType(formats strfmt.Registry) error {
 }
 
 func (m *WritableRack) validateUHeight(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UHeight) { // not required
 		return nil
 	}
 
-	if err := validate.MinimumInt("u_height", "body", int64(m.UHeight), 1, false); err != nil {
+	if err := validate.MinimumInt("u_height", "body", m.UHeight, 1, false); err != nil {
 		return err
 	}
 
-	if err := validate.MaximumInt("u_height", "body", int64(m.UHeight), 100, false); err != nil {
+	if err := validate.MaximumInt("u_height", "body", m.UHeight, 100, false); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WritableRack) validateURL(formats strfmt.Registry) error {
+	if swag.IsZero(m.URL) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("url", "body", "uri", m.URL.String(), formats); err != nil {
 		return err
 	}
 
@@ -522,7 +564,7 @@ var writableRackTypeWidthPropEnum []interface{}
 
 func init() {
 	var res []int64
-	if err := json.Unmarshal([]byte(`[19,23]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`[10,19,21,23]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -532,20 +574,144 @@ func init() {
 
 // prop value enum
 func (m *WritableRack) validateWidthEnum(path, location string, value int64) error {
-	if err := validate.Enum(path, location, value, writableRackTypeWidthPropEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, writableRackTypeWidthPropEnum, true); err != nil {
 		return err
 	}
 	return nil
 }
 
 func (m *WritableRack) validateWidth(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Width) { // not required
 		return nil
 	}
 
 	// value enum
 	if err := m.validateWidthEnum("width", "body", m.Width); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this writable rack based on the context it is used
+func (m *WritableRack) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCreated(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeviceCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDisplay(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLastUpdated(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePowerfeedCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTags(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *WritableRack) contextValidateCreated(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created", "body", strfmt.Date(m.Created)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WritableRack) contextValidateDeviceCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "device_count", "body", int64(m.DeviceCount)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WritableRack) contextValidateDisplay(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "display", "body", string(m.Display)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WritableRack) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WritableRack) contextValidateLastUpdated(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "last_updated", "body", strfmt.DateTime(m.LastUpdated)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WritableRack) contextValidatePowerfeedCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "powerfeed_count", "body", int64(m.PowerfeedCount)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WritableRack) contextValidateTags(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Tags); i++ {
+
+		if m.Tags[i] != nil {
+			if err := m.Tags[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("tags" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("tags" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *WritableRack) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", strfmt.URI(m.URL)); err != nil {
 		return err
 	}
 

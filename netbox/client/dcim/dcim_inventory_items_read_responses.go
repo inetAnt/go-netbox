@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // DcimInventoryItemsReadReader is a Reader for the DcimInventoryItemsRead structure.
@@ -45,9 +44,15 @@ func (o *DcimInventoryItemsReadReader) ReadResponse(response runtime.ClientRespo
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewDcimInventoryItemsReadDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewDcimInventoryItemsReadOK() *DcimInventoryItemsReadOK {
 	return &DcimInventoryItemsReadOK{}
 }
 
-/*DcimInventoryItemsReadOK handles this case with default header values.
+/*
+DcimInventoryItemsReadOK describes a response with status code 200, with default header values.
 
 DcimInventoryItemsReadOK dcim inventory items read o k
 */
@@ -64,7 +70,41 @@ type DcimInventoryItemsReadOK struct {
 	Payload *models.InventoryItem
 }
 
+// IsSuccess returns true when this dcim inventory items read o k response has a 2xx status code
+func (o *DcimInventoryItemsReadOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this dcim inventory items read o k response has a 3xx status code
+func (o *DcimInventoryItemsReadOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this dcim inventory items read o k response has a 4xx status code
+func (o *DcimInventoryItemsReadOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this dcim inventory items read o k response has a 5xx status code
+func (o *DcimInventoryItemsReadOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this dcim inventory items read o k response a status code equal to that given
+func (o *DcimInventoryItemsReadOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the dcim inventory items read o k response
+func (o *DcimInventoryItemsReadOK) Code() int {
+	return 200
+}
+
 func (o *DcimInventoryItemsReadOK) Error() string {
+	return fmt.Sprintf("[GET /dcim/inventory-items/{id}/][%d] dcimInventoryItemsReadOK  %+v", 200, o.Payload)
+}
+
+func (o *DcimInventoryItemsReadOK) String() string {
 	return fmt.Sprintf("[GET /dcim/inventory-items/{id}/][%d] dcimInventoryItemsReadOK  %+v", 200, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *DcimInventoryItemsReadOK) readResponse(response runtime.ClientResponse,
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDcimInventoryItemsReadDefault creates a DcimInventoryItemsReadDefault with default headers values
+func NewDcimInventoryItemsReadDefault(code int) *DcimInventoryItemsReadDefault {
+	return &DcimInventoryItemsReadDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+DcimInventoryItemsReadDefault describes a response with status code -1, with default header values.
+
+DcimInventoryItemsReadDefault dcim inventory items read default
+*/
+type DcimInventoryItemsReadDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this dcim inventory items read default response has a 2xx status code
+func (o *DcimInventoryItemsReadDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this dcim inventory items read default response has a 3xx status code
+func (o *DcimInventoryItemsReadDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this dcim inventory items read default response has a 4xx status code
+func (o *DcimInventoryItemsReadDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this dcim inventory items read default response has a 5xx status code
+func (o *DcimInventoryItemsReadDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this dcim inventory items read default response a status code equal to that given
+func (o *DcimInventoryItemsReadDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the dcim inventory items read default response
+func (o *DcimInventoryItemsReadDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *DcimInventoryItemsReadDefault) Error() string {
+	return fmt.Sprintf("[GET /dcim/inventory-items/{id}/][%d] dcim_inventory-items_read default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimInventoryItemsReadDefault) String() string {
+	return fmt.Sprintf("[GET /dcim/inventory-items/{id}/][%d] dcim_inventory-items_read default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimInventoryItemsReadDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *DcimInventoryItemsReadDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

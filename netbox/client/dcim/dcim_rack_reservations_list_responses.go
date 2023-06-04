@@ -21,18 +21,18 @@ package dcim
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // DcimRackReservationsListReader is a Reader for the DcimRackReservationsList structure.
@@ -49,9 +49,15 @@ func (o *DcimRackReservationsListReader) ReadResponse(response runtime.ClientRes
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewDcimRackReservationsListDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -60,7 +66,8 @@ func NewDcimRackReservationsListOK() *DcimRackReservationsListOK {
 	return &DcimRackReservationsListOK{}
 }
 
-/*DcimRackReservationsListOK handles this case with default header values.
+/*
+DcimRackReservationsListOK describes a response with status code 200, with default header values.
 
 DcimRackReservationsListOK dcim rack reservations list o k
 */
@@ -68,7 +75,41 @@ type DcimRackReservationsListOK struct {
 	Payload *DcimRackReservationsListOKBody
 }
 
+// IsSuccess returns true when this dcim rack reservations list o k response has a 2xx status code
+func (o *DcimRackReservationsListOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this dcim rack reservations list o k response has a 3xx status code
+func (o *DcimRackReservationsListOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this dcim rack reservations list o k response has a 4xx status code
+func (o *DcimRackReservationsListOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this dcim rack reservations list o k response has a 5xx status code
+func (o *DcimRackReservationsListOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this dcim rack reservations list o k response a status code equal to that given
+func (o *DcimRackReservationsListOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the dcim rack reservations list o k response
+func (o *DcimRackReservationsListOK) Code() int {
+	return 200
+}
+
 func (o *DcimRackReservationsListOK) Error() string {
+	return fmt.Sprintf("[GET /dcim/rack-reservations/][%d] dcimRackReservationsListOK  %+v", 200, o.Payload)
+}
+
+func (o *DcimRackReservationsListOK) String() string {
 	return fmt.Sprintf("[GET /dcim/rack-reservations/][%d] dcimRackReservationsListOK  %+v", 200, o.Payload)
 }
 
@@ -88,7 +129,78 @@ func (o *DcimRackReservationsListOK) readResponse(response runtime.ClientRespons
 	return nil
 }
 
-/*DcimRackReservationsListOKBody dcim rack reservations list o k body
+// NewDcimRackReservationsListDefault creates a DcimRackReservationsListDefault with default headers values
+func NewDcimRackReservationsListDefault(code int) *DcimRackReservationsListDefault {
+	return &DcimRackReservationsListDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+DcimRackReservationsListDefault describes a response with status code -1, with default header values.
+
+DcimRackReservationsListDefault dcim rack reservations list default
+*/
+type DcimRackReservationsListDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this dcim rack reservations list default response has a 2xx status code
+func (o *DcimRackReservationsListDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this dcim rack reservations list default response has a 3xx status code
+func (o *DcimRackReservationsListDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this dcim rack reservations list default response has a 4xx status code
+func (o *DcimRackReservationsListDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this dcim rack reservations list default response has a 5xx status code
+func (o *DcimRackReservationsListDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this dcim rack reservations list default response a status code equal to that given
+func (o *DcimRackReservationsListDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the dcim rack reservations list default response
+func (o *DcimRackReservationsListDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *DcimRackReservationsListDefault) Error() string {
+	return fmt.Sprintf("[GET /dcim/rack-reservations/][%d] dcim_rack-reservations_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimRackReservationsListDefault) String() string {
+	return fmt.Sprintf("[GET /dcim/rack-reservations/][%d] dcim_rack-reservations_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimRackReservationsListDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *DcimRackReservationsListDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+/*
+DcimRackReservationsListOKBody dcim rack reservations list o k body
 swagger:model DcimRackReservationsListOKBody
 */
 type DcimRackReservationsListOKBody struct {
@@ -146,7 +258,6 @@ func (o *DcimRackReservationsListOKBody) validateCount(formats strfmt.Registry) 
 }
 
 func (o *DcimRackReservationsListOKBody) validateNext(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Next) { // not required
 		return nil
 	}
@@ -159,7 +270,6 @@ func (o *DcimRackReservationsListOKBody) validateNext(formats strfmt.Registry) e
 }
 
 func (o *DcimRackReservationsListOKBody) validatePrevious(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Previous) { // not required
 		return nil
 	}
@@ -186,6 +296,42 @@ func (o *DcimRackReservationsListOKBody) validateResults(formats strfmt.Registry
 			if err := o.Results[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("dcimRackReservationsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("dcimRackReservationsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this dcim rack reservations list o k body based on the context it is used
+func (o *DcimRackReservationsListOKBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := o.contextValidateResults(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (o *DcimRackReservationsListOKBody) contextValidateResults(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(o.Results); i++ {
+
+		if o.Results[i] != nil {
+			if err := o.Results[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("dcimRackReservationsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("dcimRackReservationsListOK" + "." + "results" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

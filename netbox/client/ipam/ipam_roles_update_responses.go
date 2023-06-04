@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // IpamRolesUpdateReader is a Reader for the IpamRolesUpdate structure.
@@ -45,9 +44,15 @@ func (o *IpamRolesUpdateReader) ReadResponse(response runtime.ClientResponse, co
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewIpamRolesUpdateDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewIpamRolesUpdateOK() *IpamRolesUpdateOK {
 	return &IpamRolesUpdateOK{}
 }
 
-/*IpamRolesUpdateOK handles this case with default header values.
+/*
+IpamRolesUpdateOK describes a response with status code 200, with default header values.
 
 IpamRolesUpdateOK ipam roles update o k
 */
@@ -64,7 +70,41 @@ type IpamRolesUpdateOK struct {
 	Payload *models.Role
 }
 
+// IsSuccess returns true when this ipam roles update o k response has a 2xx status code
+func (o *IpamRolesUpdateOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this ipam roles update o k response has a 3xx status code
+func (o *IpamRolesUpdateOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this ipam roles update o k response has a 4xx status code
+func (o *IpamRolesUpdateOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this ipam roles update o k response has a 5xx status code
+func (o *IpamRolesUpdateOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this ipam roles update o k response a status code equal to that given
+func (o *IpamRolesUpdateOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the ipam roles update o k response
+func (o *IpamRolesUpdateOK) Code() int {
+	return 200
+}
+
 func (o *IpamRolesUpdateOK) Error() string {
+	return fmt.Sprintf("[PUT /ipam/roles/{id}/][%d] ipamRolesUpdateOK  %+v", 200, o.Payload)
+}
+
+func (o *IpamRolesUpdateOK) String() string {
 	return fmt.Sprintf("[PUT /ipam/roles/{id}/][%d] ipamRolesUpdateOK  %+v", 200, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *IpamRolesUpdateOK) readResponse(response runtime.ClientResponse, consum
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewIpamRolesUpdateDefault creates a IpamRolesUpdateDefault with default headers values
+func NewIpamRolesUpdateDefault(code int) *IpamRolesUpdateDefault {
+	return &IpamRolesUpdateDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+IpamRolesUpdateDefault describes a response with status code -1, with default header values.
+
+IpamRolesUpdateDefault ipam roles update default
+*/
+type IpamRolesUpdateDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this ipam roles update default response has a 2xx status code
+func (o *IpamRolesUpdateDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this ipam roles update default response has a 3xx status code
+func (o *IpamRolesUpdateDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this ipam roles update default response has a 4xx status code
+func (o *IpamRolesUpdateDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this ipam roles update default response has a 5xx status code
+func (o *IpamRolesUpdateDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this ipam roles update default response a status code equal to that given
+func (o *IpamRolesUpdateDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the ipam roles update default response
+func (o *IpamRolesUpdateDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *IpamRolesUpdateDefault) Error() string {
+	return fmt.Sprintf("[PUT /ipam/roles/{id}/][%d] ipam_roles_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *IpamRolesUpdateDefault) String() string {
+	return fmt.Sprintf("[PUT /ipam/roles/{id}/][%d] ipam_roles_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *IpamRolesUpdateDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *IpamRolesUpdateDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

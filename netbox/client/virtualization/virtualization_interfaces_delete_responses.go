@@ -22,10 +22,10 @@ package virtualization
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/go-openapi/runtime"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
 // VirtualizationInterfacesDeleteReader is a Reader for the VirtualizationInterfacesDelete structure.
@@ -42,9 +42,15 @@ func (o *VirtualizationInterfacesDeleteReader) ReadResponse(response runtime.Cli
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewVirtualizationInterfacesDeleteDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -53,18 +59,123 @@ func NewVirtualizationInterfacesDeleteNoContent() *VirtualizationInterfacesDelet
 	return &VirtualizationInterfacesDeleteNoContent{}
 }
 
-/*VirtualizationInterfacesDeleteNoContent handles this case with default header values.
+/*
+VirtualizationInterfacesDeleteNoContent describes a response with status code 204, with default header values.
 
 VirtualizationInterfacesDeleteNoContent virtualization interfaces delete no content
 */
 type VirtualizationInterfacesDeleteNoContent struct {
 }
 
+// IsSuccess returns true when this virtualization interfaces delete no content response has a 2xx status code
+func (o *VirtualizationInterfacesDeleteNoContent) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this virtualization interfaces delete no content response has a 3xx status code
+func (o *VirtualizationInterfacesDeleteNoContent) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this virtualization interfaces delete no content response has a 4xx status code
+func (o *VirtualizationInterfacesDeleteNoContent) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this virtualization interfaces delete no content response has a 5xx status code
+func (o *VirtualizationInterfacesDeleteNoContent) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this virtualization interfaces delete no content response a status code equal to that given
+func (o *VirtualizationInterfacesDeleteNoContent) IsCode(code int) bool {
+	return code == 204
+}
+
+// Code gets the status code for the virtualization interfaces delete no content response
+func (o *VirtualizationInterfacesDeleteNoContent) Code() int {
+	return 204
+}
+
 func (o *VirtualizationInterfacesDeleteNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /virtualization/interfaces/{id}/][%d] virtualizationInterfacesDeleteNoContent ", 204)
 }
 
+func (o *VirtualizationInterfacesDeleteNoContent) String() string {
+	return fmt.Sprintf("[DELETE /virtualization/interfaces/{id}/][%d] virtualizationInterfacesDeleteNoContent ", 204)
+}
+
 func (o *VirtualizationInterfacesDeleteNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewVirtualizationInterfacesDeleteDefault creates a VirtualizationInterfacesDeleteDefault with default headers values
+func NewVirtualizationInterfacesDeleteDefault(code int) *VirtualizationInterfacesDeleteDefault {
+	return &VirtualizationInterfacesDeleteDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+VirtualizationInterfacesDeleteDefault describes a response with status code -1, with default header values.
+
+VirtualizationInterfacesDeleteDefault virtualization interfaces delete default
+*/
+type VirtualizationInterfacesDeleteDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this virtualization interfaces delete default response has a 2xx status code
+func (o *VirtualizationInterfacesDeleteDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this virtualization interfaces delete default response has a 3xx status code
+func (o *VirtualizationInterfacesDeleteDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this virtualization interfaces delete default response has a 4xx status code
+func (o *VirtualizationInterfacesDeleteDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this virtualization interfaces delete default response has a 5xx status code
+func (o *VirtualizationInterfacesDeleteDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this virtualization interfaces delete default response a status code equal to that given
+func (o *VirtualizationInterfacesDeleteDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the virtualization interfaces delete default response
+func (o *VirtualizationInterfacesDeleteDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *VirtualizationInterfacesDeleteDefault) Error() string {
+	return fmt.Sprintf("[DELETE /virtualization/interfaces/{id}/][%d] virtualization_interfaces_delete default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *VirtualizationInterfacesDeleteDefault) String() string {
+	return fmt.Sprintf("[DELETE /virtualization/interfaces/{id}/][%d] virtualization_interfaces_delete default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *VirtualizationInterfacesDeleteDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *VirtualizationInterfacesDeleteDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
 
 	return nil
 }

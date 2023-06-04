@@ -21,18 +21,23 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // WritableInventoryItem writable inventory item
+//
 // swagger:model WritableInventoryItem
 type WritableInventoryItem struct {
+
+	// depth
+	// Read Only: true
+	Depth int64 `json:"_depth,omitempty"`
 
 	// Asset tag
 	//
@@ -40,8 +45,16 @@ type WritableInventoryItem struct {
 	// Max Length: 50
 	AssetTag *string `json:"asset_tag,omitempty"`
 
+	// Created
+	// Read Only: true
+	// Format: date
+	Created strfmt.Date `json:"created,omitempty"`
+
+	// Custom fields
+	CustomFields interface{} `json:"custom_fields,omitempty"`
+
 	// Description
-	// Max Length: 100
+	// Max Length: 200
 	Description string `json:"description,omitempty"`
 
 	// Device
@@ -49,18 +62,35 @@ type WritableInventoryItem struct {
 	Device *int64 `json:"device"`
 
 	// Discovered
+	//
+	// This item was automatically discovered
 	Discovered bool `json:"discovered,omitempty"`
 
-	// ID
+	// Display
+	// Read Only: true
+	Display string `json:"display,omitempty"`
+
+	// Id
 	// Read Only: true
 	ID int64 `json:"id,omitempty"`
+
+	// Label
+	//
+	// Physical label
+	// Max Length: 64
+	Label string `json:"label,omitempty"`
+
+	// Last updated
+	// Read Only: true
+	// Format: date-time
+	LastUpdated strfmt.DateTime `json:"last_updated,omitempty"`
 
 	// Manufacturer
 	Manufacturer *int64 `json:"manufacturer,omitempty"`
 
 	// Name
 	// Required: true
-	// Max Length: 50
+	// Max Length: 64
 	// Min Length: 1
 	Name *string `json:"name"`
 
@@ -68,6 +98,8 @@ type WritableInventoryItem struct {
 	Parent *int64 `json:"parent,omitempty"`
 
 	// Part ID
+	//
+	// Manufacturer-assigned part identifier
 	// Max Length: 50
 	PartID string `json:"part_id,omitempty"`
 
@@ -76,7 +108,12 @@ type WritableInventoryItem struct {
 	Serial string `json:"serial,omitempty"`
 
 	// tags
-	Tags []string `json:"tags"`
+	Tags []*NestedTag `json:"tags,omitempty"`
+
+	// Url
+	// Read Only: true
+	// Format: uri
+	URL strfmt.URI `json:"url,omitempty"`
 }
 
 // Validate validates this writable inventory item
@@ -87,11 +124,23 @@ func (m *WritableInventoryItem) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCreated(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateDescription(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.validateDevice(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateLabel(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateLastUpdated(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -111,6 +160,10 @@ func (m *WritableInventoryItem) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateURL(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
@@ -118,12 +171,23 @@ func (m *WritableInventoryItem) Validate(formats strfmt.Registry) error {
 }
 
 func (m *WritableInventoryItem) validateAssetTag(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AssetTag) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("asset_tag", "body", string(*m.AssetTag), 50); err != nil {
+	if err := validate.MaxLength("asset_tag", "body", *m.AssetTag, 50); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WritableInventoryItem) validateCreated(formats strfmt.Registry) error {
+	if swag.IsZero(m.Created) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("created", "body", "date", m.Created.String(), formats); err != nil {
 		return err
 	}
 
@@ -131,12 +195,11 @@ func (m *WritableInventoryItem) validateAssetTag(formats strfmt.Registry) error 
 }
 
 func (m *WritableInventoryItem) validateDescription(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Description) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("description", "body", string(m.Description), 100); err != nil {
+	if err := validate.MaxLength("description", "body", m.Description, 200); err != nil {
 		return err
 	}
 
@@ -152,17 +215,41 @@ func (m *WritableInventoryItem) validateDevice(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *WritableInventoryItem) validateLabel(formats strfmt.Registry) error {
+	if swag.IsZero(m.Label) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("label", "body", m.Label, 64); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WritableInventoryItem) validateLastUpdated(formats strfmt.Registry) error {
+	if swag.IsZero(m.LastUpdated) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("last_updated", "body", "date-time", m.LastUpdated.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *WritableInventoryItem) validateName(formats strfmt.Registry) error {
 
 	if err := validate.Required("name", "body", m.Name); err != nil {
 		return err
 	}
 
-	if err := validate.MinLength("name", "body", string(*m.Name), 1); err != nil {
+	if err := validate.MinLength("name", "body", *m.Name, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("name", "body", string(*m.Name), 50); err != nil {
+	if err := validate.MaxLength("name", "body", *m.Name, 64); err != nil {
 		return err
 	}
 
@@ -170,12 +257,11 @@ func (m *WritableInventoryItem) validateName(formats strfmt.Registry) error {
 }
 
 func (m *WritableInventoryItem) validatePartID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PartID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("part_id", "body", string(m.PartID), 50); err != nil {
+	if err := validate.MaxLength("part_id", "body", m.PartID, 50); err != nil {
 		return err
 	}
 
@@ -183,12 +269,11 @@ func (m *WritableInventoryItem) validatePartID(formats strfmt.Registry) error {
 }
 
 func (m *WritableInventoryItem) validateSerial(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Serial) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("serial", "body", string(m.Serial), 50); err != nil {
+	if err := validate.MaxLength("serial", "body", m.Serial, 50); err != nil {
 		return err
 	}
 
@@ -196,17 +281,150 @@ func (m *WritableInventoryItem) validateSerial(formats strfmt.Registry) error {
 }
 
 func (m *WritableInventoryItem) validateTags(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Tags) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Tags); i++ {
-
-		if err := validate.MinLength("tags"+"."+strconv.Itoa(i), "body", string(m.Tags[i]), 1); err != nil {
-			return err
+		if swag.IsZero(m.Tags[i]) { // not required
+			continue
 		}
 
+		if m.Tags[i] != nil {
+			if err := m.Tags[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("tags" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("tags" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *WritableInventoryItem) validateURL(formats strfmt.Registry) error {
+	if swag.IsZero(m.URL) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("url", "body", "uri", m.URL.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this writable inventory item based on the context it is used
+func (m *WritableInventoryItem) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDepth(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreated(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDisplay(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLastUpdated(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTags(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *WritableInventoryItem) contextValidateDepth(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "_depth", "body", int64(m.Depth)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WritableInventoryItem) contextValidateCreated(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created", "body", strfmt.Date(m.Created)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WritableInventoryItem) contextValidateDisplay(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "display", "body", string(m.Display)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WritableInventoryItem) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WritableInventoryItem) contextValidateLastUpdated(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "last_updated", "body", strfmt.DateTime(m.LastUpdated)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WritableInventoryItem) contextValidateTags(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Tags); i++ {
+
+		if m.Tags[i] != nil {
+			if err := m.Tags[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("tags" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("tags" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *WritableInventoryItem) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", strfmt.URI(m.URL)); err != nil {
+		return err
 	}
 
 	return nil

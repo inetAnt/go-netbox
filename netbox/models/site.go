@@ -21,23 +21,31 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+	"encoding/json"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // Site site
+//
 // swagger:model Site
 type Site struct {
 
 	// ASN
+	//
+	// 32-bit autonomous system number
 	// Maximum: 4.294967295e+09
 	// Minimum: 1
 	Asn *int64 `json:"asn,omitempty"`
+
+	// asns
+	// Unique: true
+	Asns []*NestedASN `json:"asns,omitempty"`
 
 	// Circuit count
 	// Read Only: true
@@ -68,18 +76,27 @@ type Site struct {
 	CustomFields interface{} `json:"custom_fields,omitempty"`
 
 	// Description
-	// Max Length: 100
+	// Max Length: 200
 	Description string `json:"description,omitempty"`
 
 	// Device count
 	// Read Only: true
 	DeviceCount int64 `json:"device_count,omitempty"`
 
+	// Display
+	// Read Only: true
+	Display string `json:"display,omitempty"`
+
 	// Facility
+	//
+	// Local facility ID or description
 	// Max Length: 50
 	Facility string `json:"facility,omitempty"`
 
-	// ID
+	// group
+	Group *NestedSiteGroup `json:"group,omitempty"`
+
+	// Id
 	// Read Only: true
 	ID int64 `json:"id,omitempty"`
 
@@ -89,14 +106,18 @@ type Site struct {
 	LastUpdated strfmt.DateTime `json:"last_updated,omitempty"`
 
 	// Latitude
-	Latitude *string `json:"latitude,omitempty"`
+	//
+	// GPS coordinate (latitude)
+	Latitude *float64 `json:"latitude,omitempty"`
 
 	// Longitude
-	Longitude *string `json:"longitude,omitempty"`
+	//
+	// GPS coordinate (longitude)
+	Longitude *float64 `json:"longitude,omitempty"`
 
 	// Name
 	// Required: true
-	// Max Length: 50
+	// Max Length: 100
 	// Min Length: 1
 	Name *string `json:"name"`
 
@@ -121,7 +142,7 @@ type Site struct {
 
 	// Slug
 	// Required: true
-	// Max Length: 50
+	// Max Length: 100
 	// Min Length: 1
 	// Pattern: ^[-a-zA-Z0-9_]+$
 	Slug *string `json:"slug"`
@@ -130,13 +151,18 @@ type Site struct {
 	Status *SiteStatus `json:"status,omitempty"`
 
 	// tags
-	Tags []string `json:"tags"`
+	Tags []*NestedTag `json:"tags,omitempty"`
 
 	// tenant
 	Tenant *NestedTenant `json:"tenant,omitempty"`
 
 	// Time zone
 	TimeZone string `json:"time_zone,omitempty"`
+
+	// Url
+	// Read Only: true
+	// Format: uri
+	URL strfmt.URI `json:"url,omitempty"`
 
 	// Virtualmachine count
 	// Read Only: true
@@ -152,6 +178,10 @@ func (m *Site) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateAsn(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateAsns(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -176,6 +206,10 @@ func (m *Site) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateFacility(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateGroup(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -215,6 +249,10 @@ func (m *Site) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateURL(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
@@ -222,29 +260,57 @@ func (m *Site) Validate(formats strfmt.Registry) error {
 }
 
 func (m *Site) validateAsn(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Asn) { // not required
 		return nil
 	}
 
-	if err := validate.MinimumInt("asn", "body", int64(*m.Asn), 1, false); err != nil {
+	if err := validate.MinimumInt("asn", "body", *m.Asn, 1, false); err != nil {
 		return err
 	}
 
-	if err := validate.MaximumInt("asn", "body", int64(*m.Asn), 4.294967295e+09, false); err != nil {
+	if err := validate.MaximumInt("asn", "body", *m.Asn, 4.294967295e+09, false); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (m *Site) validateContactEmail(formats strfmt.Registry) error {
+func (m *Site) validateAsns(formats strfmt.Registry) error {
+	if swag.IsZero(m.Asns) { // not required
+		return nil
+	}
 
+	if err := validate.UniqueItems("asns", "body", m.Asns); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.Asns); i++ {
+		if swag.IsZero(m.Asns[i]) { // not required
+			continue
+		}
+
+		if m.Asns[i] != nil {
+			if err := m.Asns[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("asns" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("asns" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *Site) validateContactEmail(formats strfmt.Registry) error {
 	if swag.IsZero(m.ContactEmail) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("contact_email", "body", string(m.ContactEmail), 254); err != nil {
+	if err := validate.MaxLength("contact_email", "body", m.ContactEmail.String(), 254); err != nil {
 		return err
 	}
 
@@ -256,12 +322,11 @@ func (m *Site) validateContactEmail(formats strfmt.Registry) error {
 }
 
 func (m *Site) validateContactName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ContactName) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("contact_name", "body", string(m.ContactName), 50); err != nil {
+	if err := validate.MaxLength("contact_name", "body", m.ContactName, 50); err != nil {
 		return err
 	}
 
@@ -269,12 +334,11 @@ func (m *Site) validateContactName(formats strfmt.Registry) error {
 }
 
 func (m *Site) validateContactPhone(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ContactPhone) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("contact_phone", "body", string(m.ContactPhone), 20); err != nil {
+	if err := validate.MaxLength("contact_phone", "body", m.ContactPhone, 20); err != nil {
 		return err
 	}
 
@@ -282,7 +346,6 @@ func (m *Site) validateContactPhone(formats strfmt.Registry) error {
 }
 
 func (m *Site) validateCreated(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Created) { // not required
 		return nil
 	}
@@ -295,12 +358,11 @@ func (m *Site) validateCreated(formats strfmt.Registry) error {
 }
 
 func (m *Site) validateDescription(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Description) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("description", "body", string(m.Description), 100); err != nil {
+	if err := validate.MaxLength("description", "body", m.Description, 200); err != nil {
 		return err
 	}
 
@@ -308,20 +370,37 @@ func (m *Site) validateDescription(formats strfmt.Registry) error {
 }
 
 func (m *Site) validateFacility(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Facility) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("facility", "body", string(m.Facility), 50); err != nil {
+	if err := validate.MaxLength("facility", "body", m.Facility, 50); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (m *Site) validateLastUpdated(formats strfmt.Registry) error {
+func (m *Site) validateGroup(formats strfmt.Registry) error {
+	if swag.IsZero(m.Group) { // not required
+		return nil
+	}
 
+	if m.Group != nil {
+		if err := m.Group.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("group")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("group")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Site) validateLastUpdated(formats strfmt.Registry) error {
 	if swag.IsZero(m.LastUpdated) { // not required
 		return nil
 	}
@@ -339,11 +418,11 @@ func (m *Site) validateName(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("name", "body", string(*m.Name), 1); err != nil {
+	if err := validate.MinLength("name", "body", *m.Name, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("name", "body", string(*m.Name), 50); err != nil {
+	if err := validate.MaxLength("name", "body", *m.Name, 100); err != nil {
 		return err
 	}
 
@@ -351,12 +430,11 @@ func (m *Site) validateName(formats strfmt.Registry) error {
 }
 
 func (m *Site) validatePhysicalAddress(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PhysicalAddress) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("physical_address", "body", string(m.PhysicalAddress), 200); err != nil {
+	if err := validate.MaxLength("physical_address", "body", m.PhysicalAddress, 200); err != nil {
 		return err
 	}
 
@@ -364,7 +442,6 @@ func (m *Site) validatePhysicalAddress(formats strfmt.Registry) error {
 }
 
 func (m *Site) validateRegion(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Region) { // not required
 		return nil
 	}
@@ -373,6 +450,8 @@ func (m *Site) validateRegion(formats strfmt.Registry) error {
 		if err := m.Region.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("region")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("region")
 			}
 			return err
 		}
@@ -382,12 +461,11 @@ func (m *Site) validateRegion(formats strfmt.Registry) error {
 }
 
 func (m *Site) validateShippingAddress(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ShippingAddress) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("shipping_address", "body", string(m.ShippingAddress), 200); err != nil {
+	if err := validate.MaxLength("shipping_address", "body", m.ShippingAddress, 200); err != nil {
 		return err
 	}
 
@@ -400,15 +478,15 @@ func (m *Site) validateSlug(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("slug", "body", string(*m.Slug), 1); err != nil {
+	if err := validate.MinLength("slug", "body", *m.Slug, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("slug", "body", string(*m.Slug), 50); err != nil {
+	if err := validate.MaxLength("slug", "body", *m.Slug, 100); err != nil {
 		return err
 	}
 
-	if err := validate.Pattern("slug", "body", string(*m.Slug), `^[-a-zA-Z0-9_]+$`); err != nil {
+	if err := validate.Pattern("slug", "body", *m.Slug, `^[-a-zA-Z0-9_]+$`); err != nil {
 		return err
 	}
 
@@ -416,7 +494,6 @@ func (m *Site) validateSlug(formats strfmt.Registry) error {
 }
 
 func (m *Site) validateStatus(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Status) { // not required
 		return nil
 	}
@@ -425,6 +502,8 @@ func (m *Site) validateStatus(formats strfmt.Registry) error {
 		if err := m.Status.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("status")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("status")
 			}
 			return err
 		}
@@ -434,15 +513,24 @@ func (m *Site) validateStatus(formats strfmt.Registry) error {
 }
 
 func (m *Site) validateTags(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Tags) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Tags); i++ {
+		if swag.IsZero(m.Tags[i]) { // not required
+			continue
+		}
 
-		if err := validate.MinLength("tags"+"."+strconv.Itoa(i), "body", string(m.Tags[i]), 1); err != nil {
-			return err
+		if m.Tags[i] != nil {
+			if err := m.Tags[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("tags" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("tags" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
 		}
 
 	}
@@ -451,7 +539,6 @@ func (m *Site) validateTags(formats strfmt.Registry) error {
 }
 
 func (m *Site) validateTenant(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Tenant) { // not required
 		return nil
 	}
@@ -460,9 +547,304 @@ func (m *Site) validateTenant(formats strfmt.Registry) error {
 		if err := m.Tenant.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("tenant")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("tenant")
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *Site) validateURL(formats strfmt.Registry) error {
+	if swag.IsZero(m.URL) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("url", "body", "uri", m.URL.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this site based on the context it is used
+func (m *Site) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAsns(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCircuitCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreated(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeviceCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDisplay(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGroup(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLastUpdated(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePrefixCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRackCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRegion(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateStatus(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTags(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTenant(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateVirtualmachineCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateVlanCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Site) contextValidateAsns(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Asns); i++ {
+
+		if m.Asns[i] != nil {
+			if err := m.Asns[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("asns" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("asns" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *Site) contextValidateCircuitCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "circuit_count", "body", int64(m.CircuitCount)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Site) contextValidateCreated(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created", "body", strfmt.Date(m.Created)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Site) contextValidateDeviceCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "device_count", "body", int64(m.DeviceCount)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Site) contextValidateDisplay(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "display", "body", string(m.Display)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Site) contextValidateGroup(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Group != nil {
+		if err := m.Group.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("group")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("group")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Site) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Site) contextValidateLastUpdated(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "last_updated", "body", strfmt.DateTime(m.LastUpdated)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Site) contextValidatePrefixCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "prefix_count", "body", int64(m.PrefixCount)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Site) contextValidateRackCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "rack_count", "body", int64(m.RackCount)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Site) contextValidateRegion(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Region != nil {
+		if err := m.Region.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("region")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("region")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Site) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Status != nil {
+		if err := m.Status.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("status")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("status")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Site) contextValidateTags(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Tags); i++ {
+
+		if m.Tags[i] != nil {
+			if err := m.Tags[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("tags" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("tags" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *Site) contextValidateTenant(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Tenant != nil {
+		if err := m.Tenant.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("tenant")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("tenant")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Site) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", strfmt.URI(m.URL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Site) contextValidateVirtualmachineCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "virtualmachine_count", "body", int64(m.VirtualmachineCount)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Site) contextValidateVlanCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "vlan_count", "body", int64(m.VlanCount)); err != nil {
+		return err
 	}
 
 	return nil
@@ -487,15 +869,18 @@ func (m *Site) UnmarshalBinary(b []byte) error {
 }
 
 // SiteStatus Status
+//
 // swagger:model SiteStatus
 type SiteStatus struct {
 
 	// label
 	// Required: true
+	// Enum: [Planned Staging Active Decommissioning Retired]
 	Label *string `json:"label"`
 
 	// value
 	// Required: true
+	// Enum: [planned staging active decommissioning retired]
 	Value *string `json:"value"`
 }
 
@@ -517,12 +902,93 @@ func (m *SiteStatus) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
+var siteStatusTypeLabelPropEnum []interface{}
+
+func init() {
+	var res []string
+	if err := json.Unmarshal([]byte(`["Planned","Staging","Active","Decommissioning","Retired"]`), &res); err != nil {
+		panic(err)
+	}
+	for _, v := range res {
+		siteStatusTypeLabelPropEnum = append(siteStatusTypeLabelPropEnum, v)
+	}
+}
+
+const (
+
+	// SiteStatusLabelPlanned captures enum value "Planned"
+	SiteStatusLabelPlanned string = "Planned"
+
+	// SiteStatusLabelStaging captures enum value "Staging"
+	SiteStatusLabelStaging string = "Staging"
+
+	// SiteStatusLabelActive captures enum value "Active"
+	SiteStatusLabelActive string = "Active"
+
+	// SiteStatusLabelDecommissioning captures enum value "Decommissioning"
+	SiteStatusLabelDecommissioning string = "Decommissioning"
+
+	// SiteStatusLabelRetired captures enum value "Retired"
+	SiteStatusLabelRetired string = "Retired"
+)
+
+// prop value enum
+func (m *SiteStatus) validateLabelEnum(path, location string, value string) error {
+	if err := validate.EnumCase(path, location, value, siteStatusTypeLabelPropEnum, true); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (m *SiteStatus) validateLabel(formats strfmt.Registry) error {
 
 	if err := validate.Required("status"+"."+"label", "body", m.Label); err != nil {
 		return err
 	}
 
+	// value enum
+	if err := m.validateLabelEnum("status"+"."+"label", "body", *m.Label); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+var siteStatusTypeValuePropEnum []interface{}
+
+func init() {
+	var res []string
+	if err := json.Unmarshal([]byte(`["planned","staging","active","decommissioning","retired"]`), &res); err != nil {
+		panic(err)
+	}
+	for _, v := range res {
+		siteStatusTypeValuePropEnum = append(siteStatusTypeValuePropEnum, v)
+	}
+}
+
+const (
+
+	// SiteStatusValuePlanned captures enum value "planned"
+	SiteStatusValuePlanned string = "planned"
+
+	// SiteStatusValueStaging captures enum value "staging"
+	SiteStatusValueStaging string = "staging"
+
+	// SiteStatusValueActive captures enum value "active"
+	SiteStatusValueActive string = "active"
+
+	// SiteStatusValueDecommissioning captures enum value "decommissioning"
+	SiteStatusValueDecommissioning string = "decommissioning"
+
+	// SiteStatusValueRetired captures enum value "retired"
+	SiteStatusValueRetired string = "retired"
+)
+
+// prop value enum
+func (m *SiteStatus) validateValueEnum(path, location string, value string) error {
+	if err := validate.EnumCase(path, location, value, siteStatusTypeValuePropEnum, true); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -532,6 +998,16 @@ func (m *SiteStatus) validateValue(formats strfmt.Registry) error {
 		return err
 	}
 
+	// value enum
+	if err := m.validateValueEnum("status"+"."+"value", "body", *m.Value); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validates this site status based on context it is used
+func (m *SiteStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

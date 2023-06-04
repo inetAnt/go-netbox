@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // ExtrasImageAttachmentsReadReader is a Reader for the ExtrasImageAttachmentsRead structure.
@@ -45,9 +44,15 @@ func (o *ExtrasImageAttachmentsReadReader) ReadResponse(response runtime.ClientR
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewExtrasImageAttachmentsReadDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewExtrasImageAttachmentsReadOK() *ExtrasImageAttachmentsReadOK {
 	return &ExtrasImageAttachmentsReadOK{}
 }
 
-/*ExtrasImageAttachmentsReadOK handles this case with default header values.
+/*
+ExtrasImageAttachmentsReadOK describes a response with status code 200, with default header values.
 
 ExtrasImageAttachmentsReadOK extras image attachments read o k
 */
@@ -64,7 +70,41 @@ type ExtrasImageAttachmentsReadOK struct {
 	Payload *models.ImageAttachment
 }
 
+// IsSuccess returns true when this extras image attachments read o k response has a 2xx status code
+func (o *ExtrasImageAttachmentsReadOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this extras image attachments read o k response has a 3xx status code
+func (o *ExtrasImageAttachmentsReadOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this extras image attachments read o k response has a 4xx status code
+func (o *ExtrasImageAttachmentsReadOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this extras image attachments read o k response has a 5xx status code
+func (o *ExtrasImageAttachmentsReadOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this extras image attachments read o k response a status code equal to that given
+func (o *ExtrasImageAttachmentsReadOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the extras image attachments read o k response
+func (o *ExtrasImageAttachmentsReadOK) Code() int {
+	return 200
+}
+
 func (o *ExtrasImageAttachmentsReadOK) Error() string {
+	return fmt.Sprintf("[GET /extras/image-attachments/{id}/][%d] extrasImageAttachmentsReadOK  %+v", 200, o.Payload)
+}
+
+func (o *ExtrasImageAttachmentsReadOK) String() string {
 	return fmt.Sprintf("[GET /extras/image-attachments/{id}/][%d] extrasImageAttachmentsReadOK  %+v", 200, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *ExtrasImageAttachmentsReadOK) readResponse(response runtime.ClientRespo
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewExtrasImageAttachmentsReadDefault creates a ExtrasImageAttachmentsReadDefault with default headers values
+func NewExtrasImageAttachmentsReadDefault(code int) *ExtrasImageAttachmentsReadDefault {
+	return &ExtrasImageAttachmentsReadDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+ExtrasImageAttachmentsReadDefault describes a response with status code -1, with default header values.
+
+ExtrasImageAttachmentsReadDefault extras image attachments read default
+*/
+type ExtrasImageAttachmentsReadDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this extras image attachments read default response has a 2xx status code
+func (o *ExtrasImageAttachmentsReadDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this extras image attachments read default response has a 3xx status code
+func (o *ExtrasImageAttachmentsReadDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this extras image attachments read default response has a 4xx status code
+func (o *ExtrasImageAttachmentsReadDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this extras image attachments read default response has a 5xx status code
+func (o *ExtrasImageAttachmentsReadDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this extras image attachments read default response a status code equal to that given
+func (o *ExtrasImageAttachmentsReadDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the extras image attachments read default response
+func (o *ExtrasImageAttachmentsReadDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *ExtrasImageAttachmentsReadDefault) Error() string {
+	return fmt.Sprintf("[GET /extras/image-attachments/{id}/][%d] extras_image-attachments_read default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *ExtrasImageAttachmentsReadDefault) String() string {
+	return fmt.Sprintf("[GET /extras/image-attachments/{id}/][%d] extras_image-attachments_read default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *ExtrasImageAttachmentsReadDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *ExtrasImageAttachmentsReadDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

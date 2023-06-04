@@ -21,18 +21,18 @@ package virtualization
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // VirtualizationVirtualMachinesListReader is a Reader for the VirtualizationVirtualMachinesList structure.
@@ -49,9 +49,15 @@ func (o *VirtualizationVirtualMachinesListReader) ReadResponse(response runtime.
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewVirtualizationVirtualMachinesListDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -60,7 +66,8 @@ func NewVirtualizationVirtualMachinesListOK() *VirtualizationVirtualMachinesList
 	return &VirtualizationVirtualMachinesListOK{}
 }
 
-/*VirtualizationVirtualMachinesListOK handles this case with default header values.
+/*
+VirtualizationVirtualMachinesListOK describes a response with status code 200, with default header values.
 
 VirtualizationVirtualMachinesListOK virtualization virtual machines list o k
 */
@@ -68,7 +75,41 @@ type VirtualizationVirtualMachinesListOK struct {
 	Payload *VirtualizationVirtualMachinesListOKBody
 }
 
+// IsSuccess returns true when this virtualization virtual machines list o k response has a 2xx status code
+func (o *VirtualizationVirtualMachinesListOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this virtualization virtual machines list o k response has a 3xx status code
+func (o *VirtualizationVirtualMachinesListOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this virtualization virtual machines list o k response has a 4xx status code
+func (o *VirtualizationVirtualMachinesListOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this virtualization virtual machines list o k response has a 5xx status code
+func (o *VirtualizationVirtualMachinesListOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this virtualization virtual machines list o k response a status code equal to that given
+func (o *VirtualizationVirtualMachinesListOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the virtualization virtual machines list o k response
+func (o *VirtualizationVirtualMachinesListOK) Code() int {
+	return 200
+}
+
 func (o *VirtualizationVirtualMachinesListOK) Error() string {
+	return fmt.Sprintf("[GET /virtualization/virtual-machines/][%d] virtualizationVirtualMachinesListOK  %+v", 200, o.Payload)
+}
+
+func (o *VirtualizationVirtualMachinesListOK) String() string {
 	return fmt.Sprintf("[GET /virtualization/virtual-machines/][%d] virtualizationVirtualMachinesListOK  %+v", 200, o.Payload)
 }
 
@@ -88,7 +129,78 @@ func (o *VirtualizationVirtualMachinesListOK) readResponse(response runtime.Clie
 	return nil
 }
 
-/*VirtualizationVirtualMachinesListOKBody virtualization virtual machines list o k body
+// NewVirtualizationVirtualMachinesListDefault creates a VirtualizationVirtualMachinesListDefault with default headers values
+func NewVirtualizationVirtualMachinesListDefault(code int) *VirtualizationVirtualMachinesListDefault {
+	return &VirtualizationVirtualMachinesListDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+VirtualizationVirtualMachinesListDefault describes a response with status code -1, with default header values.
+
+VirtualizationVirtualMachinesListDefault virtualization virtual machines list default
+*/
+type VirtualizationVirtualMachinesListDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this virtualization virtual machines list default response has a 2xx status code
+func (o *VirtualizationVirtualMachinesListDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this virtualization virtual machines list default response has a 3xx status code
+func (o *VirtualizationVirtualMachinesListDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this virtualization virtual machines list default response has a 4xx status code
+func (o *VirtualizationVirtualMachinesListDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this virtualization virtual machines list default response has a 5xx status code
+func (o *VirtualizationVirtualMachinesListDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this virtualization virtual machines list default response a status code equal to that given
+func (o *VirtualizationVirtualMachinesListDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the virtualization virtual machines list default response
+func (o *VirtualizationVirtualMachinesListDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *VirtualizationVirtualMachinesListDefault) Error() string {
+	return fmt.Sprintf("[GET /virtualization/virtual-machines/][%d] virtualization_virtual-machines_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *VirtualizationVirtualMachinesListDefault) String() string {
+	return fmt.Sprintf("[GET /virtualization/virtual-machines/][%d] virtualization_virtual-machines_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *VirtualizationVirtualMachinesListDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *VirtualizationVirtualMachinesListDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+/*
+VirtualizationVirtualMachinesListOKBody virtualization virtual machines list o k body
 swagger:model VirtualizationVirtualMachinesListOKBody
 */
 type VirtualizationVirtualMachinesListOKBody struct {
@@ -146,7 +258,6 @@ func (o *VirtualizationVirtualMachinesListOKBody) validateCount(formats strfmt.R
 }
 
 func (o *VirtualizationVirtualMachinesListOKBody) validateNext(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Next) { // not required
 		return nil
 	}
@@ -159,7 +270,6 @@ func (o *VirtualizationVirtualMachinesListOKBody) validateNext(formats strfmt.Re
 }
 
 func (o *VirtualizationVirtualMachinesListOKBody) validatePrevious(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Previous) { // not required
 		return nil
 	}
@@ -186,6 +296,42 @@ func (o *VirtualizationVirtualMachinesListOKBody) validateResults(formats strfmt
 			if err := o.Results[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("virtualizationVirtualMachinesListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("virtualizationVirtualMachinesListOK" + "." + "results" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this virtualization virtual machines list o k body based on the context it is used
+func (o *VirtualizationVirtualMachinesListOKBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := o.contextValidateResults(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (o *VirtualizationVirtualMachinesListOKBody) contextValidateResults(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(o.Results); i++ {
+
+		if o.Results[i] != nil {
+			if err := o.Results[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("virtualizationVirtualMachinesListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("virtualizationVirtualMachinesListOK" + "." + "results" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

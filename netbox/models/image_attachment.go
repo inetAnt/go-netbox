@@ -21,14 +21,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // ImageAttachment image attachment
+//
 // swagger:model ImageAttachment
 type ImageAttachment struct {
 
@@ -41,7 +43,11 @@ type ImageAttachment struct {
 	// Format: date-time
 	Created strfmt.DateTime `json:"created,omitempty"`
 
-	// ID
+	// Display
+	// Read Only: true
+	Display string `json:"display,omitempty"`
+
+	// Id
 	// Read Only: true
 	ID int64 `json:"id,omitempty"`
 
@@ -62,6 +68,11 @@ type ImageAttachment struct {
 	// Minimum: 0
 	ImageWidth *int64 `json:"image_width"`
 
+	// Last updated
+	// Read Only: true
+	// Format: date-time
+	LastUpdated strfmt.DateTime `json:"last_updated,omitempty"`
+
 	// Name
 	// Max Length: 50
 	Name string `json:"name,omitempty"`
@@ -74,7 +85,12 @@ type ImageAttachment struct {
 
 	// Parent
 	// Read Only: true
-	Parent map[string]string `json:"parent,omitempty"`
+	Parent map[string]*string `json:"parent,omitempty"`
+
+	// Url
+	// Read Only: true
+	// Format: uri
+	URL strfmt.URI `json:"url,omitempty"`
 }
 
 // Validate validates this image attachment
@@ -101,11 +117,19 @@ func (m *ImageAttachment) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateLastUpdated(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateName(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.validateObjectID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateURL(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -125,7 +149,6 @@ func (m *ImageAttachment) validateContentType(formats strfmt.Registry) error {
 }
 
 func (m *ImageAttachment) validateCreated(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Created) { // not required
 		return nil
 	}
@@ -138,7 +161,6 @@ func (m *ImageAttachment) validateCreated(formats strfmt.Registry) error {
 }
 
 func (m *ImageAttachment) validateImage(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Image) { // not required
 		return nil
 	}
@@ -156,11 +178,11 @@ func (m *ImageAttachment) validateImageHeight(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinimumInt("image_height", "body", int64(*m.ImageHeight), 0, false); err != nil {
+	if err := validate.MinimumInt("image_height", "body", *m.ImageHeight, 0, false); err != nil {
 		return err
 	}
 
-	if err := validate.MaximumInt("image_height", "body", int64(*m.ImageHeight), 32767, false); err != nil {
+	if err := validate.MaximumInt("image_height", "body", *m.ImageHeight, 32767, false); err != nil {
 		return err
 	}
 
@@ -173,11 +195,23 @@ func (m *ImageAttachment) validateImageWidth(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinimumInt("image_width", "body", int64(*m.ImageWidth), 0, false); err != nil {
+	if err := validate.MinimumInt("image_width", "body", *m.ImageWidth, 0, false); err != nil {
 		return err
 	}
 
-	if err := validate.MaximumInt("image_width", "body", int64(*m.ImageWidth), 32767, false); err != nil {
+	if err := validate.MaximumInt("image_width", "body", *m.ImageWidth, 32767, false); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ImageAttachment) validateLastUpdated(formats strfmt.Registry) error {
+	if swag.IsZero(m.LastUpdated) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("last_updated", "body", "date-time", m.LastUpdated.String(), formats); err != nil {
 		return err
 	}
 
@@ -185,12 +219,11 @@ func (m *ImageAttachment) validateImageWidth(formats strfmt.Registry) error {
 }
 
 func (m *ImageAttachment) validateName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Name) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("name", "body", string(m.Name), 50); err != nil {
+	if err := validate.MaxLength("name", "body", m.Name, 50); err != nil {
 		return err
 	}
 
@@ -203,11 +236,120 @@ func (m *ImageAttachment) validateObjectID(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinimumInt("object_id", "body", int64(*m.ObjectID), 0, false); err != nil {
+	if err := validate.MinimumInt("object_id", "body", *m.ObjectID, 0, false); err != nil {
 		return err
 	}
 
-	if err := validate.MaximumInt("object_id", "body", int64(*m.ObjectID), 2.147483647e+09, false); err != nil {
+	if err := validate.MaximumInt("object_id", "body", *m.ObjectID, 2.147483647e+09, false); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ImageAttachment) validateURL(formats strfmt.Registry) error {
+	if swag.IsZero(m.URL) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("url", "body", "uri", m.URL.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this image attachment based on the context it is used
+func (m *ImageAttachment) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCreated(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDisplay(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateImage(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLastUpdated(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateParent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ImageAttachment) contextValidateCreated(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created", "body", strfmt.DateTime(m.Created)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ImageAttachment) contextValidateDisplay(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "display", "body", string(m.Display)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ImageAttachment) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ImageAttachment) contextValidateImage(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "image", "body", strfmt.URI(m.Image)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ImageAttachment) contextValidateLastUpdated(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "last_updated", "body", strfmt.DateTime(m.LastUpdated)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ImageAttachment) contextValidateParent(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *ImageAttachment) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", strfmt.URI(m.URL)); err != nil {
 		return err
 	}
 

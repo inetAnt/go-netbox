@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // IpamVlansCreateReader is a Reader for the IpamVlansCreate structure.
@@ -45,9 +44,15 @@ func (o *IpamVlansCreateReader) ReadResponse(response runtime.ClientResponse, co
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewIpamVlansCreateDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewIpamVlansCreateCreated() *IpamVlansCreateCreated {
 	return &IpamVlansCreateCreated{}
 }
 
-/*IpamVlansCreateCreated handles this case with default header values.
+/*
+IpamVlansCreateCreated describes a response with status code 201, with default header values.
 
 IpamVlansCreateCreated ipam vlans create created
 */
@@ -64,7 +70,41 @@ type IpamVlansCreateCreated struct {
 	Payload *models.VLAN
 }
 
+// IsSuccess returns true when this ipam vlans create created response has a 2xx status code
+func (o *IpamVlansCreateCreated) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this ipam vlans create created response has a 3xx status code
+func (o *IpamVlansCreateCreated) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this ipam vlans create created response has a 4xx status code
+func (o *IpamVlansCreateCreated) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this ipam vlans create created response has a 5xx status code
+func (o *IpamVlansCreateCreated) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this ipam vlans create created response a status code equal to that given
+func (o *IpamVlansCreateCreated) IsCode(code int) bool {
+	return code == 201
+}
+
+// Code gets the status code for the ipam vlans create created response
+func (o *IpamVlansCreateCreated) Code() int {
+	return 201
+}
+
 func (o *IpamVlansCreateCreated) Error() string {
+	return fmt.Sprintf("[POST /ipam/vlans/][%d] ipamVlansCreateCreated  %+v", 201, o.Payload)
+}
+
+func (o *IpamVlansCreateCreated) String() string {
 	return fmt.Sprintf("[POST /ipam/vlans/][%d] ipamVlansCreateCreated  %+v", 201, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *IpamVlansCreateCreated) readResponse(response runtime.ClientResponse, c
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewIpamVlansCreateDefault creates a IpamVlansCreateDefault with default headers values
+func NewIpamVlansCreateDefault(code int) *IpamVlansCreateDefault {
+	return &IpamVlansCreateDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+IpamVlansCreateDefault describes a response with status code -1, with default header values.
+
+IpamVlansCreateDefault ipam vlans create default
+*/
+type IpamVlansCreateDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this ipam vlans create default response has a 2xx status code
+func (o *IpamVlansCreateDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this ipam vlans create default response has a 3xx status code
+func (o *IpamVlansCreateDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this ipam vlans create default response has a 4xx status code
+func (o *IpamVlansCreateDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this ipam vlans create default response has a 5xx status code
+func (o *IpamVlansCreateDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this ipam vlans create default response a status code equal to that given
+func (o *IpamVlansCreateDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the ipam vlans create default response
+func (o *IpamVlansCreateDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *IpamVlansCreateDefault) Error() string {
+	return fmt.Sprintf("[POST /ipam/vlans/][%d] ipam_vlans_create default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *IpamVlansCreateDefault) String() string {
+	return fmt.Sprintf("[POST /ipam/vlans/][%d] ipam_vlans_create default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *IpamVlansCreateDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *IpamVlansCreateDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

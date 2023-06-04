@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // IpamPrefixesCreateReader is a Reader for the IpamPrefixesCreate structure.
@@ -45,9 +44,15 @@ func (o *IpamPrefixesCreateReader) ReadResponse(response runtime.ClientResponse,
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewIpamPrefixesCreateDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewIpamPrefixesCreateCreated() *IpamPrefixesCreateCreated {
 	return &IpamPrefixesCreateCreated{}
 }
 
-/*IpamPrefixesCreateCreated handles this case with default header values.
+/*
+IpamPrefixesCreateCreated describes a response with status code 201, with default header values.
 
 IpamPrefixesCreateCreated ipam prefixes create created
 */
@@ -64,7 +70,41 @@ type IpamPrefixesCreateCreated struct {
 	Payload *models.Prefix
 }
 
+// IsSuccess returns true when this ipam prefixes create created response has a 2xx status code
+func (o *IpamPrefixesCreateCreated) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this ipam prefixes create created response has a 3xx status code
+func (o *IpamPrefixesCreateCreated) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this ipam prefixes create created response has a 4xx status code
+func (o *IpamPrefixesCreateCreated) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this ipam prefixes create created response has a 5xx status code
+func (o *IpamPrefixesCreateCreated) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this ipam prefixes create created response a status code equal to that given
+func (o *IpamPrefixesCreateCreated) IsCode(code int) bool {
+	return code == 201
+}
+
+// Code gets the status code for the ipam prefixes create created response
+func (o *IpamPrefixesCreateCreated) Code() int {
+	return 201
+}
+
 func (o *IpamPrefixesCreateCreated) Error() string {
+	return fmt.Sprintf("[POST /ipam/prefixes/][%d] ipamPrefixesCreateCreated  %+v", 201, o.Payload)
+}
+
+func (o *IpamPrefixesCreateCreated) String() string {
 	return fmt.Sprintf("[POST /ipam/prefixes/][%d] ipamPrefixesCreateCreated  %+v", 201, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *IpamPrefixesCreateCreated) readResponse(response runtime.ClientResponse
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewIpamPrefixesCreateDefault creates a IpamPrefixesCreateDefault with default headers values
+func NewIpamPrefixesCreateDefault(code int) *IpamPrefixesCreateDefault {
+	return &IpamPrefixesCreateDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+IpamPrefixesCreateDefault describes a response with status code -1, with default header values.
+
+IpamPrefixesCreateDefault ipam prefixes create default
+*/
+type IpamPrefixesCreateDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this ipam prefixes create default response has a 2xx status code
+func (o *IpamPrefixesCreateDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this ipam prefixes create default response has a 3xx status code
+func (o *IpamPrefixesCreateDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this ipam prefixes create default response has a 4xx status code
+func (o *IpamPrefixesCreateDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this ipam prefixes create default response has a 5xx status code
+func (o *IpamPrefixesCreateDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this ipam prefixes create default response a status code equal to that given
+func (o *IpamPrefixesCreateDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the ipam prefixes create default response
+func (o *IpamPrefixesCreateDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *IpamPrefixesCreateDefault) Error() string {
+	return fmt.Sprintf("[POST /ipam/prefixes/][%d] ipam_prefixes_create default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *IpamPrefixesCreateDefault) String() string {
+	return fmt.Sprintf("[POST /ipam/prefixes/][%d] ipam_prefixes_create default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *IpamPrefixesCreateDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *IpamPrefixesCreateDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

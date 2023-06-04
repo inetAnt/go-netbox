@@ -21,15 +21,12 @@ package tenancy
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"fmt"
-
 	"github.com/go-openapi/runtime"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
 // New creates a new tenancy API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) *Client {
+func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
@@ -41,86 +38,1613 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
-/*
-TenancyChoicesList tenancy choices list API
-*/
-func (a *Client) TenancyChoicesList(params *TenancyChoicesListParams, authInfo runtime.ClientAuthInfoWriter) (*TenancyChoicesListOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewTenancyChoicesListParams()
-	}
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
 
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "tenancy__choices_list",
-		Method:             "GET",
-		PathPattern:        "/tenancy/_choices/",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &TenancyChoicesListReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*TenancyChoicesListOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for tenancy__choices_list: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+// ClientService is the interface for Client methods
+type ClientService interface {
+	TenancyContactAssignmentsBulkDelete(params *TenancyContactAssignmentsBulkDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactAssignmentsBulkDeleteNoContent, error)
+
+	TenancyContactAssignmentsBulkPartialUpdate(params *TenancyContactAssignmentsBulkPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactAssignmentsBulkPartialUpdateOK, error)
+
+	TenancyContactAssignmentsBulkUpdate(params *TenancyContactAssignmentsBulkUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactAssignmentsBulkUpdateOK, error)
+
+	TenancyContactAssignmentsCreate(params *TenancyContactAssignmentsCreateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactAssignmentsCreateCreated, error)
+
+	TenancyContactAssignmentsDelete(params *TenancyContactAssignmentsDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactAssignmentsDeleteNoContent, error)
+
+	TenancyContactAssignmentsList(params *TenancyContactAssignmentsListParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactAssignmentsListOK, error)
+
+	TenancyContactAssignmentsPartialUpdate(params *TenancyContactAssignmentsPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactAssignmentsPartialUpdateOK, error)
+
+	TenancyContactAssignmentsRead(params *TenancyContactAssignmentsReadParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactAssignmentsReadOK, error)
+
+	TenancyContactAssignmentsUpdate(params *TenancyContactAssignmentsUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactAssignmentsUpdateOK, error)
+
+	TenancyContactGroupsBulkDelete(params *TenancyContactGroupsBulkDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactGroupsBulkDeleteNoContent, error)
+
+	TenancyContactGroupsBulkPartialUpdate(params *TenancyContactGroupsBulkPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactGroupsBulkPartialUpdateOK, error)
+
+	TenancyContactGroupsBulkUpdate(params *TenancyContactGroupsBulkUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactGroupsBulkUpdateOK, error)
+
+	TenancyContactGroupsCreate(params *TenancyContactGroupsCreateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactGroupsCreateCreated, error)
+
+	TenancyContactGroupsDelete(params *TenancyContactGroupsDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactGroupsDeleteNoContent, error)
+
+	TenancyContactGroupsList(params *TenancyContactGroupsListParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactGroupsListOK, error)
+
+	TenancyContactGroupsPartialUpdate(params *TenancyContactGroupsPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactGroupsPartialUpdateOK, error)
+
+	TenancyContactGroupsRead(params *TenancyContactGroupsReadParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactGroupsReadOK, error)
+
+	TenancyContactGroupsUpdate(params *TenancyContactGroupsUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactGroupsUpdateOK, error)
+
+	TenancyContactRolesBulkDelete(params *TenancyContactRolesBulkDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactRolesBulkDeleteNoContent, error)
+
+	TenancyContactRolesBulkPartialUpdate(params *TenancyContactRolesBulkPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactRolesBulkPartialUpdateOK, error)
+
+	TenancyContactRolesBulkUpdate(params *TenancyContactRolesBulkUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactRolesBulkUpdateOK, error)
+
+	TenancyContactRolesCreate(params *TenancyContactRolesCreateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactRolesCreateCreated, error)
+
+	TenancyContactRolesDelete(params *TenancyContactRolesDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactRolesDeleteNoContent, error)
+
+	TenancyContactRolesList(params *TenancyContactRolesListParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactRolesListOK, error)
+
+	TenancyContactRolesPartialUpdate(params *TenancyContactRolesPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactRolesPartialUpdateOK, error)
+
+	TenancyContactRolesRead(params *TenancyContactRolesReadParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactRolesReadOK, error)
+
+	TenancyContactRolesUpdate(params *TenancyContactRolesUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactRolesUpdateOK, error)
+
+	TenancyContactsBulkDelete(params *TenancyContactsBulkDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactsBulkDeleteNoContent, error)
+
+	TenancyContactsBulkPartialUpdate(params *TenancyContactsBulkPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactsBulkPartialUpdateOK, error)
+
+	TenancyContactsBulkUpdate(params *TenancyContactsBulkUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactsBulkUpdateOK, error)
+
+	TenancyContactsCreate(params *TenancyContactsCreateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactsCreateCreated, error)
+
+	TenancyContactsDelete(params *TenancyContactsDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactsDeleteNoContent, error)
+
+	TenancyContactsList(params *TenancyContactsListParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactsListOK, error)
+
+	TenancyContactsPartialUpdate(params *TenancyContactsPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactsPartialUpdateOK, error)
+
+	TenancyContactsRead(params *TenancyContactsReadParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactsReadOK, error)
+
+	TenancyContactsUpdate(params *TenancyContactsUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactsUpdateOK, error)
+
+	TenancyTenantGroupsBulkDelete(params *TenancyTenantGroupsBulkDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantGroupsBulkDeleteNoContent, error)
+
+	TenancyTenantGroupsBulkPartialUpdate(params *TenancyTenantGroupsBulkPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantGroupsBulkPartialUpdateOK, error)
+
+	TenancyTenantGroupsBulkUpdate(params *TenancyTenantGroupsBulkUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantGroupsBulkUpdateOK, error)
+
+	TenancyTenantGroupsCreate(params *TenancyTenantGroupsCreateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantGroupsCreateCreated, error)
+
+	TenancyTenantGroupsDelete(params *TenancyTenantGroupsDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantGroupsDeleteNoContent, error)
+
+	TenancyTenantGroupsList(params *TenancyTenantGroupsListParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantGroupsListOK, error)
+
+	TenancyTenantGroupsPartialUpdate(params *TenancyTenantGroupsPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantGroupsPartialUpdateOK, error)
+
+	TenancyTenantGroupsRead(params *TenancyTenantGroupsReadParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantGroupsReadOK, error)
+
+	TenancyTenantGroupsUpdate(params *TenancyTenantGroupsUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantGroupsUpdateOK, error)
+
+	TenancyTenantsBulkDelete(params *TenancyTenantsBulkDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantsBulkDeleteNoContent, error)
+
+	TenancyTenantsBulkPartialUpdate(params *TenancyTenantsBulkPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantsBulkPartialUpdateOK, error)
+
+	TenancyTenantsBulkUpdate(params *TenancyTenantsBulkUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantsBulkUpdateOK, error)
+
+	TenancyTenantsCreate(params *TenancyTenantsCreateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantsCreateCreated, error)
+
+	TenancyTenantsDelete(params *TenancyTenantsDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantsDeleteNoContent, error)
+
+	TenancyTenantsList(params *TenancyTenantsListParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantsListOK, error)
+
+	TenancyTenantsPartialUpdate(params *TenancyTenantsPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantsPartialUpdateOK, error)
+
+	TenancyTenantsRead(params *TenancyTenantsReadParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantsReadOK, error)
+
+	TenancyTenantsUpdate(params *TenancyTenantsUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantsUpdateOK, error)
+
+	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-TenancyChoicesRead tenancy choices read API
+TenancyContactAssignmentsBulkDelete tenancy contact assignments bulk delete API
 */
-func (a *Client) TenancyChoicesRead(params *TenancyChoicesReadParams, authInfo runtime.ClientAuthInfoWriter) (*TenancyChoicesReadOK, error) {
+func (a *Client) TenancyContactAssignmentsBulkDelete(params *TenancyContactAssignmentsBulkDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactAssignmentsBulkDeleteNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewTenancyChoicesReadParams()
+		params = NewTenancyContactAssignmentsBulkDeleteParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "tenancy__choices_read",
-		Method:             "GET",
-		PathPattern:        "/tenancy/_choices/{id}/",
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-assignments_bulk_delete",
+		Method:             "DELETE",
+		PathPattern:        "/tenancy/contact-assignments/",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
 		Params:             params,
-		Reader:             &TenancyChoicesReadReader{formats: a.formats},
+		Reader:             &TenancyContactAssignmentsBulkDeleteReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*TenancyChoicesReadOK)
+	success, ok := result.(*TenancyContactAssignmentsBulkDeleteNoContent)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for tenancy__choices_read: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*TenancyContactAssignmentsBulkDeleteDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactAssignmentsBulkPartialUpdate tenancy contact assignments bulk partial update API
+*/
+func (a *Client) TenancyContactAssignmentsBulkPartialUpdate(params *TenancyContactAssignmentsBulkPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactAssignmentsBulkPartialUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactAssignmentsBulkPartialUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-assignments_bulk_partial_update",
+		Method:             "PATCH",
+		PathPattern:        "/tenancy/contact-assignments/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactAssignmentsBulkPartialUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactAssignmentsBulkPartialUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactAssignmentsBulkPartialUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactAssignmentsBulkUpdate tenancy contact assignments bulk update API
+*/
+func (a *Client) TenancyContactAssignmentsBulkUpdate(params *TenancyContactAssignmentsBulkUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactAssignmentsBulkUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactAssignmentsBulkUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-assignments_bulk_update",
+		Method:             "PUT",
+		PathPattern:        "/tenancy/contact-assignments/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactAssignmentsBulkUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactAssignmentsBulkUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactAssignmentsBulkUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactAssignmentsCreate tenancy contact assignments create API
+*/
+func (a *Client) TenancyContactAssignmentsCreate(params *TenancyContactAssignmentsCreateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactAssignmentsCreateCreated, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactAssignmentsCreateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-assignments_create",
+		Method:             "POST",
+		PathPattern:        "/tenancy/contact-assignments/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactAssignmentsCreateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactAssignmentsCreateCreated)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactAssignmentsCreateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactAssignmentsDelete tenancy contact assignments delete API
+*/
+func (a *Client) TenancyContactAssignmentsDelete(params *TenancyContactAssignmentsDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactAssignmentsDeleteNoContent, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactAssignmentsDeleteParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-assignments_delete",
+		Method:             "DELETE",
+		PathPattern:        "/tenancy/contact-assignments/{id}/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactAssignmentsDeleteReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactAssignmentsDeleteNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactAssignmentsDeleteDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactAssignmentsList Overrides ListModelMixin to allow processing ExportTemplates.
+*/
+func (a *Client) TenancyContactAssignmentsList(params *TenancyContactAssignmentsListParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactAssignmentsListOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactAssignmentsListParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-assignments_list",
+		Method:             "GET",
+		PathPattern:        "/tenancy/contact-assignments/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactAssignmentsListReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactAssignmentsListOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactAssignmentsListDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactAssignmentsPartialUpdate tenancy contact assignments partial update API
+*/
+func (a *Client) TenancyContactAssignmentsPartialUpdate(params *TenancyContactAssignmentsPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactAssignmentsPartialUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactAssignmentsPartialUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-assignments_partial_update",
+		Method:             "PATCH",
+		PathPattern:        "/tenancy/contact-assignments/{id}/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactAssignmentsPartialUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactAssignmentsPartialUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactAssignmentsPartialUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactAssignmentsRead tenancy contact assignments read API
+*/
+func (a *Client) TenancyContactAssignmentsRead(params *TenancyContactAssignmentsReadParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactAssignmentsReadOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactAssignmentsReadParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-assignments_read",
+		Method:             "GET",
+		PathPattern:        "/tenancy/contact-assignments/{id}/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactAssignmentsReadReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactAssignmentsReadOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactAssignmentsReadDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactAssignmentsUpdate tenancy contact assignments update API
+*/
+func (a *Client) TenancyContactAssignmentsUpdate(params *TenancyContactAssignmentsUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactAssignmentsUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactAssignmentsUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-assignments_update",
+		Method:             "PUT",
+		PathPattern:        "/tenancy/contact-assignments/{id}/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactAssignmentsUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactAssignmentsUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactAssignmentsUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactGroupsBulkDelete tenancy contact groups bulk delete API
+*/
+func (a *Client) TenancyContactGroupsBulkDelete(params *TenancyContactGroupsBulkDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactGroupsBulkDeleteNoContent, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactGroupsBulkDeleteParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-groups_bulk_delete",
+		Method:             "DELETE",
+		PathPattern:        "/tenancy/contact-groups/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactGroupsBulkDeleteReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactGroupsBulkDeleteNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactGroupsBulkDeleteDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactGroupsBulkPartialUpdate tenancy contact groups bulk partial update API
+*/
+func (a *Client) TenancyContactGroupsBulkPartialUpdate(params *TenancyContactGroupsBulkPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactGroupsBulkPartialUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactGroupsBulkPartialUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-groups_bulk_partial_update",
+		Method:             "PATCH",
+		PathPattern:        "/tenancy/contact-groups/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactGroupsBulkPartialUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactGroupsBulkPartialUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactGroupsBulkPartialUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactGroupsBulkUpdate tenancy contact groups bulk update API
+*/
+func (a *Client) TenancyContactGroupsBulkUpdate(params *TenancyContactGroupsBulkUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactGroupsBulkUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactGroupsBulkUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-groups_bulk_update",
+		Method:             "PUT",
+		PathPattern:        "/tenancy/contact-groups/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactGroupsBulkUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactGroupsBulkUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactGroupsBulkUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactGroupsCreate tenancy contact groups create API
+*/
+func (a *Client) TenancyContactGroupsCreate(params *TenancyContactGroupsCreateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactGroupsCreateCreated, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactGroupsCreateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-groups_create",
+		Method:             "POST",
+		PathPattern:        "/tenancy/contact-groups/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactGroupsCreateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactGroupsCreateCreated)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactGroupsCreateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactGroupsDelete tenancy contact groups delete API
+*/
+func (a *Client) TenancyContactGroupsDelete(params *TenancyContactGroupsDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactGroupsDeleteNoContent, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactGroupsDeleteParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-groups_delete",
+		Method:             "DELETE",
+		PathPattern:        "/tenancy/contact-groups/{id}/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactGroupsDeleteReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactGroupsDeleteNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactGroupsDeleteDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactGroupsList Overrides ListModelMixin to allow processing ExportTemplates.
+*/
+func (a *Client) TenancyContactGroupsList(params *TenancyContactGroupsListParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactGroupsListOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactGroupsListParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-groups_list",
+		Method:             "GET",
+		PathPattern:        "/tenancy/contact-groups/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactGroupsListReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactGroupsListOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactGroupsListDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactGroupsPartialUpdate tenancy contact groups partial update API
+*/
+func (a *Client) TenancyContactGroupsPartialUpdate(params *TenancyContactGroupsPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactGroupsPartialUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactGroupsPartialUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-groups_partial_update",
+		Method:             "PATCH",
+		PathPattern:        "/tenancy/contact-groups/{id}/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactGroupsPartialUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactGroupsPartialUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactGroupsPartialUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactGroupsRead tenancy contact groups read API
+*/
+func (a *Client) TenancyContactGroupsRead(params *TenancyContactGroupsReadParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactGroupsReadOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactGroupsReadParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-groups_read",
+		Method:             "GET",
+		PathPattern:        "/tenancy/contact-groups/{id}/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactGroupsReadReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactGroupsReadOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactGroupsReadDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactGroupsUpdate tenancy contact groups update API
+*/
+func (a *Client) TenancyContactGroupsUpdate(params *TenancyContactGroupsUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactGroupsUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactGroupsUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-groups_update",
+		Method:             "PUT",
+		PathPattern:        "/tenancy/contact-groups/{id}/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactGroupsUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactGroupsUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactGroupsUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactRolesBulkDelete tenancy contact roles bulk delete API
+*/
+func (a *Client) TenancyContactRolesBulkDelete(params *TenancyContactRolesBulkDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactRolesBulkDeleteNoContent, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactRolesBulkDeleteParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-roles_bulk_delete",
+		Method:             "DELETE",
+		PathPattern:        "/tenancy/contact-roles/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactRolesBulkDeleteReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactRolesBulkDeleteNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactRolesBulkDeleteDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactRolesBulkPartialUpdate tenancy contact roles bulk partial update API
+*/
+func (a *Client) TenancyContactRolesBulkPartialUpdate(params *TenancyContactRolesBulkPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactRolesBulkPartialUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactRolesBulkPartialUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-roles_bulk_partial_update",
+		Method:             "PATCH",
+		PathPattern:        "/tenancy/contact-roles/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactRolesBulkPartialUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactRolesBulkPartialUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactRolesBulkPartialUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactRolesBulkUpdate tenancy contact roles bulk update API
+*/
+func (a *Client) TenancyContactRolesBulkUpdate(params *TenancyContactRolesBulkUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactRolesBulkUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactRolesBulkUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-roles_bulk_update",
+		Method:             "PUT",
+		PathPattern:        "/tenancy/contact-roles/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactRolesBulkUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactRolesBulkUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactRolesBulkUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactRolesCreate tenancy contact roles create API
+*/
+func (a *Client) TenancyContactRolesCreate(params *TenancyContactRolesCreateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactRolesCreateCreated, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactRolesCreateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-roles_create",
+		Method:             "POST",
+		PathPattern:        "/tenancy/contact-roles/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactRolesCreateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactRolesCreateCreated)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactRolesCreateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactRolesDelete tenancy contact roles delete API
+*/
+func (a *Client) TenancyContactRolesDelete(params *TenancyContactRolesDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactRolesDeleteNoContent, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactRolesDeleteParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-roles_delete",
+		Method:             "DELETE",
+		PathPattern:        "/tenancy/contact-roles/{id}/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactRolesDeleteReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactRolesDeleteNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactRolesDeleteDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactRolesList Overrides ListModelMixin to allow processing ExportTemplates.
+*/
+func (a *Client) TenancyContactRolesList(params *TenancyContactRolesListParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactRolesListOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactRolesListParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-roles_list",
+		Method:             "GET",
+		PathPattern:        "/tenancy/contact-roles/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactRolesListReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactRolesListOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactRolesListDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactRolesPartialUpdate tenancy contact roles partial update API
+*/
+func (a *Client) TenancyContactRolesPartialUpdate(params *TenancyContactRolesPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactRolesPartialUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactRolesPartialUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-roles_partial_update",
+		Method:             "PATCH",
+		PathPattern:        "/tenancy/contact-roles/{id}/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactRolesPartialUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactRolesPartialUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactRolesPartialUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactRolesRead tenancy contact roles read API
+*/
+func (a *Client) TenancyContactRolesRead(params *TenancyContactRolesReadParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactRolesReadOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactRolesReadParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-roles_read",
+		Method:             "GET",
+		PathPattern:        "/tenancy/contact-roles/{id}/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactRolesReadReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactRolesReadOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactRolesReadDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactRolesUpdate tenancy contact roles update API
+*/
+func (a *Client) TenancyContactRolesUpdate(params *TenancyContactRolesUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactRolesUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactRolesUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contact-roles_update",
+		Method:             "PUT",
+		PathPattern:        "/tenancy/contact-roles/{id}/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactRolesUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactRolesUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactRolesUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactsBulkDelete tenancy contacts bulk delete API
+*/
+func (a *Client) TenancyContactsBulkDelete(params *TenancyContactsBulkDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactsBulkDeleteNoContent, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactsBulkDeleteParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contacts_bulk_delete",
+		Method:             "DELETE",
+		PathPattern:        "/tenancy/contacts/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactsBulkDeleteReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactsBulkDeleteNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactsBulkDeleteDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactsBulkPartialUpdate tenancy contacts bulk partial update API
+*/
+func (a *Client) TenancyContactsBulkPartialUpdate(params *TenancyContactsBulkPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactsBulkPartialUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactsBulkPartialUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contacts_bulk_partial_update",
+		Method:             "PATCH",
+		PathPattern:        "/tenancy/contacts/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactsBulkPartialUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactsBulkPartialUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactsBulkPartialUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactsBulkUpdate tenancy contacts bulk update API
+*/
+func (a *Client) TenancyContactsBulkUpdate(params *TenancyContactsBulkUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactsBulkUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactsBulkUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contacts_bulk_update",
+		Method:             "PUT",
+		PathPattern:        "/tenancy/contacts/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactsBulkUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactsBulkUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactsBulkUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactsCreate tenancy contacts create API
+*/
+func (a *Client) TenancyContactsCreate(params *TenancyContactsCreateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactsCreateCreated, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactsCreateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contacts_create",
+		Method:             "POST",
+		PathPattern:        "/tenancy/contacts/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactsCreateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactsCreateCreated)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactsCreateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactsDelete tenancy contacts delete API
+*/
+func (a *Client) TenancyContactsDelete(params *TenancyContactsDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactsDeleteNoContent, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactsDeleteParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contacts_delete",
+		Method:             "DELETE",
+		PathPattern:        "/tenancy/contacts/{id}/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactsDeleteReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactsDeleteNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactsDeleteDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactsList Overrides ListModelMixin to allow processing ExportTemplates.
+*/
+func (a *Client) TenancyContactsList(params *TenancyContactsListParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactsListOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactsListParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contacts_list",
+		Method:             "GET",
+		PathPattern:        "/tenancy/contacts/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactsListReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactsListOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactsListDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactsPartialUpdate tenancy contacts partial update API
+*/
+func (a *Client) TenancyContactsPartialUpdate(params *TenancyContactsPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactsPartialUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactsPartialUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contacts_partial_update",
+		Method:             "PATCH",
+		PathPattern:        "/tenancy/contacts/{id}/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactsPartialUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactsPartialUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactsPartialUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactsRead tenancy contacts read API
+*/
+func (a *Client) TenancyContactsRead(params *TenancyContactsReadParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactsReadOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactsReadParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contacts_read",
+		Method:             "GET",
+		PathPattern:        "/tenancy/contacts/{id}/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactsReadReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactsReadOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactsReadDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyContactsUpdate tenancy contacts update API
+*/
+func (a *Client) TenancyContactsUpdate(params *TenancyContactsUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyContactsUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyContactsUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_contacts_update",
+		Method:             "PUT",
+		PathPattern:        "/tenancy/contacts/{id}/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyContactsUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyContactsUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyContactsUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyTenantGroupsBulkDelete tenancy tenant groups bulk delete API
+*/
+func (a *Client) TenancyTenantGroupsBulkDelete(params *TenancyTenantGroupsBulkDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantGroupsBulkDeleteNoContent, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyTenantGroupsBulkDeleteParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_tenant-groups_bulk_delete",
+		Method:             "DELETE",
+		PathPattern:        "/tenancy/tenant-groups/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyTenantGroupsBulkDeleteReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyTenantGroupsBulkDeleteNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyTenantGroupsBulkDeleteDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyTenantGroupsBulkPartialUpdate tenancy tenant groups bulk partial update API
+*/
+func (a *Client) TenancyTenantGroupsBulkPartialUpdate(params *TenancyTenantGroupsBulkPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantGroupsBulkPartialUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyTenantGroupsBulkPartialUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_tenant-groups_bulk_partial_update",
+		Method:             "PATCH",
+		PathPattern:        "/tenancy/tenant-groups/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyTenantGroupsBulkPartialUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyTenantGroupsBulkPartialUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyTenantGroupsBulkPartialUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyTenantGroupsBulkUpdate tenancy tenant groups bulk update API
+*/
+func (a *Client) TenancyTenantGroupsBulkUpdate(params *TenancyTenantGroupsBulkUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantGroupsBulkUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyTenantGroupsBulkUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_tenant-groups_bulk_update",
+		Method:             "PUT",
+		PathPattern:        "/tenancy/tenant-groups/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyTenantGroupsBulkUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyTenantGroupsBulkUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyTenantGroupsBulkUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
 TenancyTenantGroupsCreate tenancy tenant groups create API
 */
-func (a *Client) TenancyTenantGroupsCreate(params *TenancyTenantGroupsCreateParams, authInfo runtime.ClientAuthInfoWriter) (*TenancyTenantGroupsCreateCreated, error) {
+func (a *Client) TenancyTenantGroupsCreate(params *TenancyTenantGroupsCreateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantGroupsCreateCreated, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewTenancyTenantGroupsCreateParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "tenancy_tenant-groups_create",
 		Method:             "POST",
 		PathPattern:        "/tenancy/tenant-groups/",
@@ -132,7 +1656,12 @@ func (a *Client) TenancyTenantGroupsCreate(params *TenancyTenantGroupsCreatePara
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -141,21 +1670,19 @@ func (a *Client) TenancyTenantGroupsCreate(params *TenancyTenantGroupsCreatePara
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for tenancy_tenant-groups_create: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*TenancyTenantGroupsCreateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
 TenancyTenantGroupsDelete tenancy tenant groups delete API
 */
-func (a *Client) TenancyTenantGroupsDelete(params *TenancyTenantGroupsDeleteParams, authInfo runtime.ClientAuthInfoWriter) (*TenancyTenantGroupsDeleteNoContent, error) {
+func (a *Client) TenancyTenantGroupsDelete(params *TenancyTenantGroupsDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantGroupsDeleteNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewTenancyTenantGroupsDeleteParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "tenancy_tenant-groups_delete",
 		Method:             "DELETE",
 		PathPattern:        "/tenancy/tenant-groups/{id}/",
@@ -167,7 +1694,12 @@ func (a *Client) TenancyTenantGroupsDelete(params *TenancyTenantGroupsDeletePara
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -176,21 +1708,19 @@ func (a *Client) TenancyTenantGroupsDelete(params *TenancyTenantGroupsDeletePara
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for tenancy_tenant-groups_delete: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*TenancyTenantGroupsDeleteDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-TenancyTenantGroupsList Call to super to allow for caching
+TenancyTenantGroupsList Overrides ListModelMixin to allow processing ExportTemplates.
 */
-func (a *Client) TenancyTenantGroupsList(params *TenancyTenantGroupsListParams, authInfo runtime.ClientAuthInfoWriter) (*TenancyTenantGroupsListOK, error) {
+func (a *Client) TenancyTenantGroupsList(params *TenancyTenantGroupsListParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantGroupsListOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewTenancyTenantGroupsListParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "tenancy_tenant-groups_list",
 		Method:             "GET",
 		PathPattern:        "/tenancy/tenant-groups/",
@@ -202,7 +1732,12 @@ func (a *Client) TenancyTenantGroupsList(params *TenancyTenantGroupsListParams, 
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -211,21 +1746,19 @@ func (a *Client) TenancyTenantGroupsList(params *TenancyTenantGroupsListParams, 
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for tenancy_tenant-groups_list: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*TenancyTenantGroupsListDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
 TenancyTenantGroupsPartialUpdate tenancy tenant groups partial update API
 */
-func (a *Client) TenancyTenantGroupsPartialUpdate(params *TenancyTenantGroupsPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter) (*TenancyTenantGroupsPartialUpdateOK, error) {
+func (a *Client) TenancyTenantGroupsPartialUpdate(params *TenancyTenantGroupsPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantGroupsPartialUpdateOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewTenancyTenantGroupsPartialUpdateParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "tenancy_tenant-groups_partial_update",
 		Method:             "PATCH",
 		PathPattern:        "/tenancy/tenant-groups/{id}/",
@@ -237,7 +1770,12 @@ func (a *Client) TenancyTenantGroupsPartialUpdate(params *TenancyTenantGroupsPar
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -246,21 +1784,19 @@ func (a *Client) TenancyTenantGroupsPartialUpdate(params *TenancyTenantGroupsPar
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for tenancy_tenant-groups_partial_update: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*TenancyTenantGroupsPartialUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-TenancyTenantGroupsRead Call to super to allow for caching
+TenancyTenantGroupsRead tenancy tenant groups read API
 */
-func (a *Client) TenancyTenantGroupsRead(params *TenancyTenantGroupsReadParams, authInfo runtime.ClientAuthInfoWriter) (*TenancyTenantGroupsReadOK, error) {
+func (a *Client) TenancyTenantGroupsRead(params *TenancyTenantGroupsReadParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantGroupsReadOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewTenancyTenantGroupsReadParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "tenancy_tenant-groups_read",
 		Method:             "GET",
 		PathPattern:        "/tenancy/tenant-groups/{id}/",
@@ -272,7 +1808,12 @@ func (a *Client) TenancyTenantGroupsRead(params *TenancyTenantGroupsReadParams, 
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -281,21 +1822,19 @@ func (a *Client) TenancyTenantGroupsRead(params *TenancyTenantGroupsReadParams, 
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for tenancy_tenant-groups_read: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*TenancyTenantGroupsReadDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
 TenancyTenantGroupsUpdate tenancy tenant groups update API
 */
-func (a *Client) TenancyTenantGroupsUpdate(params *TenancyTenantGroupsUpdateParams, authInfo runtime.ClientAuthInfoWriter) (*TenancyTenantGroupsUpdateOK, error) {
+func (a *Client) TenancyTenantGroupsUpdate(params *TenancyTenantGroupsUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantGroupsUpdateOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewTenancyTenantGroupsUpdateParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "tenancy_tenant-groups_update",
 		Method:             "PUT",
 		PathPattern:        "/tenancy/tenant-groups/{id}/",
@@ -307,7 +1846,12 @@ func (a *Client) TenancyTenantGroupsUpdate(params *TenancyTenantGroupsUpdatePara
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -316,21 +1860,133 @@ func (a *Client) TenancyTenantGroupsUpdate(params *TenancyTenantGroupsUpdatePara
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for tenancy_tenant-groups_update: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*TenancyTenantGroupsUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyTenantsBulkDelete tenancy tenants bulk delete API
+*/
+func (a *Client) TenancyTenantsBulkDelete(params *TenancyTenantsBulkDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantsBulkDeleteNoContent, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyTenantsBulkDeleteParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_tenants_bulk_delete",
+		Method:             "DELETE",
+		PathPattern:        "/tenancy/tenants/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyTenantsBulkDeleteReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyTenantsBulkDeleteNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyTenantsBulkDeleteDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyTenantsBulkPartialUpdate tenancy tenants bulk partial update API
+*/
+func (a *Client) TenancyTenantsBulkPartialUpdate(params *TenancyTenantsBulkPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantsBulkPartialUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyTenantsBulkPartialUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_tenants_bulk_partial_update",
+		Method:             "PATCH",
+		PathPattern:        "/tenancy/tenants/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyTenantsBulkPartialUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyTenantsBulkPartialUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyTenantsBulkPartialUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+TenancyTenantsBulkUpdate tenancy tenants bulk update API
+*/
+func (a *Client) TenancyTenantsBulkUpdate(params *TenancyTenantsBulkUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantsBulkUpdateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTenancyTenantsBulkUpdateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "tenancy_tenants_bulk_update",
+		Method:             "PUT",
+		PathPattern:        "/tenancy/tenants/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TenancyTenantsBulkUpdateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TenancyTenantsBulkUpdateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*TenancyTenantsBulkUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
 TenancyTenantsCreate tenancy tenants create API
 */
-func (a *Client) TenancyTenantsCreate(params *TenancyTenantsCreateParams, authInfo runtime.ClientAuthInfoWriter) (*TenancyTenantsCreateCreated, error) {
+func (a *Client) TenancyTenantsCreate(params *TenancyTenantsCreateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantsCreateCreated, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewTenancyTenantsCreateParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "tenancy_tenants_create",
 		Method:             "POST",
 		PathPattern:        "/tenancy/tenants/",
@@ -342,7 +1998,12 @@ func (a *Client) TenancyTenantsCreate(params *TenancyTenantsCreateParams, authIn
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -351,21 +2012,19 @@ func (a *Client) TenancyTenantsCreate(params *TenancyTenantsCreateParams, authIn
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for tenancy_tenants_create: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*TenancyTenantsCreateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
 TenancyTenantsDelete tenancy tenants delete API
 */
-func (a *Client) TenancyTenantsDelete(params *TenancyTenantsDeleteParams, authInfo runtime.ClientAuthInfoWriter) (*TenancyTenantsDeleteNoContent, error) {
+func (a *Client) TenancyTenantsDelete(params *TenancyTenantsDeleteParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantsDeleteNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewTenancyTenantsDeleteParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "tenancy_tenants_delete",
 		Method:             "DELETE",
 		PathPattern:        "/tenancy/tenants/{id}/",
@@ -377,7 +2036,12 @@ func (a *Client) TenancyTenantsDelete(params *TenancyTenantsDeleteParams, authIn
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -386,21 +2050,19 @@ func (a *Client) TenancyTenantsDelete(params *TenancyTenantsDeleteParams, authIn
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for tenancy_tenants_delete: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*TenancyTenantsDeleteDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-TenancyTenantsList Call to super to allow for caching
+TenancyTenantsList Overrides ListModelMixin to allow processing ExportTemplates.
 */
-func (a *Client) TenancyTenantsList(params *TenancyTenantsListParams, authInfo runtime.ClientAuthInfoWriter) (*TenancyTenantsListOK, error) {
+func (a *Client) TenancyTenantsList(params *TenancyTenantsListParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantsListOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewTenancyTenantsListParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "tenancy_tenants_list",
 		Method:             "GET",
 		PathPattern:        "/tenancy/tenants/",
@@ -412,7 +2074,12 @@ func (a *Client) TenancyTenantsList(params *TenancyTenantsListParams, authInfo r
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -421,21 +2088,19 @@ func (a *Client) TenancyTenantsList(params *TenancyTenantsListParams, authInfo r
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for tenancy_tenants_list: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*TenancyTenantsListDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
 TenancyTenantsPartialUpdate tenancy tenants partial update API
 */
-func (a *Client) TenancyTenantsPartialUpdate(params *TenancyTenantsPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter) (*TenancyTenantsPartialUpdateOK, error) {
+func (a *Client) TenancyTenantsPartialUpdate(params *TenancyTenantsPartialUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantsPartialUpdateOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewTenancyTenantsPartialUpdateParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "tenancy_tenants_partial_update",
 		Method:             "PATCH",
 		PathPattern:        "/tenancy/tenants/{id}/",
@@ -447,7 +2112,12 @@ func (a *Client) TenancyTenantsPartialUpdate(params *TenancyTenantsPartialUpdate
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -456,21 +2126,19 @@ func (a *Client) TenancyTenantsPartialUpdate(params *TenancyTenantsPartialUpdate
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for tenancy_tenants_partial_update: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*TenancyTenantsPartialUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-TenancyTenantsRead Call to super to allow for caching
+TenancyTenantsRead tenancy tenants read API
 */
-func (a *Client) TenancyTenantsRead(params *TenancyTenantsReadParams, authInfo runtime.ClientAuthInfoWriter) (*TenancyTenantsReadOK, error) {
+func (a *Client) TenancyTenantsRead(params *TenancyTenantsReadParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantsReadOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewTenancyTenantsReadParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "tenancy_tenants_read",
 		Method:             "GET",
 		PathPattern:        "/tenancy/tenants/{id}/",
@@ -482,7 +2150,12 @@ func (a *Client) TenancyTenantsRead(params *TenancyTenantsReadParams, authInfo r
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -491,21 +2164,19 @@ func (a *Client) TenancyTenantsRead(params *TenancyTenantsReadParams, authInfo r
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for tenancy_tenants_read: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*TenancyTenantsReadDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
 TenancyTenantsUpdate tenancy tenants update API
 */
-func (a *Client) TenancyTenantsUpdate(params *TenancyTenantsUpdateParams, authInfo runtime.ClientAuthInfoWriter) (*TenancyTenantsUpdateOK, error) {
+func (a *Client) TenancyTenantsUpdate(params *TenancyTenantsUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TenancyTenantsUpdateOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewTenancyTenantsUpdateParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "tenancy_tenants_update",
 		Method:             "PUT",
 		PathPattern:        "/tenancy/tenants/{id}/",
@@ -517,7 +2188,12 @@ func (a *Client) TenancyTenantsUpdate(params *TenancyTenantsUpdateParams, authIn
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -526,9 +2202,8 @@ func (a *Client) TenancyTenantsUpdate(params *TenancyTenantsUpdateParams, authIn
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for tenancy_tenants_update: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*TenancyTenantsUpdateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 // SetTransport changes the transport on the client

@@ -21,18 +21,18 @@ package dcim
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // DcimConsolePortsListReader is a Reader for the DcimConsolePortsList structure.
@@ -49,9 +49,15 @@ func (o *DcimConsolePortsListReader) ReadResponse(response runtime.ClientRespons
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewDcimConsolePortsListDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -60,7 +66,8 @@ func NewDcimConsolePortsListOK() *DcimConsolePortsListOK {
 	return &DcimConsolePortsListOK{}
 }
 
-/*DcimConsolePortsListOK handles this case with default header values.
+/*
+DcimConsolePortsListOK describes a response with status code 200, with default header values.
 
 DcimConsolePortsListOK dcim console ports list o k
 */
@@ -68,7 +75,41 @@ type DcimConsolePortsListOK struct {
 	Payload *DcimConsolePortsListOKBody
 }
 
+// IsSuccess returns true when this dcim console ports list o k response has a 2xx status code
+func (o *DcimConsolePortsListOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this dcim console ports list o k response has a 3xx status code
+func (o *DcimConsolePortsListOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this dcim console ports list o k response has a 4xx status code
+func (o *DcimConsolePortsListOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this dcim console ports list o k response has a 5xx status code
+func (o *DcimConsolePortsListOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this dcim console ports list o k response a status code equal to that given
+func (o *DcimConsolePortsListOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the dcim console ports list o k response
+func (o *DcimConsolePortsListOK) Code() int {
+	return 200
+}
+
 func (o *DcimConsolePortsListOK) Error() string {
+	return fmt.Sprintf("[GET /dcim/console-ports/][%d] dcimConsolePortsListOK  %+v", 200, o.Payload)
+}
+
+func (o *DcimConsolePortsListOK) String() string {
 	return fmt.Sprintf("[GET /dcim/console-ports/][%d] dcimConsolePortsListOK  %+v", 200, o.Payload)
 }
 
@@ -88,7 +129,78 @@ func (o *DcimConsolePortsListOK) readResponse(response runtime.ClientResponse, c
 	return nil
 }
 
-/*DcimConsolePortsListOKBody dcim console ports list o k body
+// NewDcimConsolePortsListDefault creates a DcimConsolePortsListDefault with default headers values
+func NewDcimConsolePortsListDefault(code int) *DcimConsolePortsListDefault {
+	return &DcimConsolePortsListDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+DcimConsolePortsListDefault describes a response with status code -1, with default header values.
+
+DcimConsolePortsListDefault dcim console ports list default
+*/
+type DcimConsolePortsListDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this dcim console ports list default response has a 2xx status code
+func (o *DcimConsolePortsListDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this dcim console ports list default response has a 3xx status code
+func (o *DcimConsolePortsListDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this dcim console ports list default response has a 4xx status code
+func (o *DcimConsolePortsListDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this dcim console ports list default response has a 5xx status code
+func (o *DcimConsolePortsListDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this dcim console ports list default response a status code equal to that given
+func (o *DcimConsolePortsListDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the dcim console ports list default response
+func (o *DcimConsolePortsListDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *DcimConsolePortsListDefault) Error() string {
+	return fmt.Sprintf("[GET /dcim/console-ports/][%d] dcim_console-ports_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimConsolePortsListDefault) String() string {
+	return fmt.Sprintf("[GET /dcim/console-ports/][%d] dcim_console-ports_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimConsolePortsListDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *DcimConsolePortsListDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+/*
+DcimConsolePortsListOKBody dcim console ports list o k body
 swagger:model DcimConsolePortsListOKBody
 */
 type DcimConsolePortsListOKBody struct {
@@ -146,7 +258,6 @@ func (o *DcimConsolePortsListOKBody) validateCount(formats strfmt.Registry) erro
 }
 
 func (o *DcimConsolePortsListOKBody) validateNext(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Next) { // not required
 		return nil
 	}
@@ -159,7 +270,6 @@ func (o *DcimConsolePortsListOKBody) validateNext(formats strfmt.Registry) error
 }
 
 func (o *DcimConsolePortsListOKBody) validatePrevious(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Previous) { // not required
 		return nil
 	}
@@ -186,6 +296,42 @@ func (o *DcimConsolePortsListOKBody) validateResults(formats strfmt.Registry) er
 			if err := o.Results[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("dcimConsolePortsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("dcimConsolePortsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this dcim console ports list o k body based on the context it is used
+func (o *DcimConsolePortsListOKBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := o.contextValidateResults(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (o *DcimConsolePortsListOKBody) contextValidateResults(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(o.Results); i++ {
+
+		if o.Results[i] != nil {
+			if err := o.Results[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("dcimConsolePortsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("dcimConsolePortsListOK" + "." + "results" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

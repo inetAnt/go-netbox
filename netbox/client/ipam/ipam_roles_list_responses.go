@@ -21,18 +21,18 @@ package ipam
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // IpamRolesListReader is a Reader for the IpamRolesList structure.
@@ -49,9 +49,15 @@ func (o *IpamRolesListReader) ReadResponse(response runtime.ClientResponse, cons
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewIpamRolesListDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -60,7 +66,8 @@ func NewIpamRolesListOK() *IpamRolesListOK {
 	return &IpamRolesListOK{}
 }
 
-/*IpamRolesListOK handles this case with default header values.
+/*
+IpamRolesListOK describes a response with status code 200, with default header values.
 
 IpamRolesListOK ipam roles list o k
 */
@@ -68,7 +75,41 @@ type IpamRolesListOK struct {
 	Payload *IpamRolesListOKBody
 }
 
+// IsSuccess returns true when this ipam roles list o k response has a 2xx status code
+func (o *IpamRolesListOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this ipam roles list o k response has a 3xx status code
+func (o *IpamRolesListOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this ipam roles list o k response has a 4xx status code
+func (o *IpamRolesListOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this ipam roles list o k response has a 5xx status code
+func (o *IpamRolesListOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this ipam roles list o k response a status code equal to that given
+func (o *IpamRolesListOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the ipam roles list o k response
+func (o *IpamRolesListOK) Code() int {
+	return 200
+}
+
 func (o *IpamRolesListOK) Error() string {
+	return fmt.Sprintf("[GET /ipam/roles/][%d] ipamRolesListOK  %+v", 200, o.Payload)
+}
+
+func (o *IpamRolesListOK) String() string {
 	return fmt.Sprintf("[GET /ipam/roles/][%d] ipamRolesListOK  %+v", 200, o.Payload)
 }
 
@@ -88,7 +129,78 @@ func (o *IpamRolesListOK) readResponse(response runtime.ClientResponse, consumer
 	return nil
 }
 
-/*IpamRolesListOKBody ipam roles list o k body
+// NewIpamRolesListDefault creates a IpamRolesListDefault with default headers values
+func NewIpamRolesListDefault(code int) *IpamRolesListDefault {
+	return &IpamRolesListDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+IpamRolesListDefault describes a response with status code -1, with default header values.
+
+IpamRolesListDefault ipam roles list default
+*/
+type IpamRolesListDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this ipam roles list default response has a 2xx status code
+func (o *IpamRolesListDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this ipam roles list default response has a 3xx status code
+func (o *IpamRolesListDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this ipam roles list default response has a 4xx status code
+func (o *IpamRolesListDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this ipam roles list default response has a 5xx status code
+func (o *IpamRolesListDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this ipam roles list default response a status code equal to that given
+func (o *IpamRolesListDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the ipam roles list default response
+func (o *IpamRolesListDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *IpamRolesListDefault) Error() string {
+	return fmt.Sprintf("[GET /ipam/roles/][%d] ipam_roles_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *IpamRolesListDefault) String() string {
+	return fmt.Sprintf("[GET /ipam/roles/][%d] ipam_roles_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *IpamRolesListDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *IpamRolesListDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+/*
+IpamRolesListOKBody ipam roles list o k body
 swagger:model IpamRolesListOKBody
 */
 type IpamRolesListOKBody struct {
@@ -146,7 +258,6 @@ func (o *IpamRolesListOKBody) validateCount(formats strfmt.Registry) error {
 }
 
 func (o *IpamRolesListOKBody) validateNext(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Next) { // not required
 		return nil
 	}
@@ -159,7 +270,6 @@ func (o *IpamRolesListOKBody) validateNext(formats strfmt.Registry) error {
 }
 
 func (o *IpamRolesListOKBody) validatePrevious(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Previous) { // not required
 		return nil
 	}
@@ -186,6 +296,42 @@ func (o *IpamRolesListOKBody) validateResults(formats strfmt.Registry) error {
 			if err := o.Results[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("ipamRolesListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("ipamRolesListOK" + "." + "results" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this ipam roles list o k body based on the context it is used
+func (o *IpamRolesListOKBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := o.contextValidateResults(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (o *IpamRolesListOKBody) contextValidateResults(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(o.Results); i++ {
+
+		if o.Results[i] != nil {
+			if err := o.Results[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("ipamRolesListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("ipamRolesListOK" + "." + "results" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

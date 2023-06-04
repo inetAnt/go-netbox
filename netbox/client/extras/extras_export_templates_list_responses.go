@@ -21,18 +21,18 @@ package extras
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // ExtrasExportTemplatesListReader is a Reader for the ExtrasExportTemplatesList structure.
@@ -49,9 +49,15 @@ func (o *ExtrasExportTemplatesListReader) ReadResponse(response runtime.ClientRe
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewExtrasExportTemplatesListDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -60,7 +66,8 @@ func NewExtrasExportTemplatesListOK() *ExtrasExportTemplatesListOK {
 	return &ExtrasExportTemplatesListOK{}
 }
 
-/*ExtrasExportTemplatesListOK handles this case with default header values.
+/*
+ExtrasExportTemplatesListOK describes a response with status code 200, with default header values.
 
 ExtrasExportTemplatesListOK extras export templates list o k
 */
@@ -68,7 +75,41 @@ type ExtrasExportTemplatesListOK struct {
 	Payload *ExtrasExportTemplatesListOKBody
 }
 
+// IsSuccess returns true when this extras export templates list o k response has a 2xx status code
+func (o *ExtrasExportTemplatesListOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this extras export templates list o k response has a 3xx status code
+func (o *ExtrasExportTemplatesListOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this extras export templates list o k response has a 4xx status code
+func (o *ExtrasExportTemplatesListOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this extras export templates list o k response has a 5xx status code
+func (o *ExtrasExportTemplatesListOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this extras export templates list o k response a status code equal to that given
+func (o *ExtrasExportTemplatesListOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the extras export templates list o k response
+func (o *ExtrasExportTemplatesListOK) Code() int {
+	return 200
+}
+
 func (o *ExtrasExportTemplatesListOK) Error() string {
+	return fmt.Sprintf("[GET /extras/export-templates/][%d] extrasExportTemplatesListOK  %+v", 200, o.Payload)
+}
+
+func (o *ExtrasExportTemplatesListOK) String() string {
 	return fmt.Sprintf("[GET /extras/export-templates/][%d] extrasExportTemplatesListOK  %+v", 200, o.Payload)
 }
 
@@ -88,7 +129,78 @@ func (o *ExtrasExportTemplatesListOK) readResponse(response runtime.ClientRespon
 	return nil
 }
 
-/*ExtrasExportTemplatesListOKBody extras export templates list o k body
+// NewExtrasExportTemplatesListDefault creates a ExtrasExportTemplatesListDefault with default headers values
+func NewExtrasExportTemplatesListDefault(code int) *ExtrasExportTemplatesListDefault {
+	return &ExtrasExportTemplatesListDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+ExtrasExportTemplatesListDefault describes a response with status code -1, with default header values.
+
+ExtrasExportTemplatesListDefault extras export templates list default
+*/
+type ExtrasExportTemplatesListDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this extras export templates list default response has a 2xx status code
+func (o *ExtrasExportTemplatesListDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this extras export templates list default response has a 3xx status code
+func (o *ExtrasExportTemplatesListDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this extras export templates list default response has a 4xx status code
+func (o *ExtrasExportTemplatesListDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this extras export templates list default response has a 5xx status code
+func (o *ExtrasExportTemplatesListDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this extras export templates list default response a status code equal to that given
+func (o *ExtrasExportTemplatesListDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the extras export templates list default response
+func (o *ExtrasExportTemplatesListDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *ExtrasExportTemplatesListDefault) Error() string {
+	return fmt.Sprintf("[GET /extras/export-templates/][%d] extras_export-templates_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *ExtrasExportTemplatesListDefault) String() string {
+	return fmt.Sprintf("[GET /extras/export-templates/][%d] extras_export-templates_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *ExtrasExportTemplatesListDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *ExtrasExportTemplatesListDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+/*
+ExtrasExportTemplatesListOKBody extras export templates list o k body
 swagger:model ExtrasExportTemplatesListOKBody
 */
 type ExtrasExportTemplatesListOKBody struct {
@@ -146,7 +258,6 @@ func (o *ExtrasExportTemplatesListOKBody) validateCount(formats strfmt.Registry)
 }
 
 func (o *ExtrasExportTemplatesListOKBody) validateNext(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Next) { // not required
 		return nil
 	}
@@ -159,7 +270,6 @@ func (o *ExtrasExportTemplatesListOKBody) validateNext(formats strfmt.Registry) 
 }
 
 func (o *ExtrasExportTemplatesListOKBody) validatePrevious(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Previous) { // not required
 		return nil
 	}
@@ -186,6 +296,42 @@ func (o *ExtrasExportTemplatesListOKBody) validateResults(formats strfmt.Registr
 			if err := o.Results[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("extrasExportTemplatesListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("extrasExportTemplatesListOK" + "." + "results" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this extras export templates list o k body based on the context it is used
+func (o *ExtrasExportTemplatesListOKBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := o.contextValidateResults(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (o *ExtrasExportTemplatesListOKBody) contextValidateResults(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(o.Results); i++ {
+
+		if o.Results[i] != nil {
+			if err := o.Results[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("extrasExportTemplatesListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("extrasExportTemplatesListOK" + "." + "results" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

@@ -28,62 +28,77 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
-// NewDcimInventoryItemsCreateParams creates a new DcimInventoryItemsCreateParams object
-// with the default values initialized.
+// NewDcimInventoryItemsCreateParams creates a new DcimInventoryItemsCreateParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDcimInventoryItemsCreateParams() *DcimInventoryItemsCreateParams {
-	var ()
 	return &DcimInventoryItemsCreateParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewDcimInventoryItemsCreateParamsWithTimeout creates a new DcimInventoryItemsCreateParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewDcimInventoryItemsCreateParamsWithTimeout(timeout time.Duration) *DcimInventoryItemsCreateParams {
-	var ()
 	return &DcimInventoryItemsCreateParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewDcimInventoryItemsCreateParamsWithContext creates a new DcimInventoryItemsCreateParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewDcimInventoryItemsCreateParamsWithContext(ctx context.Context) *DcimInventoryItemsCreateParams {
-	var ()
 	return &DcimInventoryItemsCreateParams{
-
 		Context: ctx,
 	}
 }
 
 // NewDcimInventoryItemsCreateParamsWithHTTPClient creates a new DcimInventoryItemsCreateParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewDcimInventoryItemsCreateParamsWithHTTPClient(client *http.Client) *DcimInventoryItemsCreateParams {
-	var ()
 	return &DcimInventoryItemsCreateParams{
 		HTTPClient: client,
 	}
 }
 
-/*DcimInventoryItemsCreateParams contains all the parameters to send to the API endpoint
-for the dcim inventory items create operation typically these are written to a http.Request
+/*
+DcimInventoryItemsCreateParams contains all the parameters to send to the API endpoint
+
+	for the dcim inventory items create operation.
+
+	Typically these are written to a http.Request.
 */
 type DcimInventoryItemsCreateParams struct {
 
-	/*Data*/
+	// Data.
 	Data *models.WritableInventoryItem
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the dcim inventory items create params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DcimInventoryItemsCreateParams) WithDefaults() *DcimInventoryItemsCreateParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the dcim inventory items create params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DcimInventoryItemsCreateParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the dcim inventory items create params
@@ -137,7 +152,6 @@ func (o *DcimInventoryItemsCreateParams) WriteToRequest(r runtime.ClientRequest,
 		return err
 	}
 	var res []error
-
 	if o.Data != nil {
 		if err := r.SetBodyParam(o.Data); err != nil {
 			return err

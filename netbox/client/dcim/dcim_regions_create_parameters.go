@@ -28,62 +28,77 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
-// NewDcimRegionsCreateParams creates a new DcimRegionsCreateParams object
-// with the default values initialized.
+// NewDcimRegionsCreateParams creates a new DcimRegionsCreateParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDcimRegionsCreateParams() *DcimRegionsCreateParams {
-	var ()
 	return &DcimRegionsCreateParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewDcimRegionsCreateParamsWithTimeout creates a new DcimRegionsCreateParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewDcimRegionsCreateParamsWithTimeout(timeout time.Duration) *DcimRegionsCreateParams {
-	var ()
 	return &DcimRegionsCreateParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewDcimRegionsCreateParamsWithContext creates a new DcimRegionsCreateParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewDcimRegionsCreateParamsWithContext(ctx context.Context) *DcimRegionsCreateParams {
-	var ()
 	return &DcimRegionsCreateParams{
-
 		Context: ctx,
 	}
 }
 
 // NewDcimRegionsCreateParamsWithHTTPClient creates a new DcimRegionsCreateParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewDcimRegionsCreateParamsWithHTTPClient(client *http.Client) *DcimRegionsCreateParams {
-	var ()
 	return &DcimRegionsCreateParams{
 		HTTPClient: client,
 	}
 }
 
-/*DcimRegionsCreateParams contains all the parameters to send to the API endpoint
-for the dcim regions create operation typically these are written to a http.Request
+/*
+DcimRegionsCreateParams contains all the parameters to send to the API endpoint
+
+	for the dcim regions create operation.
+
+	Typically these are written to a http.Request.
 */
 type DcimRegionsCreateParams struct {
 
-	/*Data*/
+	// Data.
 	Data *models.WritableRegion
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the dcim regions create params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DcimRegionsCreateParams) WithDefaults() *DcimRegionsCreateParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the dcim regions create params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DcimRegionsCreateParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the dcim regions create params
@@ -137,7 +152,6 @@ func (o *DcimRegionsCreateParams) WriteToRequest(r runtime.ClientRequest, reg st
 		return err
 	}
 	var res []error
-
 	if o.Data != nil {
 		if err := r.SetBodyParam(o.Data); err != nil {
 			return err

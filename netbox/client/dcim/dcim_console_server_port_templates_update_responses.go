@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // DcimConsoleServerPortTemplatesUpdateReader is a Reader for the DcimConsoleServerPortTemplatesUpdate structure.
@@ -45,9 +44,15 @@ func (o *DcimConsoleServerPortTemplatesUpdateReader) ReadResponse(response runti
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewDcimConsoleServerPortTemplatesUpdateDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewDcimConsoleServerPortTemplatesUpdateOK() *DcimConsoleServerPortTemplates
 	return &DcimConsoleServerPortTemplatesUpdateOK{}
 }
 
-/*DcimConsoleServerPortTemplatesUpdateOK handles this case with default header values.
+/*
+DcimConsoleServerPortTemplatesUpdateOK describes a response with status code 200, with default header values.
 
 DcimConsoleServerPortTemplatesUpdateOK dcim console server port templates update o k
 */
@@ -64,7 +70,41 @@ type DcimConsoleServerPortTemplatesUpdateOK struct {
 	Payload *models.ConsoleServerPortTemplate
 }
 
+// IsSuccess returns true when this dcim console server port templates update o k response has a 2xx status code
+func (o *DcimConsoleServerPortTemplatesUpdateOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this dcim console server port templates update o k response has a 3xx status code
+func (o *DcimConsoleServerPortTemplatesUpdateOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this dcim console server port templates update o k response has a 4xx status code
+func (o *DcimConsoleServerPortTemplatesUpdateOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this dcim console server port templates update o k response has a 5xx status code
+func (o *DcimConsoleServerPortTemplatesUpdateOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this dcim console server port templates update o k response a status code equal to that given
+func (o *DcimConsoleServerPortTemplatesUpdateOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the dcim console server port templates update o k response
+func (o *DcimConsoleServerPortTemplatesUpdateOK) Code() int {
+	return 200
+}
+
 func (o *DcimConsoleServerPortTemplatesUpdateOK) Error() string {
+	return fmt.Sprintf("[PUT /dcim/console-server-port-templates/{id}/][%d] dcimConsoleServerPortTemplatesUpdateOK  %+v", 200, o.Payload)
+}
+
+func (o *DcimConsoleServerPortTemplatesUpdateOK) String() string {
 	return fmt.Sprintf("[PUT /dcim/console-server-port-templates/{id}/][%d] dcimConsoleServerPortTemplatesUpdateOK  %+v", 200, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *DcimConsoleServerPortTemplatesUpdateOK) readResponse(response runtime.C
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDcimConsoleServerPortTemplatesUpdateDefault creates a DcimConsoleServerPortTemplatesUpdateDefault with default headers values
+func NewDcimConsoleServerPortTemplatesUpdateDefault(code int) *DcimConsoleServerPortTemplatesUpdateDefault {
+	return &DcimConsoleServerPortTemplatesUpdateDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+DcimConsoleServerPortTemplatesUpdateDefault describes a response with status code -1, with default header values.
+
+DcimConsoleServerPortTemplatesUpdateDefault dcim console server port templates update default
+*/
+type DcimConsoleServerPortTemplatesUpdateDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this dcim console server port templates update default response has a 2xx status code
+func (o *DcimConsoleServerPortTemplatesUpdateDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this dcim console server port templates update default response has a 3xx status code
+func (o *DcimConsoleServerPortTemplatesUpdateDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this dcim console server port templates update default response has a 4xx status code
+func (o *DcimConsoleServerPortTemplatesUpdateDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this dcim console server port templates update default response has a 5xx status code
+func (o *DcimConsoleServerPortTemplatesUpdateDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this dcim console server port templates update default response a status code equal to that given
+func (o *DcimConsoleServerPortTemplatesUpdateDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the dcim console server port templates update default response
+func (o *DcimConsoleServerPortTemplatesUpdateDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *DcimConsoleServerPortTemplatesUpdateDefault) Error() string {
+	return fmt.Sprintf("[PUT /dcim/console-server-port-templates/{id}/][%d] dcim_console-server-port-templates_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimConsoleServerPortTemplatesUpdateDefault) String() string {
+	return fmt.Sprintf("[PUT /dcim/console-server-port-templates/{id}/][%d] dcim_console-server-port-templates_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimConsoleServerPortTemplatesUpdateDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *DcimConsoleServerPortTemplatesUpdateDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

@@ -21,14 +21,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
-// NestedDeviceType Device type
+// NestedDeviceType nested device type
+//
 // swagger:model NestedDeviceType
 type NestedDeviceType struct {
 
@@ -36,11 +38,11 @@ type NestedDeviceType struct {
 	// Read Only: true
 	DeviceCount int64 `json:"device_count,omitempty"`
 
-	// Display name
+	// Display
 	// Read Only: true
-	DisplayName string `json:"display_name,omitempty"`
+	Display string `json:"display,omitempty"`
 
-	// ID
+	// Id
 	// Read Only: true
 	ID int64 `json:"id,omitempty"`
 
@@ -49,13 +51,13 @@ type NestedDeviceType struct {
 
 	// Model
 	// Required: true
-	// Max Length: 50
+	// Max Length: 100
 	// Min Length: 1
 	Model *string `json:"model"`
 
 	// Slug
 	// Required: true
-	// Max Length: 50
+	// Max Length: 100
 	// Min Length: 1
 	// Pattern: ^[-a-zA-Z0-9_]+$
 	Slug *string `json:"slug"`
@@ -93,7 +95,6 @@ func (m *NestedDeviceType) Validate(formats strfmt.Registry) error {
 }
 
 func (m *NestedDeviceType) validateManufacturer(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Manufacturer) { // not required
 		return nil
 	}
@@ -102,6 +103,8 @@ func (m *NestedDeviceType) validateManufacturer(formats strfmt.Registry) error {
 		if err := m.Manufacturer.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("manufacturer")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("manufacturer")
 			}
 			return err
 		}
@@ -116,11 +119,11 @@ func (m *NestedDeviceType) validateModel(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("model", "body", string(*m.Model), 1); err != nil {
+	if err := validate.MinLength("model", "body", *m.Model, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("model", "body", string(*m.Model), 50); err != nil {
+	if err := validate.MaxLength("model", "body", *m.Model, 100); err != nil {
 		return err
 	}
 
@@ -133,15 +136,15 @@ func (m *NestedDeviceType) validateSlug(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("slug", "body", string(*m.Slug), 1); err != nil {
+	if err := validate.MinLength("slug", "body", *m.Slug, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("slug", "body", string(*m.Slug), 50); err != nil {
+	if err := validate.MaxLength("slug", "body", *m.Slug, 100); err != nil {
 		return err
 	}
 
-	if err := validate.Pattern("slug", "body", string(*m.Slug), `^[-a-zA-Z0-9_]+$`); err != nil {
+	if err := validate.Pattern("slug", "body", *m.Slug, `^[-a-zA-Z0-9_]+$`); err != nil {
 		return err
 	}
 
@@ -149,12 +152,93 @@ func (m *NestedDeviceType) validateSlug(formats strfmt.Registry) error {
 }
 
 func (m *NestedDeviceType) validateURL(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.URL) { // not required
 		return nil
 	}
 
 	if err := validate.FormatOf("url", "body", "uri", m.URL.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this nested device type based on the context it is used
+func (m *NestedDeviceType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDeviceCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDisplay(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateManufacturer(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *NestedDeviceType) contextValidateDeviceCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "device_count", "body", int64(m.DeviceCount)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *NestedDeviceType) contextValidateDisplay(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "display", "body", string(m.Display)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *NestedDeviceType) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *NestedDeviceType) contextValidateManufacturer(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Manufacturer != nil {
+		if err := m.Manufacturer.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("manufacturer")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("manufacturer")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *NestedDeviceType) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", strfmt.URI(m.URL)); err != nil {
 		return err
 	}
 

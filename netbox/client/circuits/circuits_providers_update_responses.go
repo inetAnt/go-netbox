@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // CircuitsProvidersUpdateReader is a Reader for the CircuitsProvidersUpdate structure.
@@ -45,9 +44,15 @@ func (o *CircuitsProvidersUpdateReader) ReadResponse(response runtime.ClientResp
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewCircuitsProvidersUpdateDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewCircuitsProvidersUpdateOK() *CircuitsProvidersUpdateOK {
 	return &CircuitsProvidersUpdateOK{}
 }
 
-/*CircuitsProvidersUpdateOK handles this case with default header values.
+/*
+CircuitsProvidersUpdateOK describes a response with status code 200, with default header values.
 
 CircuitsProvidersUpdateOK circuits providers update o k
 */
@@ -64,7 +70,41 @@ type CircuitsProvidersUpdateOK struct {
 	Payload *models.Provider
 }
 
+// IsSuccess returns true when this circuits providers update o k response has a 2xx status code
+func (o *CircuitsProvidersUpdateOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this circuits providers update o k response has a 3xx status code
+func (o *CircuitsProvidersUpdateOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this circuits providers update o k response has a 4xx status code
+func (o *CircuitsProvidersUpdateOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this circuits providers update o k response has a 5xx status code
+func (o *CircuitsProvidersUpdateOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this circuits providers update o k response a status code equal to that given
+func (o *CircuitsProvidersUpdateOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the circuits providers update o k response
+func (o *CircuitsProvidersUpdateOK) Code() int {
+	return 200
+}
+
 func (o *CircuitsProvidersUpdateOK) Error() string {
+	return fmt.Sprintf("[PUT /circuits/providers/{id}/][%d] circuitsProvidersUpdateOK  %+v", 200, o.Payload)
+}
+
+func (o *CircuitsProvidersUpdateOK) String() string {
 	return fmt.Sprintf("[PUT /circuits/providers/{id}/][%d] circuitsProvidersUpdateOK  %+v", 200, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *CircuitsProvidersUpdateOK) readResponse(response runtime.ClientResponse
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCircuitsProvidersUpdateDefault creates a CircuitsProvidersUpdateDefault with default headers values
+func NewCircuitsProvidersUpdateDefault(code int) *CircuitsProvidersUpdateDefault {
+	return &CircuitsProvidersUpdateDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+CircuitsProvidersUpdateDefault describes a response with status code -1, with default header values.
+
+CircuitsProvidersUpdateDefault circuits providers update default
+*/
+type CircuitsProvidersUpdateDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this circuits providers update default response has a 2xx status code
+func (o *CircuitsProvidersUpdateDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this circuits providers update default response has a 3xx status code
+func (o *CircuitsProvidersUpdateDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this circuits providers update default response has a 4xx status code
+func (o *CircuitsProvidersUpdateDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this circuits providers update default response has a 5xx status code
+func (o *CircuitsProvidersUpdateDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this circuits providers update default response a status code equal to that given
+func (o *CircuitsProvidersUpdateDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the circuits providers update default response
+func (o *CircuitsProvidersUpdateDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *CircuitsProvidersUpdateDefault) Error() string {
+	return fmt.Sprintf("[PUT /circuits/providers/{id}/][%d] circuits_providers_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *CircuitsProvidersUpdateDefault) String() string {
+	return fmt.Sprintf("[PUT /circuits/providers/{id}/][%d] circuits_providers_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *CircuitsProvidersUpdateDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *CircuitsProvidersUpdateDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

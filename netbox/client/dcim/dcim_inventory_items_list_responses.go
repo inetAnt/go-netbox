@@ -21,18 +21,18 @@ package dcim
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // DcimInventoryItemsListReader is a Reader for the DcimInventoryItemsList structure.
@@ -49,9 +49,15 @@ func (o *DcimInventoryItemsListReader) ReadResponse(response runtime.ClientRespo
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewDcimInventoryItemsListDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -60,7 +66,8 @@ func NewDcimInventoryItemsListOK() *DcimInventoryItemsListOK {
 	return &DcimInventoryItemsListOK{}
 }
 
-/*DcimInventoryItemsListOK handles this case with default header values.
+/*
+DcimInventoryItemsListOK describes a response with status code 200, with default header values.
 
 DcimInventoryItemsListOK dcim inventory items list o k
 */
@@ -68,7 +75,41 @@ type DcimInventoryItemsListOK struct {
 	Payload *DcimInventoryItemsListOKBody
 }
 
+// IsSuccess returns true when this dcim inventory items list o k response has a 2xx status code
+func (o *DcimInventoryItemsListOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this dcim inventory items list o k response has a 3xx status code
+func (o *DcimInventoryItemsListOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this dcim inventory items list o k response has a 4xx status code
+func (o *DcimInventoryItemsListOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this dcim inventory items list o k response has a 5xx status code
+func (o *DcimInventoryItemsListOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this dcim inventory items list o k response a status code equal to that given
+func (o *DcimInventoryItemsListOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the dcim inventory items list o k response
+func (o *DcimInventoryItemsListOK) Code() int {
+	return 200
+}
+
 func (o *DcimInventoryItemsListOK) Error() string {
+	return fmt.Sprintf("[GET /dcim/inventory-items/][%d] dcimInventoryItemsListOK  %+v", 200, o.Payload)
+}
+
+func (o *DcimInventoryItemsListOK) String() string {
 	return fmt.Sprintf("[GET /dcim/inventory-items/][%d] dcimInventoryItemsListOK  %+v", 200, o.Payload)
 }
 
@@ -88,7 +129,78 @@ func (o *DcimInventoryItemsListOK) readResponse(response runtime.ClientResponse,
 	return nil
 }
 
-/*DcimInventoryItemsListOKBody dcim inventory items list o k body
+// NewDcimInventoryItemsListDefault creates a DcimInventoryItemsListDefault with default headers values
+func NewDcimInventoryItemsListDefault(code int) *DcimInventoryItemsListDefault {
+	return &DcimInventoryItemsListDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+DcimInventoryItemsListDefault describes a response with status code -1, with default header values.
+
+DcimInventoryItemsListDefault dcim inventory items list default
+*/
+type DcimInventoryItemsListDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this dcim inventory items list default response has a 2xx status code
+func (o *DcimInventoryItemsListDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this dcim inventory items list default response has a 3xx status code
+func (o *DcimInventoryItemsListDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this dcim inventory items list default response has a 4xx status code
+func (o *DcimInventoryItemsListDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this dcim inventory items list default response has a 5xx status code
+func (o *DcimInventoryItemsListDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this dcim inventory items list default response a status code equal to that given
+func (o *DcimInventoryItemsListDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the dcim inventory items list default response
+func (o *DcimInventoryItemsListDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *DcimInventoryItemsListDefault) Error() string {
+	return fmt.Sprintf("[GET /dcim/inventory-items/][%d] dcim_inventory-items_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimInventoryItemsListDefault) String() string {
+	return fmt.Sprintf("[GET /dcim/inventory-items/][%d] dcim_inventory-items_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimInventoryItemsListDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *DcimInventoryItemsListDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+/*
+DcimInventoryItemsListOKBody dcim inventory items list o k body
 swagger:model DcimInventoryItemsListOKBody
 */
 type DcimInventoryItemsListOKBody struct {
@@ -146,7 +258,6 @@ func (o *DcimInventoryItemsListOKBody) validateCount(formats strfmt.Registry) er
 }
 
 func (o *DcimInventoryItemsListOKBody) validateNext(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Next) { // not required
 		return nil
 	}
@@ -159,7 +270,6 @@ func (o *DcimInventoryItemsListOKBody) validateNext(formats strfmt.Registry) err
 }
 
 func (o *DcimInventoryItemsListOKBody) validatePrevious(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Previous) { // not required
 		return nil
 	}
@@ -186,6 +296,42 @@ func (o *DcimInventoryItemsListOKBody) validateResults(formats strfmt.Registry) 
 			if err := o.Results[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("dcimInventoryItemsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("dcimInventoryItemsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this dcim inventory items list o k body based on the context it is used
+func (o *DcimInventoryItemsListOKBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := o.contextValidateResults(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (o *DcimInventoryItemsListOKBody) contextValidateResults(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(o.Results); i++ {
+
+		if o.Results[i] != nil {
+			if err := o.Results[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("dcimInventoryItemsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("dcimInventoryItemsListOK" + "." + "results" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

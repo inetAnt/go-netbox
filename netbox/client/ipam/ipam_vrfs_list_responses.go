@@ -21,18 +21,18 @@ package ipam
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // IpamVrfsListReader is a Reader for the IpamVrfsList structure.
@@ -49,9 +49,15 @@ func (o *IpamVrfsListReader) ReadResponse(response runtime.ClientResponse, consu
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewIpamVrfsListDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -60,7 +66,8 @@ func NewIpamVrfsListOK() *IpamVrfsListOK {
 	return &IpamVrfsListOK{}
 }
 
-/*IpamVrfsListOK handles this case with default header values.
+/*
+IpamVrfsListOK describes a response with status code 200, with default header values.
 
 IpamVrfsListOK ipam vrfs list o k
 */
@@ -68,7 +75,41 @@ type IpamVrfsListOK struct {
 	Payload *IpamVrfsListOKBody
 }
 
+// IsSuccess returns true when this ipam vrfs list o k response has a 2xx status code
+func (o *IpamVrfsListOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this ipam vrfs list o k response has a 3xx status code
+func (o *IpamVrfsListOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this ipam vrfs list o k response has a 4xx status code
+func (o *IpamVrfsListOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this ipam vrfs list o k response has a 5xx status code
+func (o *IpamVrfsListOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this ipam vrfs list o k response a status code equal to that given
+func (o *IpamVrfsListOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the ipam vrfs list o k response
+func (o *IpamVrfsListOK) Code() int {
+	return 200
+}
+
 func (o *IpamVrfsListOK) Error() string {
+	return fmt.Sprintf("[GET /ipam/vrfs/][%d] ipamVrfsListOK  %+v", 200, o.Payload)
+}
+
+func (o *IpamVrfsListOK) String() string {
 	return fmt.Sprintf("[GET /ipam/vrfs/][%d] ipamVrfsListOK  %+v", 200, o.Payload)
 }
 
@@ -88,7 +129,78 @@ func (o *IpamVrfsListOK) readResponse(response runtime.ClientResponse, consumer 
 	return nil
 }
 
-/*IpamVrfsListOKBody ipam vrfs list o k body
+// NewIpamVrfsListDefault creates a IpamVrfsListDefault with default headers values
+func NewIpamVrfsListDefault(code int) *IpamVrfsListDefault {
+	return &IpamVrfsListDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+IpamVrfsListDefault describes a response with status code -1, with default header values.
+
+IpamVrfsListDefault ipam vrfs list default
+*/
+type IpamVrfsListDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this ipam vrfs list default response has a 2xx status code
+func (o *IpamVrfsListDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this ipam vrfs list default response has a 3xx status code
+func (o *IpamVrfsListDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this ipam vrfs list default response has a 4xx status code
+func (o *IpamVrfsListDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this ipam vrfs list default response has a 5xx status code
+func (o *IpamVrfsListDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this ipam vrfs list default response a status code equal to that given
+func (o *IpamVrfsListDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the ipam vrfs list default response
+func (o *IpamVrfsListDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *IpamVrfsListDefault) Error() string {
+	return fmt.Sprintf("[GET /ipam/vrfs/][%d] ipam_vrfs_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *IpamVrfsListDefault) String() string {
+	return fmt.Sprintf("[GET /ipam/vrfs/][%d] ipam_vrfs_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *IpamVrfsListDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *IpamVrfsListDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+/*
+IpamVrfsListOKBody ipam vrfs list o k body
 swagger:model IpamVrfsListOKBody
 */
 type IpamVrfsListOKBody struct {
@@ -146,7 +258,6 @@ func (o *IpamVrfsListOKBody) validateCount(formats strfmt.Registry) error {
 }
 
 func (o *IpamVrfsListOKBody) validateNext(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Next) { // not required
 		return nil
 	}
@@ -159,7 +270,6 @@ func (o *IpamVrfsListOKBody) validateNext(formats strfmt.Registry) error {
 }
 
 func (o *IpamVrfsListOKBody) validatePrevious(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Previous) { // not required
 		return nil
 	}
@@ -186,6 +296,42 @@ func (o *IpamVrfsListOKBody) validateResults(formats strfmt.Registry) error {
 			if err := o.Results[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("ipamVrfsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("ipamVrfsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this ipam vrfs list o k body based on the context it is used
+func (o *IpamVrfsListOKBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := o.contextValidateResults(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (o *IpamVrfsListOKBody) contextValidateResults(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(o.Results); i++ {
+
+		if o.Results[i] != nil {
+			if err := o.Results[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("ipamVrfsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("ipamVrfsListOK" + "." + "results" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

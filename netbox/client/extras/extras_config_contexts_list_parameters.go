@@ -28,107 +28,280 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewExtrasConfigContextsListParams creates a new ExtrasConfigContextsListParams object
-// with the default values initialized.
+// NewExtrasConfigContextsListParams creates a new ExtrasConfigContextsListParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewExtrasConfigContextsListParams() *ExtrasConfigContextsListParams {
-	var ()
 	return &ExtrasConfigContextsListParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewExtrasConfigContextsListParamsWithTimeout creates a new ExtrasConfigContextsListParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewExtrasConfigContextsListParamsWithTimeout(timeout time.Duration) *ExtrasConfigContextsListParams {
-	var ()
 	return &ExtrasConfigContextsListParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewExtrasConfigContextsListParamsWithContext creates a new ExtrasConfigContextsListParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewExtrasConfigContextsListParamsWithContext(ctx context.Context) *ExtrasConfigContextsListParams {
-	var ()
 	return &ExtrasConfigContextsListParams{
-
 		Context: ctx,
 	}
 }
 
 // NewExtrasConfigContextsListParamsWithHTTPClient creates a new ExtrasConfigContextsListParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewExtrasConfigContextsListParamsWithHTTPClient(client *http.Client) *ExtrasConfigContextsListParams {
-	var ()
 	return &ExtrasConfigContextsListParams{
 		HTTPClient: client,
 	}
 }
 
-/*ExtrasConfigContextsListParams contains all the parameters to send to the API endpoint
-for the extras config contexts list operation typically these are written to a http.Request
+/*
+ExtrasConfigContextsListParams contains all the parameters to send to the API endpoint
+
+	for the extras config contexts list operation.
+
+	Typically these are written to a http.Request.
 */
 type ExtrasConfigContextsListParams struct {
 
-	/*ClusterGroup*/
+	// ClusterGroup.
 	ClusterGroup *string
-	/*ClusterGroupID*/
-	ClusterGroupID *string
-	/*ClusterID*/
-	ClusterID *string
-	/*IsActive*/
-	IsActive *string
-	/*Limit
-	  Number of results to return per page.
 
+	// ClusterGroupn.
+	ClusterGroupn *string
+
+	// ClusterGroupID.
+	ClusterGroupID *string
+
+	// ClusterGroupIDn.
+	ClusterGroupIDn *string
+
+	// ClusterID.
+	ClusterID *string
+
+	// ClusterIDn.
+	ClusterIDn *string
+
+	// Created.
+	Created *string
+
+	// CreatedGte.
+	CreatedGte *string
+
+	// CreatedLte.
+	CreatedLte *string
+
+	// DeviceTypeID.
+	DeviceTypeID *string
+
+	// DeviceTypeIDn.
+	DeviceTypeIDn *string
+
+	// ID.
+	ID *string
+
+	// IDGt.
+	IDGt *string
+
+	// IDGte.
+	IDGte *string
+
+	// IDLt.
+	IDLt *string
+
+	// IDLte.
+	IDLte *string
+
+	// IDn.
+	IDn *string
+
+	// IsActive.
+	IsActive *string
+
+	// LastUpdated.
+	LastUpdated *string
+
+	// LastUpdatedGte.
+	LastUpdatedGte *string
+
+	// LastUpdatedLte.
+	LastUpdatedLte *string
+
+	/* Limit.
+
+	   Number of results to return per page.
 	*/
 	Limit *int64
-	/*Name*/
-	Name *string
-	/*Offset
-	  The initial index from which to return the results.
 
+	// Name.
+	Name *string
+
+	// NameEmpty.
+	NameEmpty *string
+
+	// NameIc.
+	NameIc *string
+
+	// NameIe.
+	NameIe *string
+
+	// NameIew.
+	NameIew *string
+
+	// NameIsw.
+	NameIsw *string
+
+	// Namen.
+	Namen *string
+
+	// NameNic.
+	NameNic *string
+
+	// NameNie.
+	NameNie *string
+
+	// NameNiew.
+	NameNiew *string
+
+	// NameNisw.
+	NameNisw *string
+
+	/* Offset.
+
+	   The initial index from which to return the results.
 	*/
 	Offset *int64
-	/*Platform*/
+
+	// Platform.
 	Platform *string
-	/*PlatformID*/
+
+	// Platformn.
+	Platformn *string
+
+	// PlatformID.
 	PlatformID *string
-	/*Q*/
+
+	// PlatformIDn.
+	PlatformIDn *string
+
+	// Q.
 	Q *string
-	/*Region*/
+
+	// Region.
 	Region *string
-	/*RegionID*/
+
+	// Regionn.
+	Regionn *string
+
+	// RegionID.
 	RegionID *string
-	/*Role*/
+
+	// RegionIDn.
+	RegionIDn *string
+
+	// Role.
 	Role *string
-	/*RoleID*/
+
+	// Rolen.
+	Rolen *string
+
+	// RoleID.
 	RoleID *string
-	/*Site*/
+
+	// RoleIDn.
+	RoleIDn *string
+
+	// Site.
 	Site *string
-	/*SiteID*/
+
+	// Siten.
+	Siten *string
+
+	// SiteGroup.
+	SiteGroup *string
+
+	// SiteGroupn.
+	SiteGroupn *string
+
+	// SiteGroupID.
+	SiteGroupID *string
+
+	// SiteGroupIDn.
+	SiteGroupIDn *string
+
+	// SiteID.
 	SiteID *string
-	/*Tag*/
+
+	// SiteIDn.
+	SiteIDn *string
+
+	// Tag.
 	Tag *string
-	/*Tenant*/
+
+	// Tagn.
+	Tagn *string
+
+	// TagID.
+	TagID *string
+
+	// TagIDn.
+	TagIDn *string
+
+	// Tenant.
 	Tenant *string
-	/*TenantGroup*/
+
+	// Tenantn.
+	Tenantn *string
+
+	// TenantGroup.
 	TenantGroup *string
-	/*TenantGroupID*/
+
+	// TenantGroupn.
+	TenantGroupn *string
+
+	// TenantGroupID.
 	TenantGroupID *string
-	/*TenantID*/
+
+	// TenantGroupIDn.
+	TenantGroupIDn *string
+
+	// TenantID.
 	TenantID *string
+
+	// TenantIDn.
+	TenantIDn *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the extras config contexts list params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ExtrasConfigContextsListParams) WithDefaults() *ExtrasConfigContextsListParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the extras config contexts list params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ExtrasConfigContextsListParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the extras config contexts list params
@@ -175,6 +348,17 @@ func (o *ExtrasConfigContextsListParams) SetClusterGroup(clusterGroup *string) {
 	o.ClusterGroup = clusterGroup
 }
 
+// WithClusterGroupn adds the clusterGroupn to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithClusterGroupn(clusterGroupn *string) *ExtrasConfigContextsListParams {
+	o.SetClusterGroupn(clusterGroupn)
+	return o
+}
+
+// SetClusterGroupn adds the clusterGroupN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetClusterGroupn(clusterGroupn *string) {
+	o.ClusterGroupn = clusterGroupn
+}
+
 // WithClusterGroupID adds the clusterGroupID to the extras config contexts list params
 func (o *ExtrasConfigContextsListParams) WithClusterGroupID(clusterGroupID *string) *ExtrasConfigContextsListParams {
 	o.SetClusterGroupID(clusterGroupID)
@@ -184,6 +368,17 @@ func (o *ExtrasConfigContextsListParams) WithClusterGroupID(clusterGroupID *stri
 // SetClusterGroupID adds the clusterGroupId to the extras config contexts list params
 func (o *ExtrasConfigContextsListParams) SetClusterGroupID(clusterGroupID *string) {
 	o.ClusterGroupID = clusterGroupID
+}
+
+// WithClusterGroupIDn adds the clusterGroupIDn to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithClusterGroupIDn(clusterGroupIDn *string) *ExtrasConfigContextsListParams {
+	o.SetClusterGroupIDn(clusterGroupIDn)
+	return o
+}
+
+// SetClusterGroupIDn adds the clusterGroupIdN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetClusterGroupIDn(clusterGroupIDn *string) {
+	o.ClusterGroupIDn = clusterGroupIDn
 }
 
 // WithClusterID adds the clusterID to the extras config contexts list params
@@ -197,6 +392,138 @@ func (o *ExtrasConfigContextsListParams) SetClusterID(clusterID *string) {
 	o.ClusterID = clusterID
 }
 
+// WithClusterIDn adds the clusterIDn to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithClusterIDn(clusterIDn *string) *ExtrasConfigContextsListParams {
+	o.SetClusterIDn(clusterIDn)
+	return o
+}
+
+// SetClusterIDn adds the clusterIdN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetClusterIDn(clusterIDn *string) {
+	o.ClusterIDn = clusterIDn
+}
+
+// WithCreated adds the created to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithCreated(created *string) *ExtrasConfigContextsListParams {
+	o.SetCreated(created)
+	return o
+}
+
+// SetCreated adds the created to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetCreated(created *string) {
+	o.Created = created
+}
+
+// WithCreatedGte adds the createdGte to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithCreatedGte(createdGte *string) *ExtrasConfigContextsListParams {
+	o.SetCreatedGte(createdGte)
+	return o
+}
+
+// SetCreatedGte adds the createdGte to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetCreatedGte(createdGte *string) {
+	o.CreatedGte = createdGte
+}
+
+// WithCreatedLte adds the createdLte to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithCreatedLte(createdLte *string) *ExtrasConfigContextsListParams {
+	o.SetCreatedLte(createdLte)
+	return o
+}
+
+// SetCreatedLte adds the createdLte to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetCreatedLte(createdLte *string) {
+	o.CreatedLte = createdLte
+}
+
+// WithDeviceTypeID adds the deviceTypeID to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithDeviceTypeID(deviceTypeID *string) *ExtrasConfigContextsListParams {
+	o.SetDeviceTypeID(deviceTypeID)
+	return o
+}
+
+// SetDeviceTypeID adds the deviceTypeId to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetDeviceTypeID(deviceTypeID *string) {
+	o.DeviceTypeID = deviceTypeID
+}
+
+// WithDeviceTypeIDn adds the deviceTypeIDn to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithDeviceTypeIDn(deviceTypeIDn *string) *ExtrasConfigContextsListParams {
+	o.SetDeviceTypeIDn(deviceTypeIDn)
+	return o
+}
+
+// SetDeviceTypeIDn adds the deviceTypeIdN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetDeviceTypeIDn(deviceTypeIDn *string) {
+	o.DeviceTypeIDn = deviceTypeIDn
+}
+
+// WithID adds the id to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithID(id *string) *ExtrasConfigContextsListParams {
+	o.SetID(id)
+	return o
+}
+
+// SetID adds the id to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetID(id *string) {
+	o.ID = id
+}
+
+// WithIDGt adds the iDGt to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithIDGt(iDGt *string) *ExtrasConfigContextsListParams {
+	o.SetIDGt(iDGt)
+	return o
+}
+
+// SetIDGt adds the idGt to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetIDGt(iDGt *string) {
+	o.IDGt = iDGt
+}
+
+// WithIDGte adds the iDGte to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithIDGte(iDGte *string) *ExtrasConfigContextsListParams {
+	o.SetIDGte(iDGte)
+	return o
+}
+
+// SetIDGte adds the idGte to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetIDGte(iDGte *string) {
+	o.IDGte = iDGte
+}
+
+// WithIDLt adds the iDLt to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithIDLt(iDLt *string) *ExtrasConfigContextsListParams {
+	o.SetIDLt(iDLt)
+	return o
+}
+
+// SetIDLt adds the idLt to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetIDLt(iDLt *string) {
+	o.IDLt = iDLt
+}
+
+// WithIDLte adds the iDLte to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithIDLte(iDLte *string) *ExtrasConfigContextsListParams {
+	o.SetIDLte(iDLte)
+	return o
+}
+
+// SetIDLte adds the idLte to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetIDLte(iDLte *string) {
+	o.IDLte = iDLte
+}
+
+// WithIDn adds the iDn to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithIDn(iDn *string) *ExtrasConfigContextsListParams {
+	o.SetIDn(iDn)
+	return o
+}
+
+// SetIDn adds the idN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetIDn(iDn *string) {
+	o.IDn = iDn
+}
+
 // WithIsActive adds the isActive to the extras config contexts list params
 func (o *ExtrasConfigContextsListParams) WithIsActive(isActive *string) *ExtrasConfigContextsListParams {
 	o.SetIsActive(isActive)
@@ -206,6 +533,39 @@ func (o *ExtrasConfigContextsListParams) WithIsActive(isActive *string) *ExtrasC
 // SetIsActive adds the isActive to the extras config contexts list params
 func (o *ExtrasConfigContextsListParams) SetIsActive(isActive *string) {
 	o.IsActive = isActive
+}
+
+// WithLastUpdated adds the lastUpdated to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithLastUpdated(lastUpdated *string) *ExtrasConfigContextsListParams {
+	o.SetLastUpdated(lastUpdated)
+	return o
+}
+
+// SetLastUpdated adds the lastUpdated to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetLastUpdated(lastUpdated *string) {
+	o.LastUpdated = lastUpdated
+}
+
+// WithLastUpdatedGte adds the lastUpdatedGte to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithLastUpdatedGte(lastUpdatedGte *string) *ExtrasConfigContextsListParams {
+	o.SetLastUpdatedGte(lastUpdatedGte)
+	return o
+}
+
+// SetLastUpdatedGte adds the lastUpdatedGte to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetLastUpdatedGte(lastUpdatedGte *string) {
+	o.LastUpdatedGte = lastUpdatedGte
+}
+
+// WithLastUpdatedLte adds the lastUpdatedLte to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithLastUpdatedLte(lastUpdatedLte *string) *ExtrasConfigContextsListParams {
+	o.SetLastUpdatedLte(lastUpdatedLte)
+	return o
+}
+
+// SetLastUpdatedLte adds the lastUpdatedLte to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetLastUpdatedLte(lastUpdatedLte *string) {
+	o.LastUpdatedLte = lastUpdatedLte
 }
 
 // WithLimit adds the limit to the extras config contexts list params
@@ -230,6 +590,116 @@ func (o *ExtrasConfigContextsListParams) SetName(name *string) {
 	o.Name = name
 }
 
+// WithNameEmpty adds the nameEmpty to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithNameEmpty(nameEmpty *string) *ExtrasConfigContextsListParams {
+	o.SetNameEmpty(nameEmpty)
+	return o
+}
+
+// SetNameEmpty adds the nameEmpty to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetNameEmpty(nameEmpty *string) {
+	o.NameEmpty = nameEmpty
+}
+
+// WithNameIc adds the nameIc to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithNameIc(nameIc *string) *ExtrasConfigContextsListParams {
+	o.SetNameIc(nameIc)
+	return o
+}
+
+// SetNameIc adds the nameIc to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetNameIc(nameIc *string) {
+	o.NameIc = nameIc
+}
+
+// WithNameIe adds the nameIe to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithNameIe(nameIe *string) *ExtrasConfigContextsListParams {
+	o.SetNameIe(nameIe)
+	return o
+}
+
+// SetNameIe adds the nameIe to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetNameIe(nameIe *string) {
+	o.NameIe = nameIe
+}
+
+// WithNameIew adds the nameIew to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithNameIew(nameIew *string) *ExtrasConfigContextsListParams {
+	o.SetNameIew(nameIew)
+	return o
+}
+
+// SetNameIew adds the nameIew to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetNameIew(nameIew *string) {
+	o.NameIew = nameIew
+}
+
+// WithNameIsw adds the nameIsw to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithNameIsw(nameIsw *string) *ExtrasConfigContextsListParams {
+	o.SetNameIsw(nameIsw)
+	return o
+}
+
+// SetNameIsw adds the nameIsw to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetNameIsw(nameIsw *string) {
+	o.NameIsw = nameIsw
+}
+
+// WithNamen adds the namen to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithNamen(namen *string) *ExtrasConfigContextsListParams {
+	o.SetNamen(namen)
+	return o
+}
+
+// SetNamen adds the nameN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetNamen(namen *string) {
+	o.Namen = namen
+}
+
+// WithNameNic adds the nameNic to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithNameNic(nameNic *string) *ExtrasConfigContextsListParams {
+	o.SetNameNic(nameNic)
+	return o
+}
+
+// SetNameNic adds the nameNic to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetNameNic(nameNic *string) {
+	o.NameNic = nameNic
+}
+
+// WithNameNie adds the nameNie to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithNameNie(nameNie *string) *ExtrasConfigContextsListParams {
+	o.SetNameNie(nameNie)
+	return o
+}
+
+// SetNameNie adds the nameNie to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetNameNie(nameNie *string) {
+	o.NameNie = nameNie
+}
+
+// WithNameNiew adds the nameNiew to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithNameNiew(nameNiew *string) *ExtrasConfigContextsListParams {
+	o.SetNameNiew(nameNiew)
+	return o
+}
+
+// SetNameNiew adds the nameNiew to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetNameNiew(nameNiew *string) {
+	o.NameNiew = nameNiew
+}
+
+// WithNameNisw adds the nameNisw to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithNameNisw(nameNisw *string) *ExtrasConfigContextsListParams {
+	o.SetNameNisw(nameNisw)
+	return o
+}
+
+// SetNameNisw adds the nameNisw to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetNameNisw(nameNisw *string) {
+	o.NameNisw = nameNisw
+}
+
 // WithOffset adds the offset to the extras config contexts list params
 func (o *ExtrasConfigContextsListParams) WithOffset(offset *int64) *ExtrasConfigContextsListParams {
 	o.SetOffset(offset)
@@ -252,6 +722,17 @@ func (o *ExtrasConfigContextsListParams) SetPlatform(platform *string) {
 	o.Platform = platform
 }
 
+// WithPlatformn adds the platformn to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithPlatformn(platformn *string) *ExtrasConfigContextsListParams {
+	o.SetPlatformn(platformn)
+	return o
+}
+
+// SetPlatformn adds the platformN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetPlatformn(platformn *string) {
+	o.Platformn = platformn
+}
+
 // WithPlatformID adds the platformID to the extras config contexts list params
 func (o *ExtrasConfigContextsListParams) WithPlatformID(platformID *string) *ExtrasConfigContextsListParams {
 	o.SetPlatformID(platformID)
@@ -261,6 +742,17 @@ func (o *ExtrasConfigContextsListParams) WithPlatformID(platformID *string) *Ext
 // SetPlatformID adds the platformId to the extras config contexts list params
 func (o *ExtrasConfigContextsListParams) SetPlatformID(platformID *string) {
 	o.PlatformID = platformID
+}
+
+// WithPlatformIDn adds the platformIDn to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithPlatformIDn(platformIDn *string) *ExtrasConfigContextsListParams {
+	o.SetPlatformIDn(platformIDn)
+	return o
+}
+
+// SetPlatformIDn adds the platformIdN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetPlatformIDn(platformIDn *string) {
+	o.PlatformIDn = platformIDn
 }
 
 // WithQ adds the q to the extras config contexts list params
@@ -285,6 +777,17 @@ func (o *ExtrasConfigContextsListParams) SetRegion(region *string) {
 	o.Region = region
 }
 
+// WithRegionn adds the regionn to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithRegionn(regionn *string) *ExtrasConfigContextsListParams {
+	o.SetRegionn(regionn)
+	return o
+}
+
+// SetRegionn adds the regionN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetRegionn(regionn *string) {
+	o.Regionn = regionn
+}
+
 // WithRegionID adds the regionID to the extras config contexts list params
 func (o *ExtrasConfigContextsListParams) WithRegionID(regionID *string) *ExtrasConfigContextsListParams {
 	o.SetRegionID(regionID)
@@ -294,6 +797,17 @@ func (o *ExtrasConfigContextsListParams) WithRegionID(regionID *string) *ExtrasC
 // SetRegionID adds the regionId to the extras config contexts list params
 func (o *ExtrasConfigContextsListParams) SetRegionID(regionID *string) {
 	o.RegionID = regionID
+}
+
+// WithRegionIDn adds the regionIDn to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithRegionIDn(regionIDn *string) *ExtrasConfigContextsListParams {
+	o.SetRegionIDn(regionIDn)
+	return o
+}
+
+// SetRegionIDn adds the regionIdN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetRegionIDn(regionIDn *string) {
+	o.RegionIDn = regionIDn
 }
 
 // WithRole adds the role to the extras config contexts list params
@@ -307,6 +821,17 @@ func (o *ExtrasConfigContextsListParams) SetRole(role *string) {
 	o.Role = role
 }
 
+// WithRolen adds the rolen to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithRolen(rolen *string) *ExtrasConfigContextsListParams {
+	o.SetRolen(rolen)
+	return o
+}
+
+// SetRolen adds the roleN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetRolen(rolen *string) {
+	o.Rolen = rolen
+}
+
 // WithRoleID adds the roleID to the extras config contexts list params
 func (o *ExtrasConfigContextsListParams) WithRoleID(roleID *string) *ExtrasConfigContextsListParams {
 	o.SetRoleID(roleID)
@@ -316,6 +841,17 @@ func (o *ExtrasConfigContextsListParams) WithRoleID(roleID *string) *ExtrasConfi
 // SetRoleID adds the roleId to the extras config contexts list params
 func (o *ExtrasConfigContextsListParams) SetRoleID(roleID *string) {
 	o.RoleID = roleID
+}
+
+// WithRoleIDn adds the roleIDn to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithRoleIDn(roleIDn *string) *ExtrasConfigContextsListParams {
+	o.SetRoleIDn(roleIDn)
+	return o
+}
+
+// SetRoleIDn adds the roleIdN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetRoleIDn(roleIDn *string) {
+	o.RoleIDn = roleIDn
 }
 
 // WithSite adds the site to the extras config contexts list params
@@ -329,6 +865,61 @@ func (o *ExtrasConfigContextsListParams) SetSite(site *string) {
 	o.Site = site
 }
 
+// WithSiten adds the siten to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithSiten(siten *string) *ExtrasConfigContextsListParams {
+	o.SetSiten(siten)
+	return o
+}
+
+// SetSiten adds the siteN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetSiten(siten *string) {
+	o.Siten = siten
+}
+
+// WithSiteGroup adds the siteGroup to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithSiteGroup(siteGroup *string) *ExtrasConfigContextsListParams {
+	o.SetSiteGroup(siteGroup)
+	return o
+}
+
+// SetSiteGroup adds the siteGroup to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetSiteGroup(siteGroup *string) {
+	o.SiteGroup = siteGroup
+}
+
+// WithSiteGroupn adds the siteGroupn to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithSiteGroupn(siteGroupn *string) *ExtrasConfigContextsListParams {
+	o.SetSiteGroupn(siteGroupn)
+	return o
+}
+
+// SetSiteGroupn adds the siteGroupN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetSiteGroupn(siteGroupn *string) {
+	o.SiteGroupn = siteGroupn
+}
+
+// WithSiteGroupID adds the siteGroupID to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithSiteGroupID(siteGroupID *string) *ExtrasConfigContextsListParams {
+	o.SetSiteGroupID(siteGroupID)
+	return o
+}
+
+// SetSiteGroupID adds the siteGroupId to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetSiteGroupID(siteGroupID *string) {
+	o.SiteGroupID = siteGroupID
+}
+
+// WithSiteGroupIDn adds the siteGroupIDn to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithSiteGroupIDn(siteGroupIDn *string) *ExtrasConfigContextsListParams {
+	o.SetSiteGroupIDn(siteGroupIDn)
+	return o
+}
+
+// SetSiteGroupIDn adds the siteGroupIdN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetSiteGroupIDn(siteGroupIDn *string) {
+	o.SiteGroupIDn = siteGroupIDn
+}
+
 // WithSiteID adds the siteID to the extras config contexts list params
 func (o *ExtrasConfigContextsListParams) WithSiteID(siteID *string) *ExtrasConfigContextsListParams {
 	o.SetSiteID(siteID)
@@ -338,6 +929,17 @@ func (o *ExtrasConfigContextsListParams) WithSiteID(siteID *string) *ExtrasConfi
 // SetSiteID adds the siteId to the extras config contexts list params
 func (o *ExtrasConfigContextsListParams) SetSiteID(siteID *string) {
 	o.SiteID = siteID
+}
+
+// WithSiteIDn adds the siteIDn to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithSiteIDn(siteIDn *string) *ExtrasConfigContextsListParams {
+	o.SetSiteIDn(siteIDn)
+	return o
+}
+
+// SetSiteIDn adds the siteIdN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetSiteIDn(siteIDn *string) {
+	o.SiteIDn = siteIDn
 }
 
 // WithTag adds the tag to the extras config contexts list params
@@ -351,6 +953,39 @@ func (o *ExtrasConfigContextsListParams) SetTag(tag *string) {
 	o.Tag = tag
 }
 
+// WithTagn adds the tagn to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithTagn(tagn *string) *ExtrasConfigContextsListParams {
+	o.SetTagn(tagn)
+	return o
+}
+
+// SetTagn adds the tagN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetTagn(tagn *string) {
+	o.Tagn = tagn
+}
+
+// WithTagID adds the tagID to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithTagID(tagID *string) *ExtrasConfigContextsListParams {
+	o.SetTagID(tagID)
+	return o
+}
+
+// SetTagID adds the tagId to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetTagID(tagID *string) {
+	o.TagID = tagID
+}
+
+// WithTagIDn adds the tagIDn to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithTagIDn(tagIDn *string) *ExtrasConfigContextsListParams {
+	o.SetTagIDn(tagIDn)
+	return o
+}
+
+// SetTagIDn adds the tagIdN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetTagIDn(tagIDn *string) {
+	o.TagIDn = tagIDn
+}
+
 // WithTenant adds the tenant to the extras config contexts list params
 func (o *ExtrasConfigContextsListParams) WithTenant(tenant *string) *ExtrasConfigContextsListParams {
 	o.SetTenant(tenant)
@@ -360,6 +995,17 @@ func (o *ExtrasConfigContextsListParams) WithTenant(tenant *string) *ExtrasConfi
 // SetTenant adds the tenant to the extras config contexts list params
 func (o *ExtrasConfigContextsListParams) SetTenant(tenant *string) {
 	o.Tenant = tenant
+}
+
+// WithTenantn adds the tenantn to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithTenantn(tenantn *string) *ExtrasConfigContextsListParams {
+	o.SetTenantn(tenantn)
+	return o
+}
+
+// SetTenantn adds the tenantN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetTenantn(tenantn *string) {
+	o.Tenantn = tenantn
 }
 
 // WithTenantGroup adds the tenantGroup to the extras config contexts list params
@@ -373,6 +1019,17 @@ func (o *ExtrasConfigContextsListParams) SetTenantGroup(tenantGroup *string) {
 	o.TenantGroup = tenantGroup
 }
 
+// WithTenantGroupn adds the tenantGroupn to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithTenantGroupn(tenantGroupn *string) *ExtrasConfigContextsListParams {
+	o.SetTenantGroupn(tenantGroupn)
+	return o
+}
+
+// SetTenantGroupn adds the tenantGroupN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetTenantGroupn(tenantGroupn *string) {
+	o.TenantGroupn = tenantGroupn
+}
+
 // WithTenantGroupID adds the tenantGroupID to the extras config contexts list params
 func (o *ExtrasConfigContextsListParams) WithTenantGroupID(tenantGroupID *string) *ExtrasConfigContextsListParams {
 	o.SetTenantGroupID(tenantGroupID)
@@ -384,6 +1041,17 @@ func (o *ExtrasConfigContextsListParams) SetTenantGroupID(tenantGroupID *string)
 	o.TenantGroupID = tenantGroupID
 }
 
+// WithTenantGroupIDn adds the tenantGroupIDn to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithTenantGroupIDn(tenantGroupIDn *string) *ExtrasConfigContextsListParams {
+	o.SetTenantGroupIDn(tenantGroupIDn)
+	return o
+}
+
+// SetTenantGroupIDn adds the tenantGroupIdN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetTenantGroupIDn(tenantGroupIDn *string) {
+	o.TenantGroupIDn = tenantGroupIDn
+}
+
 // WithTenantID adds the tenantID to the extras config contexts list params
 func (o *ExtrasConfigContextsListParams) WithTenantID(tenantID *string) *ExtrasConfigContextsListParams {
 	o.SetTenantID(tenantID)
@@ -393,6 +1061,17 @@ func (o *ExtrasConfigContextsListParams) WithTenantID(tenantID *string) *ExtrasC
 // SetTenantID adds the tenantId to the extras config contexts list params
 func (o *ExtrasConfigContextsListParams) SetTenantID(tenantID *string) {
 	o.TenantID = tenantID
+}
+
+// WithTenantIDn adds the tenantIDn to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) WithTenantIDn(tenantIDn *string) *ExtrasConfigContextsListParams {
+	o.SetTenantIDn(tenantIDn)
+	return o
+}
+
+// SetTenantIDn adds the tenantIdN to the extras config contexts list params
+func (o *ExtrasConfigContextsListParams) SetTenantIDn(tenantIDn *string) {
+	o.TenantIDn = tenantIDn
 }
 
 // WriteToRequest writes these params to a swagger request
@@ -407,336 +1086,1139 @@ func (o *ExtrasConfigContextsListParams) WriteToRequest(r runtime.ClientRequest,
 
 		// query param cluster_group
 		var qrClusterGroup string
+
 		if o.ClusterGroup != nil {
 			qrClusterGroup = *o.ClusterGroup
 		}
 		qClusterGroup := qrClusterGroup
 		if qClusterGroup != "" {
+
 			if err := r.SetQueryParam("cluster_group", qClusterGroup); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.ClusterGroupn != nil {
+
+		// query param cluster_group__n
+		var qrClusterGroupn string
+
+		if o.ClusterGroupn != nil {
+			qrClusterGroupn = *o.ClusterGroupn
+		}
+		qClusterGroupn := qrClusterGroupn
+		if qClusterGroupn != "" {
+
+			if err := r.SetQueryParam("cluster_group__n", qClusterGroupn); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.ClusterGroupID != nil {
 
 		// query param cluster_group_id
 		var qrClusterGroupID string
+
 		if o.ClusterGroupID != nil {
 			qrClusterGroupID = *o.ClusterGroupID
 		}
 		qClusterGroupID := qrClusterGroupID
 		if qClusterGroupID != "" {
+
 			if err := r.SetQueryParam("cluster_group_id", qClusterGroupID); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.ClusterGroupIDn != nil {
+
+		// query param cluster_group_id__n
+		var qrClusterGroupIDn string
+
+		if o.ClusterGroupIDn != nil {
+			qrClusterGroupIDn = *o.ClusterGroupIDn
+		}
+		qClusterGroupIDn := qrClusterGroupIDn
+		if qClusterGroupIDn != "" {
+
+			if err := r.SetQueryParam("cluster_group_id__n", qClusterGroupIDn); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.ClusterID != nil {
 
 		// query param cluster_id
 		var qrClusterID string
+
 		if o.ClusterID != nil {
 			qrClusterID = *o.ClusterID
 		}
 		qClusterID := qrClusterID
 		if qClusterID != "" {
+
 			if err := r.SetQueryParam("cluster_id", qClusterID); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.ClusterIDn != nil {
+
+		// query param cluster_id__n
+		var qrClusterIDn string
+
+		if o.ClusterIDn != nil {
+			qrClusterIDn = *o.ClusterIDn
+		}
+		qClusterIDn := qrClusterIDn
+		if qClusterIDn != "" {
+
+			if err := r.SetQueryParam("cluster_id__n", qClusterIDn); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.Created != nil {
+
+		// query param created
+		var qrCreated string
+
+		if o.Created != nil {
+			qrCreated = *o.Created
+		}
+		qCreated := qrCreated
+		if qCreated != "" {
+
+			if err := r.SetQueryParam("created", qCreated); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.CreatedGte != nil {
+
+		// query param created__gte
+		var qrCreatedGte string
+
+		if o.CreatedGte != nil {
+			qrCreatedGte = *o.CreatedGte
+		}
+		qCreatedGte := qrCreatedGte
+		if qCreatedGte != "" {
+
+			if err := r.SetQueryParam("created__gte", qCreatedGte); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.CreatedLte != nil {
+
+		// query param created__lte
+		var qrCreatedLte string
+
+		if o.CreatedLte != nil {
+			qrCreatedLte = *o.CreatedLte
+		}
+		qCreatedLte := qrCreatedLte
+		if qCreatedLte != "" {
+
+			if err := r.SetQueryParam("created__lte", qCreatedLte); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.DeviceTypeID != nil {
+
+		// query param device_type_id
+		var qrDeviceTypeID string
+
+		if o.DeviceTypeID != nil {
+			qrDeviceTypeID = *o.DeviceTypeID
+		}
+		qDeviceTypeID := qrDeviceTypeID
+		if qDeviceTypeID != "" {
+
+			if err := r.SetQueryParam("device_type_id", qDeviceTypeID); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.DeviceTypeIDn != nil {
+
+		// query param device_type_id__n
+		var qrDeviceTypeIDn string
+
+		if o.DeviceTypeIDn != nil {
+			qrDeviceTypeIDn = *o.DeviceTypeIDn
+		}
+		qDeviceTypeIDn := qrDeviceTypeIDn
+		if qDeviceTypeIDn != "" {
+
+			if err := r.SetQueryParam("device_type_id__n", qDeviceTypeIDn); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.ID != nil {
+
+		// query param id
+		var qrID string
+
+		if o.ID != nil {
+			qrID = *o.ID
+		}
+		qID := qrID
+		if qID != "" {
+
+			if err := r.SetQueryParam("id", qID); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.IDGt != nil {
+
+		// query param id__gt
+		var qrIDGt string
+
+		if o.IDGt != nil {
+			qrIDGt = *o.IDGt
+		}
+		qIDGt := qrIDGt
+		if qIDGt != "" {
+
+			if err := r.SetQueryParam("id__gt", qIDGt); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.IDGte != nil {
+
+		// query param id__gte
+		var qrIDGte string
+
+		if o.IDGte != nil {
+			qrIDGte = *o.IDGte
+		}
+		qIDGte := qrIDGte
+		if qIDGte != "" {
+
+			if err := r.SetQueryParam("id__gte", qIDGte); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.IDLt != nil {
+
+		// query param id__lt
+		var qrIDLt string
+
+		if o.IDLt != nil {
+			qrIDLt = *o.IDLt
+		}
+		qIDLt := qrIDLt
+		if qIDLt != "" {
+
+			if err := r.SetQueryParam("id__lt", qIDLt); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.IDLte != nil {
+
+		// query param id__lte
+		var qrIDLte string
+
+		if o.IDLte != nil {
+			qrIDLte = *o.IDLte
+		}
+		qIDLte := qrIDLte
+		if qIDLte != "" {
+
+			if err := r.SetQueryParam("id__lte", qIDLte); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.IDn != nil {
+
+		// query param id__n
+		var qrIDn string
+
+		if o.IDn != nil {
+			qrIDn = *o.IDn
+		}
+		qIDn := qrIDn
+		if qIDn != "" {
+
+			if err := r.SetQueryParam("id__n", qIDn); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.IsActive != nil {
 
 		// query param is_active
 		var qrIsActive string
+
 		if o.IsActive != nil {
 			qrIsActive = *o.IsActive
 		}
 		qIsActive := qrIsActive
 		if qIsActive != "" {
+
 			if err := r.SetQueryParam("is_active", qIsActive); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.LastUpdated != nil {
+
+		// query param last_updated
+		var qrLastUpdated string
+
+		if o.LastUpdated != nil {
+			qrLastUpdated = *o.LastUpdated
+		}
+		qLastUpdated := qrLastUpdated
+		if qLastUpdated != "" {
+
+			if err := r.SetQueryParam("last_updated", qLastUpdated); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.LastUpdatedGte != nil {
+
+		// query param last_updated__gte
+		var qrLastUpdatedGte string
+
+		if o.LastUpdatedGte != nil {
+			qrLastUpdatedGte = *o.LastUpdatedGte
+		}
+		qLastUpdatedGte := qrLastUpdatedGte
+		if qLastUpdatedGte != "" {
+
+			if err := r.SetQueryParam("last_updated__gte", qLastUpdatedGte); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.LastUpdatedLte != nil {
+
+		// query param last_updated__lte
+		var qrLastUpdatedLte string
+
+		if o.LastUpdatedLte != nil {
+			qrLastUpdatedLte = *o.LastUpdatedLte
+		}
+		qLastUpdatedLte := qrLastUpdatedLte
+		if qLastUpdatedLte != "" {
+
+			if err := r.SetQueryParam("last_updated__lte", qLastUpdatedLte); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Name != nil {
 
 		// query param name
 		var qrName string
+
 		if o.Name != nil {
 			qrName = *o.Name
 		}
 		qName := qrName
 		if qName != "" {
+
 			if err := r.SetQueryParam("name", qName); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.NameEmpty != nil {
+
+		// query param name__empty
+		var qrNameEmpty string
+
+		if o.NameEmpty != nil {
+			qrNameEmpty = *o.NameEmpty
+		}
+		qNameEmpty := qrNameEmpty
+		if qNameEmpty != "" {
+
+			if err := r.SetQueryParam("name__empty", qNameEmpty); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.NameIc != nil {
+
+		// query param name__ic
+		var qrNameIc string
+
+		if o.NameIc != nil {
+			qrNameIc = *o.NameIc
+		}
+		qNameIc := qrNameIc
+		if qNameIc != "" {
+
+			if err := r.SetQueryParam("name__ic", qNameIc); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.NameIe != nil {
+
+		// query param name__ie
+		var qrNameIe string
+
+		if o.NameIe != nil {
+			qrNameIe = *o.NameIe
+		}
+		qNameIe := qrNameIe
+		if qNameIe != "" {
+
+			if err := r.SetQueryParam("name__ie", qNameIe); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.NameIew != nil {
+
+		// query param name__iew
+		var qrNameIew string
+
+		if o.NameIew != nil {
+			qrNameIew = *o.NameIew
+		}
+		qNameIew := qrNameIew
+		if qNameIew != "" {
+
+			if err := r.SetQueryParam("name__iew", qNameIew); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.NameIsw != nil {
+
+		// query param name__isw
+		var qrNameIsw string
+
+		if o.NameIsw != nil {
+			qrNameIsw = *o.NameIsw
+		}
+		qNameIsw := qrNameIsw
+		if qNameIsw != "" {
+
+			if err := r.SetQueryParam("name__isw", qNameIsw); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.Namen != nil {
+
+		// query param name__n
+		var qrNamen string
+
+		if o.Namen != nil {
+			qrNamen = *o.Namen
+		}
+		qNamen := qrNamen
+		if qNamen != "" {
+
+			if err := r.SetQueryParam("name__n", qNamen); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.NameNic != nil {
+
+		// query param name__nic
+		var qrNameNic string
+
+		if o.NameNic != nil {
+			qrNameNic = *o.NameNic
+		}
+		qNameNic := qrNameNic
+		if qNameNic != "" {
+
+			if err := r.SetQueryParam("name__nic", qNameNic); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.NameNie != nil {
+
+		// query param name__nie
+		var qrNameNie string
+
+		if o.NameNie != nil {
+			qrNameNie = *o.NameNie
+		}
+		qNameNie := qrNameNie
+		if qNameNie != "" {
+
+			if err := r.SetQueryParam("name__nie", qNameNie); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.NameNiew != nil {
+
+		// query param name__niew
+		var qrNameNiew string
+
+		if o.NameNiew != nil {
+			qrNameNiew = *o.NameNiew
+		}
+		qNameNiew := qrNameNiew
+		if qNameNiew != "" {
+
+			if err := r.SetQueryParam("name__niew", qNameNiew); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.NameNisw != nil {
+
+		// query param name__nisw
+		var qrNameNisw string
+
+		if o.NameNisw != nil {
+			qrNameNisw = *o.NameNisw
+		}
+		qNameNisw := qrNameNisw
+		if qNameNisw != "" {
+
+			if err := r.SetQueryParam("name__nisw", qNameNisw); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.Offset != nil {
 
 		// query param offset
 		var qrOffset int64
+
 		if o.Offset != nil {
 			qrOffset = *o.Offset
 		}
 		qOffset := swag.FormatInt64(qrOffset)
 		if qOffset != "" {
+
 			if err := r.SetQueryParam("offset", qOffset); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Platform != nil {
 
 		// query param platform
 		var qrPlatform string
+
 		if o.Platform != nil {
 			qrPlatform = *o.Platform
 		}
 		qPlatform := qrPlatform
 		if qPlatform != "" {
+
 			if err := r.SetQueryParam("platform", qPlatform); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.Platformn != nil {
+
+		// query param platform__n
+		var qrPlatformn string
+
+		if o.Platformn != nil {
+			qrPlatformn = *o.Platformn
+		}
+		qPlatformn := qrPlatformn
+		if qPlatformn != "" {
+
+			if err := r.SetQueryParam("platform__n", qPlatformn); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.PlatformID != nil {
 
 		// query param platform_id
 		var qrPlatformID string
+
 		if o.PlatformID != nil {
 			qrPlatformID = *o.PlatformID
 		}
 		qPlatformID := qrPlatformID
 		if qPlatformID != "" {
+
 			if err := r.SetQueryParam("platform_id", qPlatformID); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.PlatformIDn != nil {
+
+		// query param platform_id__n
+		var qrPlatformIDn string
+
+		if o.PlatformIDn != nil {
+			qrPlatformIDn = *o.PlatformIDn
+		}
+		qPlatformIDn := qrPlatformIDn
+		if qPlatformIDn != "" {
+
+			if err := r.SetQueryParam("platform_id__n", qPlatformIDn); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.Q != nil {
 
 		// query param q
 		var qrQ string
+
 		if o.Q != nil {
 			qrQ = *o.Q
 		}
 		qQ := qrQ
 		if qQ != "" {
+
 			if err := r.SetQueryParam("q", qQ); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Region != nil {
 
 		// query param region
 		var qrRegion string
+
 		if o.Region != nil {
 			qrRegion = *o.Region
 		}
 		qRegion := qrRegion
 		if qRegion != "" {
+
 			if err := r.SetQueryParam("region", qRegion); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.Regionn != nil {
+
+		// query param region__n
+		var qrRegionn string
+
+		if o.Regionn != nil {
+			qrRegionn = *o.Regionn
+		}
+		qRegionn := qrRegionn
+		if qRegionn != "" {
+
+			if err := r.SetQueryParam("region__n", qRegionn); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.RegionID != nil {
 
 		// query param region_id
 		var qrRegionID string
+
 		if o.RegionID != nil {
 			qrRegionID = *o.RegionID
 		}
 		qRegionID := qrRegionID
 		if qRegionID != "" {
+
 			if err := r.SetQueryParam("region_id", qRegionID); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.RegionIDn != nil {
+
+		// query param region_id__n
+		var qrRegionIDn string
+
+		if o.RegionIDn != nil {
+			qrRegionIDn = *o.RegionIDn
+		}
+		qRegionIDn := qrRegionIDn
+		if qRegionIDn != "" {
+
+			if err := r.SetQueryParam("region_id__n", qRegionIDn); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.Role != nil {
 
 		// query param role
 		var qrRole string
+
 		if o.Role != nil {
 			qrRole = *o.Role
 		}
 		qRole := qrRole
 		if qRole != "" {
+
 			if err := r.SetQueryParam("role", qRole); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.Rolen != nil {
+
+		// query param role__n
+		var qrRolen string
+
+		if o.Rolen != nil {
+			qrRolen = *o.Rolen
+		}
+		qRolen := qrRolen
+		if qRolen != "" {
+
+			if err := r.SetQueryParam("role__n", qRolen); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.RoleID != nil {
 
 		// query param role_id
 		var qrRoleID string
+
 		if o.RoleID != nil {
 			qrRoleID = *o.RoleID
 		}
 		qRoleID := qrRoleID
 		if qRoleID != "" {
+
 			if err := r.SetQueryParam("role_id", qRoleID); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.RoleIDn != nil {
+
+		// query param role_id__n
+		var qrRoleIDn string
+
+		if o.RoleIDn != nil {
+			qrRoleIDn = *o.RoleIDn
+		}
+		qRoleIDn := qrRoleIDn
+		if qRoleIDn != "" {
+
+			if err := r.SetQueryParam("role_id__n", qRoleIDn); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.Site != nil {
 
 		// query param site
 		var qrSite string
+
 		if o.Site != nil {
 			qrSite = *o.Site
 		}
 		qSite := qrSite
 		if qSite != "" {
+
 			if err := r.SetQueryParam("site", qSite); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.Siten != nil {
+
+		// query param site__n
+		var qrSiten string
+
+		if o.Siten != nil {
+			qrSiten = *o.Siten
+		}
+		qSiten := qrSiten
+		if qSiten != "" {
+
+			if err := r.SetQueryParam("site__n", qSiten); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.SiteGroup != nil {
+
+		// query param site_group
+		var qrSiteGroup string
+
+		if o.SiteGroup != nil {
+			qrSiteGroup = *o.SiteGroup
+		}
+		qSiteGroup := qrSiteGroup
+		if qSiteGroup != "" {
+
+			if err := r.SetQueryParam("site_group", qSiteGroup); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.SiteGroupn != nil {
+
+		// query param site_group__n
+		var qrSiteGroupn string
+
+		if o.SiteGroupn != nil {
+			qrSiteGroupn = *o.SiteGroupn
+		}
+		qSiteGroupn := qrSiteGroupn
+		if qSiteGroupn != "" {
+
+			if err := r.SetQueryParam("site_group__n", qSiteGroupn); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.SiteGroupID != nil {
+
+		// query param site_group_id
+		var qrSiteGroupID string
+
+		if o.SiteGroupID != nil {
+			qrSiteGroupID = *o.SiteGroupID
+		}
+		qSiteGroupID := qrSiteGroupID
+		if qSiteGroupID != "" {
+
+			if err := r.SetQueryParam("site_group_id", qSiteGroupID); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.SiteGroupIDn != nil {
+
+		// query param site_group_id__n
+		var qrSiteGroupIDn string
+
+		if o.SiteGroupIDn != nil {
+			qrSiteGroupIDn = *o.SiteGroupIDn
+		}
+		qSiteGroupIDn := qrSiteGroupIDn
+		if qSiteGroupIDn != "" {
+
+			if err := r.SetQueryParam("site_group_id__n", qSiteGroupIDn); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.SiteID != nil {
 
 		// query param site_id
 		var qrSiteID string
+
 		if o.SiteID != nil {
 			qrSiteID = *o.SiteID
 		}
 		qSiteID := qrSiteID
 		if qSiteID != "" {
+
 			if err := r.SetQueryParam("site_id", qSiteID); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.SiteIDn != nil {
+
+		// query param site_id__n
+		var qrSiteIDn string
+
+		if o.SiteIDn != nil {
+			qrSiteIDn = *o.SiteIDn
+		}
+		qSiteIDn := qrSiteIDn
+		if qSiteIDn != "" {
+
+			if err := r.SetQueryParam("site_id__n", qSiteIDn); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.Tag != nil {
 
 		// query param tag
 		var qrTag string
+
 		if o.Tag != nil {
 			qrTag = *o.Tag
 		}
 		qTag := qrTag
 		if qTag != "" {
+
 			if err := r.SetQueryParam("tag", qTag); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.Tagn != nil {
+
+		// query param tag__n
+		var qrTagn string
+
+		if o.Tagn != nil {
+			qrTagn = *o.Tagn
+		}
+		qTagn := qrTagn
+		if qTagn != "" {
+
+			if err := r.SetQueryParam("tag__n", qTagn); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.TagID != nil {
+
+		// query param tag_id
+		var qrTagID string
+
+		if o.TagID != nil {
+			qrTagID = *o.TagID
+		}
+		qTagID := qrTagID
+		if qTagID != "" {
+
+			if err := r.SetQueryParam("tag_id", qTagID); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.TagIDn != nil {
+
+		// query param tag_id__n
+		var qrTagIDn string
+
+		if o.TagIDn != nil {
+			qrTagIDn = *o.TagIDn
+		}
+		qTagIDn := qrTagIDn
+		if qTagIDn != "" {
+
+			if err := r.SetQueryParam("tag_id__n", qTagIDn); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.Tenant != nil {
 
 		// query param tenant
 		var qrTenant string
+
 		if o.Tenant != nil {
 			qrTenant = *o.Tenant
 		}
 		qTenant := qrTenant
 		if qTenant != "" {
+
 			if err := r.SetQueryParam("tenant", qTenant); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.Tenantn != nil {
+
+		// query param tenant__n
+		var qrTenantn string
+
+		if o.Tenantn != nil {
+			qrTenantn = *o.Tenantn
+		}
+		qTenantn := qrTenantn
+		if qTenantn != "" {
+
+			if err := r.SetQueryParam("tenant__n", qTenantn); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.TenantGroup != nil {
 
 		// query param tenant_group
 		var qrTenantGroup string
+
 		if o.TenantGroup != nil {
 			qrTenantGroup = *o.TenantGroup
 		}
 		qTenantGroup := qrTenantGroup
 		if qTenantGroup != "" {
+
 			if err := r.SetQueryParam("tenant_group", qTenantGroup); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.TenantGroupn != nil {
+
+		// query param tenant_group__n
+		var qrTenantGroupn string
+
+		if o.TenantGroupn != nil {
+			qrTenantGroupn = *o.TenantGroupn
+		}
+		qTenantGroupn := qrTenantGroupn
+		if qTenantGroupn != "" {
+
+			if err := r.SetQueryParam("tenant_group__n", qTenantGroupn); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.TenantGroupID != nil {
 
 		// query param tenant_group_id
 		var qrTenantGroupID string
+
 		if o.TenantGroupID != nil {
 			qrTenantGroupID = *o.TenantGroupID
 		}
 		qTenantGroupID := qrTenantGroupID
 		if qTenantGroupID != "" {
+
 			if err := r.SetQueryParam("tenant_group_id", qTenantGroupID); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.TenantGroupIDn != nil {
+
+		// query param tenant_group_id__n
+		var qrTenantGroupIDn string
+
+		if o.TenantGroupIDn != nil {
+			qrTenantGroupIDn = *o.TenantGroupIDn
+		}
+		qTenantGroupIDn := qrTenantGroupIDn
+		if qTenantGroupIDn != "" {
+
+			if err := r.SetQueryParam("tenant_group_id__n", qTenantGroupIDn); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.TenantID != nil {
 
 		// query param tenant_id
 		var qrTenantID string
+
 		if o.TenantID != nil {
 			qrTenantID = *o.TenantID
 		}
 		qTenantID := qrTenantID
 		if qTenantID != "" {
+
 			if err := r.SetQueryParam("tenant_id", qTenantID); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.TenantIDn != nil {
+
+		// query param tenant_id__n
+		var qrTenantIDn string
+
+		if o.TenantIDn != nil {
+			qrTenantIDn = *o.TenantIDn
+		}
+		qTenantIDn := qrTenantIDn
+		if qTenantIDn != "" {
+
+			if err := r.SetQueryParam("tenant_id__n", qTenantIDn); err != nil {
+				return err
+			}
+		}
 	}
 
 	if len(res) > 0 {

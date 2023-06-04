@@ -21,18 +21,18 @@ package virtualization
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // VirtualizationClusterGroupsListReader is a Reader for the VirtualizationClusterGroupsList structure.
@@ -49,9 +49,15 @@ func (o *VirtualizationClusterGroupsListReader) ReadResponse(response runtime.Cl
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewVirtualizationClusterGroupsListDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -60,7 +66,8 @@ func NewVirtualizationClusterGroupsListOK() *VirtualizationClusterGroupsListOK {
 	return &VirtualizationClusterGroupsListOK{}
 }
 
-/*VirtualizationClusterGroupsListOK handles this case with default header values.
+/*
+VirtualizationClusterGroupsListOK describes a response with status code 200, with default header values.
 
 VirtualizationClusterGroupsListOK virtualization cluster groups list o k
 */
@@ -68,7 +75,41 @@ type VirtualizationClusterGroupsListOK struct {
 	Payload *VirtualizationClusterGroupsListOKBody
 }
 
+// IsSuccess returns true when this virtualization cluster groups list o k response has a 2xx status code
+func (o *VirtualizationClusterGroupsListOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this virtualization cluster groups list o k response has a 3xx status code
+func (o *VirtualizationClusterGroupsListOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this virtualization cluster groups list o k response has a 4xx status code
+func (o *VirtualizationClusterGroupsListOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this virtualization cluster groups list o k response has a 5xx status code
+func (o *VirtualizationClusterGroupsListOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this virtualization cluster groups list o k response a status code equal to that given
+func (o *VirtualizationClusterGroupsListOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the virtualization cluster groups list o k response
+func (o *VirtualizationClusterGroupsListOK) Code() int {
+	return 200
+}
+
 func (o *VirtualizationClusterGroupsListOK) Error() string {
+	return fmt.Sprintf("[GET /virtualization/cluster-groups/][%d] virtualizationClusterGroupsListOK  %+v", 200, o.Payload)
+}
+
+func (o *VirtualizationClusterGroupsListOK) String() string {
 	return fmt.Sprintf("[GET /virtualization/cluster-groups/][%d] virtualizationClusterGroupsListOK  %+v", 200, o.Payload)
 }
 
@@ -88,7 +129,78 @@ func (o *VirtualizationClusterGroupsListOK) readResponse(response runtime.Client
 	return nil
 }
 
-/*VirtualizationClusterGroupsListOKBody virtualization cluster groups list o k body
+// NewVirtualizationClusterGroupsListDefault creates a VirtualizationClusterGroupsListDefault with default headers values
+func NewVirtualizationClusterGroupsListDefault(code int) *VirtualizationClusterGroupsListDefault {
+	return &VirtualizationClusterGroupsListDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+VirtualizationClusterGroupsListDefault describes a response with status code -1, with default header values.
+
+VirtualizationClusterGroupsListDefault virtualization cluster groups list default
+*/
+type VirtualizationClusterGroupsListDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this virtualization cluster groups list default response has a 2xx status code
+func (o *VirtualizationClusterGroupsListDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this virtualization cluster groups list default response has a 3xx status code
+func (o *VirtualizationClusterGroupsListDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this virtualization cluster groups list default response has a 4xx status code
+func (o *VirtualizationClusterGroupsListDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this virtualization cluster groups list default response has a 5xx status code
+func (o *VirtualizationClusterGroupsListDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this virtualization cluster groups list default response a status code equal to that given
+func (o *VirtualizationClusterGroupsListDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the virtualization cluster groups list default response
+func (o *VirtualizationClusterGroupsListDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *VirtualizationClusterGroupsListDefault) Error() string {
+	return fmt.Sprintf("[GET /virtualization/cluster-groups/][%d] virtualization_cluster-groups_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *VirtualizationClusterGroupsListDefault) String() string {
+	return fmt.Sprintf("[GET /virtualization/cluster-groups/][%d] virtualization_cluster-groups_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *VirtualizationClusterGroupsListDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *VirtualizationClusterGroupsListDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+/*
+VirtualizationClusterGroupsListOKBody virtualization cluster groups list o k body
 swagger:model VirtualizationClusterGroupsListOKBody
 */
 type VirtualizationClusterGroupsListOKBody struct {
@@ -146,7 +258,6 @@ func (o *VirtualizationClusterGroupsListOKBody) validateCount(formats strfmt.Reg
 }
 
 func (o *VirtualizationClusterGroupsListOKBody) validateNext(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Next) { // not required
 		return nil
 	}
@@ -159,7 +270,6 @@ func (o *VirtualizationClusterGroupsListOKBody) validateNext(formats strfmt.Regi
 }
 
 func (o *VirtualizationClusterGroupsListOKBody) validatePrevious(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Previous) { // not required
 		return nil
 	}
@@ -186,6 +296,42 @@ func (o *VirtualizationClusterGroupsListOKBody) validateResults(formats strfmt.R
 			if err := o.Results[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("virtualizationClusterGroupsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("virtualizationClusterGroupsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this virtualization cluster groups list o k body based on the context it is used
+func (o *VirtualizationClusterGroupsListOKBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := o.contextValidateResults(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (o *VirtualizationClusterGroupsListOKBody) contextValidateResults(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(o.Results); i++ {
+
+		if o.Results[i] != nil {
+			if err := o.Results[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("virtualizationClusterGroupsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("virtualizationClusterGroupsListOK" + "." + "results" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

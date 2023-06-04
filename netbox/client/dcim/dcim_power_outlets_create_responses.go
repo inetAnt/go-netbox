@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // DcimPowerOutletsCreateReader is a Reader for the DcimPowerOutletsCreate structure.
@@ -45,9 +44,15 @@ func (o *DcimPowerOutletsCreateReader) ReadResponse(response runtime.ClientRespo
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewDcimPowerOutletsCreateDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewDcimPowerOutletsCreateCreated() *DcimPowerOutletsCreateCreated {
 	return &DcimPowerOutletsCreateCreated{}
 }
 
-/*DcimPowerOutletsCreateCreated handles this case with default header values.
+/*
+DcimPowerOutletsCreateCreated describes a response with status code 201, with default header values.
 
 DcimPowerOutletsCreateCreated dcim power outlets create created
 */
@@ -64,7 +70,41 @@ type DcimPowerOutletsCreateCreated struct {
 	Payload *models.PowerOutlet
 }
 
+// IsSuccess returns true when this dcim power outlets create created response has a 2xx status code
+func (o *DcimPowerOutletsCreateCreated) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this dcim power outlets create created response has a 3xx status code
+func (o *DcimPowerOutletsCreateCreated) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this dcim power outlets create created response has a 4xx status code
+func (o *DcimPowerOutletsCreateCreated) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this dcim power outlets create created response has a 5xx status code
+func (o *DcimPowerOutletsCreateCreated) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this dcim power outlets create created response a status code equal to that given
+func (o *DcimPowerOutletsCreateCreated) IsCode(code int) bool {
+	return code == 201
+}
+
+// Code gets the status code for the dcim power outlets create created response
+func (o *DcimPowerOutletsCreateCreated) Code() int {
+	return 201
+}
+
 func (o *DcimPowerOutletsCreateCreated) Error() string {
+	return fmt.Sprintf("[POST /dcim/power-outlets/][%d] dcimPowerOutletsCreateCreated  %+v", 201, o.Payload)
+}
+
+func (o *DcimPowerOutletsCreateCreated) String() string {
 	return fmt.Sprintf("[POST /dcim/power-outlets/][%d] dcimPowerOutletsCreateCreated  %+v", 201, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *DcimPowerOutletsCreateCreated) readResponse(response runtime.ClientResp
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDcimPowerOutletsCreateDefault creates a DcimPowerOutletsCreateDefault with default headers values
+func NewDcimPowerOutletsCreateDefault(code int) *DcimPowerOutletsCreateDefault {
+	return &DcimPowerOutletsCreateDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+DcimPowerOutletsCreateDefault describes a response with status code -1, with default header values.
+
+DcimPowerOutletsCreateDefault dcim power outlets create default
+*/
+type DcimPowerOutletsCreateDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this dcim power outlets create default response has a 2xx status code
+func (o *DcimPowerOutletsCreateDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this dcim power outlets create default response has a 3xx status code
+func (o *DcimPowerOutletsCreateDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this dcim power outlets create default response has a 4xx status code
+func (o *DcimPowerOutletsCreateDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this dcim power outlets create default response has a 5xx status code
+func (o *DcimPowerOutletsCreateDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this dcim power outlets create default response a status code equal to that given
+func (o *DcimPowerOutletsCreateDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the dcim power outlets create default response
+func (o *DcimPowerOutletsCreateDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *DcimPowerOutletsCreateDefault) Error() string {
+	return fmt.Sprintf("[POST /dcim/power-outlets/][%d] dcim_power-outlets_create default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimPowerOutletsCreateDefault) String() string {
+	return fmt.Sprintf("[POST /dcim/power-outlets/][%d] dcim_power-outlets_create default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimPowerOutletsCreateDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *DcimPowerOutletsCreateDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

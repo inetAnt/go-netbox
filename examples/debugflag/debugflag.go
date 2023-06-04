@@ -21,7 +21,7 @@ import (
 
 	runtimeclient "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-	"github.com/inetAnt/go-netbox/netbox/client"
+	"github.com/inetAnt/go-netbox/v3/netbox/client"
 )
 
 func main() {

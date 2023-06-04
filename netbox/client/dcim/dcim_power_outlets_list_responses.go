@@ -21,18 +21,18 @@ package dcim
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // DcimPowerOutletsListReader is a Reader for the DcimPowerOutletsList structure.
@@ -49,9 +49,15 @@ func (o *DcimPowerOutletsListReader) ReadResponse(response runtime.ClientRespons
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewDcimPowerOutletsListDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -60,7 +66,8 @@ func NewDcimPowerOutletsListOK() *DcimPowerOutletsListOK {
 	return &DcimPowerOutletsListOK{}
 }
 
-/*DcimPowerOutletsListOK handles this case with default header values.
+/*
+DcimPowerOutletsListOK describes a response with status code 200, with default header values.
 
 DcimPowerOutletsListOK dcim power outlets list o k
 */
@@ -68,7 +75,41 @@ type DcimPowerOutletsListOK struct {
 	Payload *DcimPowerOutletsListOKBody
 }
 
+// IsSuccess returns true when this dcim power outlets list o k response has a 2xx status code
+func (o *DcimPowerOutletsListOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this dcim power outlets list o k response has a 3xx status code
+func (o *DcimPowerOutletsListOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this dcim power outlets list o k response has a 4xx status code
+func (o *DcimPowerOutletsListOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this dcim power outlets list o k response has a 5xx status code
+func (o *DcimPowerOutletsListOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this dcim power outlets list o k response a status code equal to that given
+func (o *DcimPowerOutletsListOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the dcim power outlets list o k response
+func (o *DcimPowerOutletsListOK) Code() int {
+	return 200
+}
+
 func (o *DcimPowerOutletsListOK) Error() string {
+	return fmt.Sprintf("[GET /dcim/power-outlets/][%d] dcimPowerOutletsListOK  %+v", 200, o.Payload)
+}
+
+func (o *DcimPowerOutletsListOK) String() string {
 	return fmt.Sprintf("[GET /dcim/power-outlets/][%d] dcimPowerOutletsListOK  %+v", 200, o.Payload)
 }
 
@@ -88,7 +129,78 @@ func (o *DcimPowerOutletsListOK) readResponse(response runtime.ClientResponse, c
 	return nil
 }
 
-/*DcimPowerOutletsListOKBody dcim power outlets list o k body
+// NewDcimPowerOutletsListDefault creates a DcimPowerOutletsListDefault with default headers values
+func NewDcimPowerOutletsListDefault(code int) *DcimPowerOutletsListDefault {
+	return &DcimPowerOutletsListDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+DcimPowerOutletsListDefault describes a response with status code -1, with default header values.
+
+DcimPowerOutletsListDefault dcim power outlets list default
+*/
+type DcimPowerOutletsListDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this dcim power outlets list default response has a 2xx status code
+func (o *DcimPowerOutletsListDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this dcim power outlets list default response has a 3xx status code
+func (o *DcimPowerOutletsListDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this dcim power outlets list default response has a 4xx status code
+func (o *DcimPowerOutletsListDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this dcim power outlets list default response has a 5xx status code
+func (o *DcimPowerOutletsListDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this dcim power outlets list default response a status code equal to that given
+func (o *DcimPowerOutletsListDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the dcim power outlets list default response
+func (o *DcimPowerOutletsListDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *DcimPowerOutletsListDefault) Error() string {
+	return fmt.Sprintf("[GET /dcim/power-outlets/][%d] dcim_power-outlets_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimPowerOutletsListDefault) String() string {
+	return fmt.Sprintf("[GET /dcim/power-outlets/][%d] dcim_power-outlets_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimPowerOutletsListDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *DcimPowerOutletsListDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+/*
+DcimPowerOutletsListOKBody dcim power outlets list o k body
 swagger:model DcimPowerOutletsListOKBody
 */
 type DcimPowerOutletsListOKBody struct {
@@ -146,7 +258,6 @@ func (o *DcimPowerOutletsListOKBody) validateCount(formats strfmt.Registry) erro
 }
 
 func (o *DcimPowerOutletsListOKBody) validateNext(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Next) { // not required
 		return nil
 	}
@@ -159,7 +270,6 @@ func (o *DcimPowerOutletsListOKBody) validateNext(formats strfmt.Registry) error
 }
 
 func (o *DcimPowerOutletsListOKBody) validatePrevious(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Previous) { // not required
 		return nil
 	}
@@ -186,6 +296,42 @@ func (o *DcimPowerOutletsListOKBody) validateResults(formats strfmt.Registry) er
 			if err := o.Results[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("dcimPowerOutletsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("dcimPowerOutletsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this dcim power outlets list o k body based on the context it is used
+func (o *DcimPowerOutletsListOKBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := o.contextValidateResults(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (o *DcimPowerOutletsListOKBody) contextValidateResults(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(o.Results); i++ {
+
+		if o.Results[i] != nil {
+			if err := o.Results[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("dcimPowerOutletsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("dcimPowerOutletsListOK" + "." + "results" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

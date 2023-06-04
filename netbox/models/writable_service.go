@@ -21,17 +21,18 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // WritableService writable service
+//
 // swagger:model WritableService
 type WritableService struct {
 
@@ -44,13 +45,17 @@ type WritableService struct {
 	CustomFields interface{} `json:"custom_fields,omitempty"`
 
 	// Description
-	// Max Length: 100
+	// Max Length: 200
 	Description string `json:"description,omitempty"`
 
 	// Device
 	Device *int64 `json:"device,omitempty"`
 
-	// ID
+	// Display
+	// Read Only: true
+	Display string `json:"display,omitempty"`
+
+	// Id
 	// Read Only: true
 	ID int64 `json:"id,omitempty"`
 
@@ -65,23 +70,26 @@ type WritableService struct {
 
 	// Name
 	// Required: true
-	// Max Length: 30
+	// Max Length: 100
 	// Min Length: 1
 	Name *string `json:"name"`
 
-	// Port number
+	// ports
 	// Required: true
-	// Maximum: 65535
-	// Minimum: 1
-	Port *int64 `json:"port"`
+	Ports []int64 `json:"ports"`
 
 	// Protocol
 	// Required: true
-	// Enum: [tcp udp]
+	// Enum: [tcp udp sctp]
 	Protocol *string `json:"protocol"`
 
 	// tags
-	Tags []string `json:"tags"`
+	Tags []*NestedTag `json:"tags,omitempty"`
+
+	// Url
+	// Read Only: true
+	// Format: uri
+	URL strfmt.URI `json:"url,omitempty"`
 
 	// Virtual machine
 	VirtualMachine *int64 `json:"virtual_machine,omitempty"`
@@ -111,7 +119,7 @@ func (m *WritableService) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validatePort(formats); err != nil {
+	if err := m.validatePorts(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -123,6 +131,10 @@ func (m *WritableService) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateURL(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
@@ -130,7 +142,6 @@ func (m *WritableService) Validate(formats strfmt.Registry) error {
 }
 
 func (m *WritableService) validateCreated(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Created) { // not required
 		return nil
 	}
@@ -143,12 +154,11 @@ func (m *WritableService) validateCreated(formats strfmt.Registry) error {
 }
 
 func (m *WritableService) validateDescription(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Description) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("description", "body", string(m.Description), 100); err != nil {
+	if err := validate.MaxLength("description", "body", m.Description, 200); err != nil {
 		return err
 	}
 
@@ -156,7 +166,6 @@ func (m *WritableService) validateDescription(formats strfmt.Registry) error {
 }
 
 func (m *WritableService) validateIpaddresses(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Ipaddresses) { // not required
 		return nil
 	}
@@ -169,7 +178,6 @@ func (m *WritableService) validateIpaddresses(formats strfmt.Registry) error {
 }
 
 func (m *WritableService) validateLastUpdated(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LastUpdated) { // not required
 		return nil
 	}
@@ -187,29 +195,33 @@ func (m *WritableService) validateName(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("name", "body", string(*m.Name), 1); err != nil {
+	if err := validate.MinLength("name", "body", *m.Name, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("name", "body", string(*m.Name), 30); err != nil {
+	if err := validate.MaxLength("name", "body", *m.Name, 100); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (m *WritableService) validatePort(formats strfmt.Registry) error {
+func (m *WritableService) validatePorts(formats strfmt.Registry) error {
 
-	if err := validate.Required("port", "body", m.Port); err != nil {
+	if err := validate.Required("ports", "body", m.Ports); err != nil {
 		return err
 	}
 
-	if err := validate.MinimumInt("port", "body", int64(*m.Port), 1, false); err != nil {
-		return err
-	}
+	for i := 0; i < len(m.Ports); i++ {
 
-	if err := validate.MaximumInt("port", "body", int64(*m.Port), 65535, false); err != nil {
-		return err
+		if err := validate.MinimumInt("ports"+"."+strconv.Itoa(i), "body", m.Ports[i], 1, false); err != nil {
+			return err
+		}
+
+		if err := validate.MaximumInt("ports"+"."+strconv.Itoa(i), "body", m.Ports[i], 65535, false); err != nil {
+			return err
+		}
+
 	}
 
 	return nil
@@ -219,7 +231,7 @@ var writableServiceTypeProtocolPropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["tcp","udp"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["tcp","udp","sctp"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -234,11 +246,14 @@ const (
 
 	// WritableServiceProtocolUDP captures enum value "udp"
 	WritableServiceProtocolUDP string = "udp"
+
+	// WritableServiceProtocolSctp captures enum value "sctp"
+	WritableServiceProtocolSctp string = "sctp"
 )
 
 // prop value enum
 func (m *WritableService) validateProtocolEnum(path, location string, value string) error {
-	if err := validate.Enum(path, location, value, writableServiceTypeProtocolPropEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, writableServiceTypeProtocolPropEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -259,17 +274,137 @@ func (m *WritableService) validateProtocol(formats strfmt.Registry) error {
 }
 
 func (m *WritableService) validateTags(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Tags) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Tags); i++ {
-
-		if err := validate.MinLength("tags"+"."+strconv.Itoa(i), "body", string(m.Tags[i]), 1); err != nil {
-			return err
+		if swag.IsZero(m.Tags[i]) { // not required
+			continue
 		}
 
+		if m.Tags[i] != nil {
+			if err := m.Tags[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("tags" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("tags" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *WritableService) validateURL(formats strfmt.Registry) error {
+	if swag.IsZero(m.URL) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("url", "body", "uri", m.URL.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this writable service based on the context it is used
+func (m *WritableService) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCreated(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDisplay(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLastUpdated(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTags(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *WritableService) contextValidateCreated(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created", "body", strfmt.Date(m.Created)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WritableService) contextValidateDisplay(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "display", "body", string(m.Display)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WritableService) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WritableService) contextValidateLastUpdated(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "last_updated", "body", strfmt.DateTime(m.LastUpdated)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WritableService) contextValidateTags(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Tags); i++ {
+
+		if m.Tags[i] != nil {
+			if err := m.Tags[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("tags" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("tags" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *WritableService) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", strfmt.URI(m.URL)); err != nil {
+		return err
 	}
 
 	return nil

@@ -1,62 +1,168 @@
-go-netbox 
-=========
+# go-netbox
 
-[![GoDoc](http://godoc.org/github.com/netbox-community/go-netbox?status.svg)](http://godoc.org/github.com/netbox-community/go-netbox) [![Build Status](https://github.com/inetAnt/go-netbox/workflows/main/badge.svg?branch=master)](https://github.com/inetAnt/go-netbox/actions) [![Report Card](https://goreportcard.com/badge/github.com/netbox-community/go-netbox)](https://goreportcard.com/report/github.com/netbox-community/go-netbox)
+[![GoDoc](https://pkg.go.dev/badge/github.com/inetAnt/go-netbox/v3)](https://pkg.go.dev/github.com/inetAnt/go-netbox/v3) [![Build Status](https://github.com/inetAnt/go-netbox/workflows/main/badge.svg?branch=master)](https://github.com/inetAnt/go-netbox/actions) [![Report Card](https://goreportcard.com/badge/github.com/netbox-community/go-netbox)](https://goreportcard.com/report/github.com/netbox-community/go-netbox)
 
-Package `netbox` provides an API 2.0 client for [netbox-community's NetBox](https://github.com/netbox-community/netbox)
-IPAM and DCIM service.
+_go-netbox_ is —to nobody's surprise— the official [Go](https://go.dev) API client for [Netbox](https://github.com/netbox-community/netbox) IPAM and DCIM service.
 
-This package assumes you are using NetBox 2.0, as the NetBox 1.0 API no longer exists.
+This project follows [Semantic Versioning](https://semver.org). The version of the library built for a Netbox version has the same tag, followed by a hyphen and the build number (an incremental integer), as several versions of the library may exist for the same version of Netbox.
 
-Using the client
-================
+## Installation
 
-The `github.com/go-netbox/netbox` package has some convenience functions for creating clients with the most common
-configurations you are likely to need while connecting to NetBox. `NewNetboxAt` allows you to specify a hostname
-(including port, if you need it), and `NewNetboxWithAPIKey` allows you to specify both a hostname:port and API token.
+Use `go get` to add the library as a project's dependency. Do not forget to run `go mod init` first if necessary.
+
+```shell
+go get github.com/inetAnt/go-netbox/v3
+
+# Or install a specific version
+go get github.com/inetAnt/go-netbox/v3@v3.4.5-1
+```
+
+**Note:** dependencies should be managed with [Go modules](https://go.dev/doc/modules/managing-dependencies).
+
+## Usage
+
+### Instantiate the client
+
+The package has some convenience functions for creating clients with the most common configurations.
+
 ```golang
+package main
+
 import (
-    "github.com/inetAnt/go-netbox/netbox"
+	"log"
+
+	"github.com/inetAnt/go-netbox/v3/netbox"
 )
-...
-    c := netbox.NewNetboxAt("your.netbox.host:8000")
-    // OR
-    c := netbox.NewNetboxWithAPIKey("your.netbox.host:8000", "your_netbox_token")
+
+func main() {
+	c := netbox.NewNetboxAt("netbox.example.org:8000")
+    
+	// or:
+	// c := netbox.NewNetboxWithAPIKey("netbox.example.org:8000", "<api-token>")
+
+	log.Printf("%+v", c)
+}
 ```
 
-If you specify the API key, you do not need to pass an additional `authInfo` to operations that need authentication, and
-can pass `nil`:
+In order to consume the Netbox API with HTTP over TLS, a transport must be created.
+
 ```golang
-    c.Dcim.DcimDeviceTypesCreate(createRequest, nil)
+package main
+
+import (
+	"fmt"
+	"log"
+
+	transport "github.com/go-openapi/runtime/client"
+	"github.com/inetAnt/go-netbox/v3/netbox/client"
+)
+
+func main() {
+	t := transport.New("netbox.example.org", client.DefaultBasePath, []string{"https"})
+
+	t.DefaultAuthentication = transport.APIKeyAuth(
+		"Authorization",
+		"header",
+		fmt.Sprintf("Token %v", "<api-token>"),
+	)
+
+	c := client.New(t, nil)
+
+	log.Printf("%+v", c)
+}
 ```
 
-Go Module support
-================
+For more complex client configurations, see the documentation of _[github.com/go-openapi/runtime/client](https://pkg.go.dev/github.com/go-openapi/runtime/client)_, the library which in turn is used by the client.
 
-Go 1.13+
+**Note:** setting the `DEBUG` environment variable will dump all requests to standard error output.
 
-`go get github.com/netbox-community/go-netbox`
+### Use the client
 
+With the client already instantiated, it is possible to consume any API feature.
 
-More complex client configuration
-=================================
+For example, to list the first 100 active virtual machines:
 
-The client is generated using [go-swagger](https://github.com/go-swagger/go-swagger). This means the generated client
-makes use of [github.com/go-openapi/runtime/client](https://godoc.org/github.com/go-openapi/runtime/client). If you need
-a more complex configuration, it is probably possible with a combination of this generated client and the runtime
-options.
+```golang
+package main
 
-The [godocs for the go-openapi/runtime/client module](https://godoc.org/github.com/go-openapi/runtime/client) explain
-the client options in detail, including different authentication and debugging options. One thing I want to flag because
-it is so useful: setting the `DEBUG` environment variable will dump all requests to standard out.
+import (
+	"log"
 
-Regenerating the client
-=======================
+	"github.com/inetAnt/go-netbox/v3/netbox"
+	"github.com/inetAnt/go-netbox/v3/netbox/client/virtualization"
+)
 
-To regenerate the client with a new or different swagger schema, first clean the existing client, then replace
-swagger.json and finally re-generate:
+var status = "active"
+var pageLimit = int64(100)
+
+func main() {
+	c := netbox.NewNetboxWithAPIKey("netbox.example.org", "<api-token>")
+
+	req := virtualization.
+		NewVirtualizationVirtualMachinesListParams().
+		WithStatus(&status).
+		WithLimit(&pageLimit)
+
+	// additional `authInfo` is `nil` because the API token has already been specified in the client 
+	res, err := w.netbox.Virtualization.VirtualizationVirtualMachinesList(req, nil)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Printf("%+v", res.Payload.Results)
+}
 ```
-make clean
-cp new_swagger_file.json swagger.json
-make generate
+
+See [reference](https://pkg.go.dev/github.com/netbox-community/go-netbox) for more information on all possible usages.
+
+## Development
+
+The project comes with a containerized development environment that can be used from any platform. It is only required to have [Git](https://git-scm.com) and [Docker Desktop](https://www.docker.com/products/docker-desktop/) (or, separately, [Docker](https://docs.docker.com/engine/install) and [Docker Compose](https://docs.docker.com/compose/install/)) installed on the machine.
+
+To start the development environment, run the following command.
+
+```bash
+make
+```
+
+Then, to attach a shell in the container, run the command below.
+
+```bash
+make shell
+```
+
+Finally, to stop the development environment, run the following command.
+
+```bash
+make down
+```
+
+### Considerations
+
+The library is almost entirely generated from the Netbox [OpenAPI](https://www.openapis.org/) specification using _[go-swagger](https://github.com/go-swagger/go-swagger)_. Therefore, files under directories `netbox/client` and `netbox/models` should not be directly modified, as they will be overwritten in the next regeneration (see next section).
+
+To fix issues in generated code, there are two options:
+
+- Change the OpenAPI spec with pre-generation hooks (see [`scripts/pre-generation`](scripts/pre-generation)).
+- If the above is not possible, change the generated code with post-generation hooks (see [`scripts/post-generation`](scripts/post-generation)).
+
+### Regenerate the library
+
+To update the OpenAPI specification to the latest Netbox version and regenerate the library, run the following command.
+
+```bash
+make build
+```
+
+If regeneration of the library is needed for a specific Netbox version other than the latest one, pass the corresponding argument.
+
+```bash
+make build NETBOX_VERSION=3.0.0
+```
+
+In order to obtain the OpenAPI specification, the version of _[netbox-docker](https://github.com/netbox-community/netbox-docker)_ corresponding to the given Netbox version is used. However, it is also possible to provide a specific version of _netbox-docker_.
+
+```bash
+make build NETBOX_VERSION=3.0.0 NETBOX_DOCKER_VERSION=1.3.1
 ```

@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // DcimDeviceRolesUpdateReader is a Reader for the DcimDeviceRolesUpdate structure.
@@ -45,9 +44,15 @@ func (o *DcimDeviceRolesUpdateReader) ReadResponse(response runtime.ClientRespon
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewDcimDeviceRolesUpdateDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewDcimDeviceRolesUpdateOK() *DcimDeviceRolesUpdateOK {
 	return &DcimDeviceRolesUpdateOK{}
 }
 
-/*DcimDeviceRolesUpdateOK handles this case with default header values.
+/*
+DcimDeviceRolesUpdateOK describes a response with status code 200, with default header values.
 
 DcimDeviceRolesUpdateOK dcim device roles update o k
 */
@@ -64,7 +70,41 @@ type DcimDeviceRolesUpdateOK struct {
 	Payload *models.DeviceRole
 }
 
+// IsSuccess returns true when this dcim device roles update o k response has a 2xx status code
+func (o *DcimDeviceRolesUpdateOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this dcim device roles update o k response has a 3xx status code
+func (o *DcimDeviceRolesUpdateOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this dcim device roles update o k response has a 4xx status code
+func (o *DcimDeviceRolesUpdateOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this dcim device roles update o k response has a 5xx status code
+func (o *DcimDeviceRolesUpdateOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this dcim device roles update o k response a status code equal to that given
+func (o *DcimDeviceRolesUpdateOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the dcim device roles update o k response
+func (o *DcimDeviceRolesUpdateOK) Code() int {
+	return 200
+}
+
 func (o *DcimDeviceRolesUpdateOK) Error() string {
+	return fmt.Sprintf("[PUT /dcim/device-roles/{id}/][%d] dcimDeviceRolesUpdateOK  %+v", 200, o.Payload)
+}
+
+func (o *DcimDeviceRolesUpdateOK) String() string {
 	return fmt.Sprintf("[PUT /dcim/device-roles/{id}/][%d] dcimDeviceRolesUpdateOK  %+v", 200, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *DcimDeviceRolesUpdateOK) readResponse(response runtime.ClientResponse, 
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDcimDeviceRolesUpdateDefault creates a DcimDeviceRolesUpdateDefault with default headers values
+func NewDcimDeviceRolesUpdateDefault(code int) *DcimDeviceRolesUpdateDefault {
+	return &DcimDeviceRolesUpdateDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+DcimDeviceRolesUpdateDefault describes a response with status code -1, with default header values.
+
+DcimDeviceRolesUpdateDefault dcim device roles update default
+*/
+type DcimDeviceRolesUpdateDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this dcim device roles update default response has a 2xx status code
+func (o *DcimDeviceRolesUpdateDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this dcim device roles update default response has a 3xx status code
+func (o *DcimDeviceRolesUpdateDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this dcim device roles update default response has a 4xx status code
+func (o *DcimDeviceRolesUpdateDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this dcim device roles update default response has a 5xx status code
+func (o *DcimDeviceRolesUpdateDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this dcim device roles update default response a status code equal to that given
+func (o *DcimDeviceRolesUpdateDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the dcim device roles update default response
+func (o *DcimDeviceRolesUpdateDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *DcimDeviceRolesUpdateDefault) Error() string {
+	return fmt.Sprintf("[PUT /dcim/device-roles/{id}/][%d] dcim_device-roles_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimDeviceRolesUpdateDefault) String() string {
+	return fmt.Sprintf("[PUT /dcim/device-roles/{id}/][%d] dcim_device-roles_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimDeviceRolesUpdateDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *DcimDeviceRolesUpdateDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

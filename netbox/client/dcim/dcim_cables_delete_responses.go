@@ -22,10 +22,10 @@ package dcim
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/go-openapi/runtime"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
 // DcimCablesDeleteReader is a Reader for the DcimCablesDelete structure.
@@ -42,9 +42,15 @@ func (o *DcimCablesDeleteReader) ReadResponse(response runtime.ClientResponse, c
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewDcimCablesDeleteDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -53,18 +59,123 @@ func NewDcimCablesDeleteNoContent() *DcimCablesDeleteNoContent {
 	return &DcimCablesDeleteNoContent{}
 }
 
-/*DcimCablesDeleteNoContent handles this case with default header values.
+/*
+DcimCablesDeleteNoContent describes a response with status code 204, with default header values.
 
 DcimCablesDeleteNoContent dcim cables delete no content
 */
 type DcimCablesDeleteNoContent struct {
 }
 
+// IsSuccess returns true when this dcim cables delete no content response has a 2xx status code
+func (o *DcimCablesDeleteNoContent) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this dcim cables delete no content response has a 3xx status code
+func (o *DcimCablesDeleteNoContent) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this dcim cables delete no content response has a 4xx status code
+func (o *DcimCablesDeleteNoContent) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this dcim cables delete no content response has a 5xx status code
+func (o *DcimCablesDeleteNoContent) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this dcim cables delete no content response a status code equal to that given
+func (o *DcimCablesDeleteNoContent) IsCode(code int) bool {
+	return code == 204
+}
+
+// Code gets the status code for the dcim cables delete no content response
+func (o *DcimCablesDeleteNoContent) Code() int {
+	return 204
+}
+
 func (o *DcimCablesDeleteNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /dcim/cables/{id}/][%d] dcimCablesDeleteNoContent ", 204)
 }
 
+func (o *DcimCablesDeleteNoContent) String() string {
+	return fmt.Sprintf("[DELETE /dcim/cables/{id}/][%d] dcimCablesDeleteNoContent ", 204)
+}
+
 func (o *DcimCablesDeleteNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewDcimCablesDeleteDefault creates a DcimCablesDeleteDefault with default headers values
+func NewDcimCablesDeleteDefault(code int) *DcimCablesDeleteDefault {
+	return &DcimCablesDeleteDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+DcimCablesDeleteDefault describes a response with status code -1, with default header values.
+
+DcimCablesDeleteDefault dcim cables delete default
+*/
+type DcimCablesDeleteDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this dcim cables delete default response has a 2xx status code
+func (o *DcimCablesDeleteDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this dcim cables delete default response has a 3xx status code
+func (o *DcimCablesDeleteDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this dcim cables delete default response has a 4xx status code
+func (o *DcimCablesDeleteDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this dcim cables delete default response has a 5xx status code
+func (o *DcimCablesDeleteDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this dcim cables delete default response a status code equal to that given
+func (o *DcimCablesDeleteDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the dcim cables delete default response
+func (o *DcimCablesDeleteDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *DcimCablesDeleteDefault) Error() string {
+	return fmt.Sprintf("[DELETE /dcim/cables/{id}/][%d] dcim_cables_delete default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimCablesDeleteDefault) String() string {
+	return fmt.Sprintf("[DELETE /dcim/cables/{id}/][%d] dcim_cables_delete default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimCablesDeleteDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *DcimCablesDeleteDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
 
 	return nil
 }

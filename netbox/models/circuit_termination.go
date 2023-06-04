@@ -21,18 +21,23 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // CircuitTermination circuit termination
+//
 // swagger:model CircuitTermination
 type CircuitTermination struct {
+
+	// occupied
+	// Read Only: true
+	Occupied *bool `json:"_occupied,omitempty"`
 
 	// cable
 	Cable *NestedCable `json:"cable,omitempty"`
@@ -41,42 +46,59 @@ type CircuitTermination struct {
 	// Required: true
 	Circuit *NestedCircuit `json:"circuit"`
 
-	// Connected endpoint
-	//
-	//
-	//         Return the appropriate serializer for the type of connected object.
-	//
+	// Created
 	// Read Only: true
-	ConnectedEndpoint map[string]string `json:"connected_endpoint,omitempty"`
-
-	// Connected endpoint type
-	// Read Only: true
-	ConnectedEndpointType string `json:"connected_endpoint_type,omitempty"`
-
-	// connection status
-	ConnectionStatus *CircuitTerminationConnectionStatus `json:"connection_status,omitempty"`
+	// Format: date
+	Created strfmt.Date `json:"created,omitempty"`
 
 	// Description
-	// Max Length: 100
+	// Max Length: 200
 	Description string `json:"description,omitempty"`
 
-	// ID
+	// Display
+	// Read Only: true
+	Display string `json:"display,omitempty"`
+
+	// Id
 	// Read Only: true
 	ID int64 `json:"id,omitempty"`
 
+	// Last updated
+	// Read Only: true
+	// Format: date-time
+	LastUpdated strfmt.DateTime `json:"last_updated,omitempty"`
+
+	// Link peer
+	//
+	//
+	// Return the appropriate serializer for the link termination model.
+	//
+	// Read Only: true
+	LinkPeer map[string]*string `json:"link_peer,omitempty"`
+
+	// Link peer type
+	// Read Only: true
+	LinkPeerType string `json:"link_peer_type,omitempty"`
+
+	// Mark connected
+	//
+	// Treat as if a cable is connected
+	MarkConnected bool `json:"mark_connected,omitempty"`
+
 	// Port speed (Kbps)
-	// Required: true
 	// Maximum: 2.147483647e+09
 	// Minimum: 0
-	PortSpeed *int64 `json:"port_speed"`
+	PortSpeed *int64 `json:"port_speed,omitempty"`
 
 	// Patch panel/port(s)
 	// Max Length: 100
 	PpInfo string `json:"pp_info,omitempty"`
 
+	// provider network
+	ProviderNetwork *NestedProviderNetwork `json:"provider_network,omitempty"`
+
 	// site
-	// Required: true
-	Site *NestedSite `json:"site"`
+	Site *NestedSite `json:"site,omitempty"`
 
 	// Termination
 	// Required: true
@@ -89,6 +111,11 @@ type CircuitTermination struct {
 	// Maximum: 2.147483647e+09
 	// Minimum: 0
 	UpstreamSpeed *int64 `json:"upstream_speed,omitempty"`
+
+	// Url
+	// Read Only: true
+	// Format: uri
+	URL strfmt.URI `json:"url,omitempty"`
 
 	// Cross-connect ID
 	// Max Length: 50
@@ -107,11 +134,15 @@ func (m *CircuitTermination) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateConnectionStatus(formats); err != nil {
+	if err := m.validateCreated(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.validateDescription(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateLastUpdated(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -120,6 +151,10 @@ func (m *CircuitTermination) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validatePpInfo(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateProviderNetwork(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -135,6 +170,10 @@ func (m *CircuitTermination) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateURL(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateXconnectID(formats); err != nil {
 		res = append(res, err)
 	}
@@ -146,7 +185,6 @@ func (m *CircuitTermination) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CircuitTermination) validateCable(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Cable) { // not required
 		return nil
 	}
@@ -155,6 +193,8 @@ func (m *CircuitTermination) validateCable(formats strfmt.Registry) error {
 		if err := m.Cable.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("cable")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("cable")
 			}
 			return err
 		}
@@ -173,6 +213,8 @@ func (m *CircuitTermination) validateCircuit(formats strfmt.Registry) error {
 		if err := m.Circuit.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("circuit")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("circuit")
 			}
 			return err
 		}
@@ -181,31 +223,36 @@ func (m *CircuitTermination) validateCircuit(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *CircuitTermination) validateConnectionStatus(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.ConnectionStatus) { // not required
+func (m *CircuitTermination) validateCreated(formats strfmt.Registry) error {
+	if swag.IsZero(m.Created) { // not required
 		return nil
 	}
 
-	if m.ConnectionStatus != nil {
-		if err := m.ConnectionStatus.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("connection_status")
-			}
-			return err
-		}
+	if err := validate.FormatOf("created", "body", "date", m.Created.String(), formats); err != nil {
+		return err
 	}
 
 	return nil
 }
 
 func (m *CircuitTermination) validateDescription(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Description) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("description", "body", string(m.Description), 100); err != nil {
+	if err := validate.MaxLength("description", "body", m.Description, 200); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CircuitTermination) validateLastUpdated(formats strfmt.Registry) error {
+	if swag.IsZero(m.LastUpdated) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("last_updated", "body", "date-time", m.LastUpdated.String(), formats); err != nil {
 		return err
 	}
 
@@ -213,16 +260,15 @@ func (m *CircuitTermination) validateDescription(formats strfmt.Registry) error 
 }
 
 func (m *CircuitTermination) validatePortSpeed(formats strfmt.Registry) error {
+	if swag.IsZero(m.PortSpeed) { // not required
+		return nil
+	}
 
-	if err := validate.Required("port_speed", "body", m.PortSpeed); err != nil {
+	if err := validate.MinimumInt("port_speed", "body", *m.PortSpeed, 0, false); err != nil {
 		return err
 	}
 
-	if err := validate.MinimumInt("port_speed", "body", int64(*m.PortSpeed), 0, false); err != nil {
-		return err
-	}
-
-	if err := validate.MaximumInt("port_speed", "body", int64(*m.PortSpeed), 2.147483647e+09, false); err != nil {
+	if err := validate.MaximumInt("port_speed", "body", *m.PortSpeed, 2.147483647e+09, false); err != nil {
 		return err
 	}
 
@@ -230,28 +276,47 @@ func (m *CircuitTermination) validatePortSpeed(formats strfmt.Registry) error {
 }
 
 func (m *CircuitTermination) validatePpInfo(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PpInfo) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("pp_info", "body", string(m.PpInfo), 100); err != nil {
+	if err := validate.MaxLength("pp_info", "body", m.PpInfo, 100); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (m *CircuitTermination) validateSite(formats strfmt.Registry) error {
+func (m *CircuitTermination) validateProviderNetwork(formats strfmt.Registry) error {
+	if swag.IsZero(m.ProviderNetwork) { // not required
+		return nil
+	}
 
-	if err := validate.Required("site", "body", m.Site); err != nil {
-		return err
+	if m.ProviderNetwork != nil {
+		if err := m.ProviderNetwork.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("provider_network")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("provider_network")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CircuitTermination) validateSite(formats strfmt.Registry) error {
+	if swag.IsZero(m.Site) { // not required
+		return nil
 	}
 
 	if m.Site != nil {
 		if err := m.Site.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("site")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("site")
 			}
 			return err
 		}
@@ -283,7 +348,7 @@ const (
 
 // prop value enum
 func (m *CircuitTermination) validateTermSideEnum(path, location string, value string) error {
-	if err := validate.Enum(path, location, value, circuitTerminationTypeTermSidePropEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, circuitTerminationTypeTermSidePropEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -304,16 +369,27 @@ func (m *CircuitTermination) validateTermSide(formats strfmt.Registry) error {
 }
 
 func (m *CircuitTermination) validateUpstreamSpeed(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UpstreamSpeed) { // not required
 		return nil
 	}
 
-	if err := validate.MinimumInt("upstream_speed", "body", int64(*m.UpstreamSpeed), 0, false); err != nil {
+	if err := validate.MinimumInt("upstream_speed", "body", *m.UpstreamSpeed, 0, false); err != nil {
 		return err
 	}
 
-	if err := validate.MaximumInt("upstream_speed", "body", int64(*m.UpstreamSpeed), 2.147483647e+09, false); err != nil {
+	if err := validate.MaximumInt("upstream_speed", "body", *m.UpstreamSpeed, 2.147483647e+09, false); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CircuitTermination) validateURL(formats strfmt.Registry) error {
+	if swag.IsZero(m.URL) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("url", "body", "uri", m.URL.String(), formats); err != nil {
 		return err
 	}
 
@@ -321,12 +397,201 @@ func (m *CircuitTermination) validateUpstreamSpeed(formats strfmt.Registry) erro
 }
 
 func (m *CircuitTermination) validateXconnectID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.XconnectID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("xconnect_id", "body", string(m.XconnectID), 50); err != nil {
+	if err := validate.MaxLength("xconnect_id", "body", m.XconnectID, 50); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this circuit termination based on the context it is used
+func (m *CircuitTermination) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateOccupied(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCable(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCircuit(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreated(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDisplay(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLastUpdated(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLinkPeer(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLinkPeerType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateProviderNetwork(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSite(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CircuitTermination) contextValidateOccupied(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "_occupied", "body", m.Occupied); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CircuitTermination) contextValidateCable(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Cable != nil {
+		if err := m.Cable.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("cable")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("cable")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CircuitTermination) contextValidateCircuit(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Circuit != nil {
+		if err := m.Circuit.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("circuit")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("circuit")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CircuitTermination) contextValidateCreated(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created", "body", strfmt.Date(m.Created)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CircuitTermination) contextValidateDisplay(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "display", "body", string(m.Display)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CircuitTermination) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CircuitTermination) contextValidateLastUpdated(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "last_updated", "body", strfmt.DateTime(m.LastUpdated)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CircuitTermination) contextValidateLinkPeer(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *CircuitTermination) contextValidateLinkPeerType(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "link_peer_type", "body", string(m.LinkPeerType)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CircuitTermination) contextValidateProviderNetwork(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ProviderNetwork != nil {
+		if err := m.ProviderNetwork.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("provider_network")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("provider_network")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CircuitTermination) contextValidateSite(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Site != nil {
+		if err := m.Site.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("site")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("site")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CircuitTermination) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", strfmt.URI(m.URL)); err != nil {
 		return err
 	}
 
@@ -344,73 +609,6 @@ func (m *CircuitTermination) MarshalBinary() ([]byte, error) {
 // UnmarshalBinary interface implementation
 func (m *CircuitTermination) UnmarshalBinary(b []byte) error {
 	var res CircuitTermination
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
-}
-
-// CircuitTerminationConnectionStatus Connection status
-// swagger:model CircuitTerminationConnectionStatus
-type CircuitTerminationConnectionStatus struct {
-
-	// label
-	// Required: true
-	Label *string `json:"label"`
-
-	// value
-	// Required: true
-	Value *bool `json:"value"`
-}
-
-// Validate validates this circuit termination connection status
-func (m *CircuitTerminationConnectionStatus) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := m.validateLabel(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateValue(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (m *CircuitTerminationConnectionStatus) validateLabel(formats strfmt.Registry) error {
-
-	if err := validate.Required("connection_status"+"."+"label", "body", m.Label); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *CircuitTerminationConnectionStatus) validateValue(formats strfmt.Registry) error {
-
-	if err := validate.Required("connection_status"+"."+"value", "body", m.Value); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (m *CircuitTerminationConnectionStatus) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(m)
-}
-
-// UnmarshalBinary interface implementation
-func (m *CircuitTerminationConnectionStatus) UnmarshalBinary(b []byte) error {
-	var res CircuitTerminationConnectionStatus
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

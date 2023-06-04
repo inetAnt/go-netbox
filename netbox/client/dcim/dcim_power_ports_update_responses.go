@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // DcimPowerPortsUpdateReader is a Reader for the DcimPowerPortsUpdate structure.
@@ -45,9 +44,15 @@ func (o *DcimPowerPortsUpdateReader) ReadResponse(response runtime.ClientRespons
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewDcimPowerPortsUpdateDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewDcimPowerPortsUpdateOK() *DcimPowerPortsUpdateOK {
 	return &DcimPowerPortsUpdateOK{}
 }
 
-/*DcimPowerPortsUpdateOK handles this case with default header values.
+/*
+DcimPowerPortsUpdateOK describes a response with status code 200, with default header values.
 
 DcimPowerPortsUpdateOK dcim power ports update o k
 */
@@ -64,7 +70,41 @@ type DcimPowerPortsUpdateOK struct {
 	Payload *models.PowerPort
 }
 
+// IsSuccess returns true when this dcim power ports update o k response has a 2xx status code
+func (o *DcimPowerPortsUpdateOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this dcim power ports update o k response has a 3xx status code
+func (o *DcimPowerPortsUpdateOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this dcim power ports update o k response has a 4xx status code
+func (o *DcimPowerPortsUpdateOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this dcim power ports update o k response has a 5xx status code
+func (o *DcimPowerPortsUpdateOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this dcim power ports update o k response a status code equal to that given
+func (o *DcimPowerPortsUpdateOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the dcim power ports update o k response
+func (o *DcimPowerPortsUpdateOK) Code() int {
+	return 200
+}
+
 func (o *DcimPowerPortsUpdateOK) Error() string {
+	return fmt.Sprintf("[PUT /dcim/power-ports/{id}/][%d] dcimPowerPortsUpdateOK  %+v", 200, o.Payload)
+}
+
+func (o *DcimPowerPortsUpdateOK) String() string {
 	return fmt.Sprintf("[PUT /dcim/power-ports/{id}/][%d] dcimPowerPortsUpdateOK  %+v", 200, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *DcimPowerPortsUpdateOK) readResponse(response runtime.ClientResponse, c
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDcimPowerPortsUpdateDefault creates a DcimPowerPortsUpdateDefault with default headers values
+func NewDcimPowerPortsUpdateDefault(code int) *DcimPowerPortsUpdateDefault {
+	return &DcimPowerPortsUpdateDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+DcimPowerPortsUpdateDefault describes a response with status code -1, with default header values.
+
+DcimPowerPortsUpdateDefault dcim power ports update default
+*/
+type DcimPowerPortsUpdateDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this dcim power ports update default response has a 2xx status code
+func (o *DcimPowerPortsUpdateDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this dcim power ports update default response has a 3xx status code
+func (o *DcimPowerPortsUpdateDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this dcim power ports update default response has a 4xx status code
+func (o *DcimPowerPortsUpdateDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this dcim power ports update default response has a 5xx status code
+func (o *DcimPowerPortsUpdateDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this dcim power ports update default response a status code equal to that given
+func (o *DcimPowerPortsUpdateDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the dcim power ports update default response
+func (o *DcimPowerPortsUpdateDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *DcimPowerPortsUpdateDefault) Error() string {
+	return fmt.Sprintf("[PUT /dcim/power-ports/{id}/][%d] dcim_power-ports_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimPowerPortsUpdateDefault) String() string {
+	return fmt.Sprintf("[PUT /dcim/power-ports/{id}/][%d] dcim_power-ports_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimPowerPortsUpdateDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *DcimPowerPortsUpdateDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

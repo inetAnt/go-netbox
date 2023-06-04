@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // TenancyTenantsUpdateReader is a Reader for the TenancyTenantsUpdate structure.
@@ -45,9 +44,15 @@ func (o *TenancyTenantsUpdateReader) ReadResponse(response runtime.ClientRespons
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewTenancyTenantsUpdateDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewTenancyTenantsUpdateOK() *TenancyTenantsUpdateOK {
 	return &TenancyTenantsUpdateOK{}
 }
 
-/*TenancyTenantsUpdateOK handles this case with default header values.
+/*
+TenancyTenantsUpdateOK describes a response with status code 200, with default header values.
 
 TenancyTenantsUpdateOK tenancy tenants update o k
 */
@@ -64,7 +70,41 @@ type TenancyTenantsUpdateOK struct {
 	Payload *models.Tenant
 }
 
+// IsSuccess returns true when this tenancy tenants update o k response has a 2xx status code
+func (o *TenancyTenantsUpdateOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this tenancy tenants update o k response has a 3xx status code
+func (o *TenancyTenantsUpdateOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this tenancy tenants update o k response has a 4xx status code
+func (o *TenancyTenantsUpdateOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this tenancy tenants update o k response has a 5xx status code
+func (o *TenancyTenantsUpdateOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this tenancy tenants update o k response a status code equal to that given
+func (o *TenancyTenantsUpdateOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the tenancy tenants update o k response
+func (o *TenancyTenantsUpdateOK) Code() int {
+	return 200
+}
+
 func (o *TenancyTenantsUpdateOK) Error() string {
+	return fmt.Sprintf("[PUT /tenancy/tenants/{id}/][%d] tenancyTenantsUpdateOK  %+v", 200, o.Payload)
+}
+
+func (o *TenancyTenantsUpdateOK) String() string {
 	return fmt.Sprintf("[PUT /tenancy/tenants/{id}/][%d] tenancyTenantsUpdateOK  %+v", 200, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *TenancyTenantsUpdateOK) readResponse(response runtime.ClientResponse, c
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewTenancyTenantsUpdateDefault creates a TenancyTenantsUpdateDefault with default headers values
+func NewTenancyTenantsUpdateDefault(code int) *TenancyTenantsUpdateDefault {
+	return &TenancyTenantsUpdateDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+TenancyTenantsUpdateDefault describes a response with status code -1, with default header values.
+
+TenancyTenantsUpdateDefault tenancy tenants update default
+*/
+type TenancyTenantsUpdateDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this tenancy tenants update default response has a 2xx status code
+func (o *TenancyTenantsUpdateDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this tenancy tenants update default response has a 3xx status code
+func (o *TenancyTenantsUpdateDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this tenancy tenants update default response has a 4xx status code
+func (o *TenancyTenantsUpdateDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this tenancy tenants update default response has a 5xx status code
+func (o *TenancyTenantsUpdateDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this tenancy tenants update default response a status code equal to that given
+func (o *TenancyTenantsUpdateDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the tenancy tenants update default response
+func (o *TenancyTenantsUpdateDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *TenancyTenantsUpdateDefault) Error() string {
+	return fmt.Sprintf("[PUT /tenancy/tenants/{id}/][%d] tenancy_tenants_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *TenancyTenantsUpdateDefault) String() string {
+	return fmt.Sprintf("[PUT /tenancy/tenants/{id}/][%d] tenancy_tenants_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *TenancyTenantsUpdateDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *TenancyTenantsUpdateDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

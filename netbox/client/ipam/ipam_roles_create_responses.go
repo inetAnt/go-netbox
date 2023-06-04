@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // IpamRolesCreateReader is a Reader for the IpamRolesCreate structure.
@@ -45,9 +44,15 @@ func (o *IpamRolesCreateReader) ReadResponse(response runtime.ClientResponse, co
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewIpamRolesCreateDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewIpamRolesCreateCreated() *IpamRolesCreateCreated {
 	return &IpamRolesCreateCreated{}
 }
 
-/*IpamRolesCreateCreated handles this case with default header values.
+/*
+IpamRolesCreateCreated describes a response with status code 201, with default header values.
 
 IpamRolesCreateCreated ipam roles create created
 */
@@ -64,7 +70,41 @@ type IpamRolesCreateCreated struct {
 	Payload *models.Role
 }
 
+// IsSuccess returns true when this ipam roles create created response has a 2xx status code
+func (o *IpamRolesCreateCreated) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this ipam roles create created response has a 3xx status code
+func (o *IpamRolesCreateCreated) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this ipam roles create created response has a 4xx status code
+func (o *IpamRolesCreateCreated) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this ipam roles create created response has a 5xx status code
+func (o *IpamRolesCreateCreated) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this ipam roles create created response a status code equal to that given
+func (o *IpamRolesCreateCreated) IsCode(code int) bool {
+	return code == 201
+}
+
+// Code gets the status code for the ipam roles create created response
+func (o *IpamRolesCreateCreated) Code() int {
+	return 201
+}
+
 func (o *IpamRolesCreateCreated) Error() string {
+	return fmt.Sprintf("[POST /ipam/roles/][%d] ipamRolesCreateCreated  %+v", 201, o.Payload)
+}
+
+func (o *IpamRolesCreateCreated) String() string {
 	return fmt.Sprintf("[POST /ipam/roles/][%d] ipamRolesCreateCreated  %+v", 201, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *IpamRolesCreateCreated) readResponse(response runtime.ClientResponse, c
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewIpamRolesCreateDefault creates a IpamRolesCreateDefault with default headers values
+func NewIpamRolesCreateDefault(code int) *IpamRolesCreateDefault {
+	return &IpamRolesCreateDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+IpamRolesCreateDefault describes a response with status code -1, with default header values.
+
+IpamRolesCreateDefault ipam roles create default
+*/
+type IpamRolesCreateDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this ipam roles create default response has a 2xx status code
+func (o *IpamRolesCreateDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this ipam roles create default response has a 3xx status code
+func (o *IpamRolesCreateDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this ipam roles create default response has a 4xx status code
+func (o *IpamRolesCreateDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this ipam roles create default response has a 5xx status code
+func (o *IpamRolesCreateDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this ipam roles create default response a status code equal to that given
+func (o *IpamRolesCreateDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the ipam roles create default response
+func (o *IpamRolesCreateDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *IpamRolesCreateDefault) Error() string {
+	return fmt.Sprintf("[POST /ipam/roles/][%d] ipam_roles_create default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *IpamRolesCreateDefault) String() string {
+	return fmt.Sprintf("[POST /ipam/roles/][%d] ipam_roles_create default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *IpamRolesCreateDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *IpamRolesCreateDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

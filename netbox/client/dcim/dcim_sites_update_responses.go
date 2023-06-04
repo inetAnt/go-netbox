@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // DcimSitesUpdateReader is a Reader for the DcimSitesUpdate structure.
@@ -45,9 +44,15 @@ func (o *DcimSitesUpdateReader) ReadResponse(response runtime.ClientResponse, co
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewDcimSitesUpdateDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewDcimSitesUpdateOK() *DcimSitesUpdateOK {
 	return &DcimSitesUpdateOK{}
 }
 
-/*DcimSitesUpdateOK handles this case with default header values.
+/*
+DcimSitesUpdateOK describes a response with status code 200, with default header values.
 
 DcimSitesUpdateOK dcim sites update o k
 */
@@ -64,7 +70,41 @@ type DcimSitesUpdateOK struct {
 	Payload *models.Site
 }
 
+// IsSuccess returns true when this dcim sites update o k response has a 2xx status code
+func (o *DcimSitesUpdateOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this dcim sites update o k response has a 3xx status code
+func (o *DcimSitesUpdateOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this dcim sites update o k response has a 4xx status code
+func (o *DcimSitesUpdateOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this dcim sites update o k response has a 5xx status code
+func (o *DcimSitesUpdateOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this dcim sites update o k response a status code equal to that given
+func (o *DcimSitesUpdateOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the dcim sites update o k response
+func (o *DcimSitesUpdateOK) Code() int {
+	return 200
+}
+
 func (o *DcimSitesUpdateOK) Error() string {
+	return fmt.Sprintf("[PUT /dcim/sites/{id}/][%d] dcimSitesUpdateOK  %+v", 200, o.Payload)
+}
+
+func (o *DcimSitesUpdateOK) String() string {
 	return fmt.Sprintf("[PUT /dcim/sites/{id}/][%d] dcimSitesUpdateOK  %+v", 200, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *DcimSitesUpdateOK) readResponse(response runtime.ClientResponse, consum
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDcimSitesUpdateDefault creates a DcimSitesUpdateDefault with default headers values
+func NewDcimSitesUpdateDefault(code int) *DcimSitesUpdateDefault {
+	return &DcimSitesUpdateDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+DcimSitesUpdateDefault describes a response with status code -1, with default header values.
+
+DcimSitesUpdateDefault dcim sites update default
+*/
+type DcimSitesUpdateDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this dcim sites update default response has a 2xx status code
+func (o *DcimSitesUpdateDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this dcim sites update default response has a 3xx status code
+func (o *DcimSitesUpdateDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this dcim sites update default response has a 4xx status code
+func (o *DcimSitesUpdateDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this dcim sites update default response has a 5xx status code
+func (o *DcimSitesUpdateDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this dcim sites update default response a status code equal to that given
+func (o *DcimSitesUpdateDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the dcim sites update default response
+func (o *DcimSitesUpdateDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *DcimSitesUpdateDefault) Error() string {
+	return fmt.Sprintf("[PUT /dcim/sites/{id}/][%d] dcim_sites_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimSitesUpdateDefault) String() string {
+	return fmt.Sprintf("[PUT /dcim/sites/{id}/][%d] dcim_sites_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimSitesUpdateDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *DcimSitesUpdateDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

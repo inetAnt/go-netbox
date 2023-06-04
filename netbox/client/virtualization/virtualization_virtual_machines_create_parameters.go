@@ -28,62 +28,77 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
-// NewVirtualizationVirtualMachinesCreateParams creates a new VirtualizationVirtualMachinesCreateParams object
-// with the default values initialized.
+// NewVirtualizationVirtualMachinesCreateParams creates a new VirtualizationVirtualMachinesCreateParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewVirtualizationVirtualMachinesCreateParams() *VirtualizationVirtualMachinesCreateParams {
-	var ()
 	return &VirtualizationVirtualMachinesCreateParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewVirtualizationVirtualMachinesCreateParamsWithTimeout creates a new VirtualizationVirtualMachinesCreateParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewVirtualizationVirtualMachinesCreateParamsWithTimeout(timeout time.Duration) *VirtualizationVirtualMachinesCreateParams {
-	var ()
 	return &VirtualizationVirtualMachinesCreateParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewVirtualizationVirtualMachinesCreateParamsWithContext creates a new VirtualizationVirtualMachinesCreateParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewVirtualizationVirtualMachinesCreateParamsWithContext(ctx context.Context) *VirtualizationVirtualMachinesCreateParams {
-	var ()
 	return &VirtualizationVirtualMachinesCreateParams{
-
 		Context: ctx,
 	}
 }
 
 // NewVirtualizationVirtualMachinesCreateParamsWithHTTPClient creates a new VirtualizationVirtualMachinesCreateParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewVirtualizationVirtualMachinesCreateParamsWithHTTPClient(client *http.Client) *VirtualizationVirtualMachinesCreateParams {
-	var ()
 	return &VirtualizationVirtualMachinesCreateParams{
 		HTTPClient: client,
 	}
 }
 
-/*VirtualizationVirtualMachinesCreateParams contains all the parameters to send to the API endpoint
-for the virtualization virtual machines create operation typically these are written to a http.Request
+/*
+VirtualizationVirtualMachinesCreateParams contains all the parameters to send to the API endpoint
+
+	for the virtualization virtual machines create operation.
+
+	Typically these are written to a http.Request.
 */
 type VirtualizationVirtualMachinesCreateParams struct {
 
-	/*Data*/
+	// Data.
 	Data *models.WritableVirtualMachineWithConfigContext
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the virtualization virtual machines create params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *VirtualizationVirtualMachinesCreateParams) WithDefaults() *VirtualizationVirtualMachinesCreateParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the virtualization virtual machines create params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *VirtualizationVirtualMachinesCreateParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the virtualization virtual machines create params
@@ -137,7 +152,6 @@ func (o *VirtualizationVirtualMachinesCreateParams) WriteToRequest(r runtime.Cli
 		return err
 	}
 	var res []error
-
 	if o.Data != nil {
 		if err := r.SetBodyParam(o.Data); err != nil {
 			return err

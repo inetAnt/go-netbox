@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // DcimFrontPortTemplatesReadReader is a Reader for the DcimFrontPortTemplatesRead structure.
@@ -45,9 +44,15 @@ func (o *DcimFrontPortTemplatesReadReader) ReadResponse(response runtime.ClientR
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewDcimFrontPortTemplatesReadDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewDcimFrontPortTemplatesReadOK() *DcimFrontPortTemplatesReadOK {
 	return &DcimFrontPortTemplatesReadOK{}
 }
 
-/*DcimFrontPortTemplatesReadOK handles this case with default header values.
+/*
+DcimFrontPortTemplatesReadOK describes a response with status code 200, with default header values.
 
 DcimFrontPortTemplatesReadOK dcim front port templates read o k
 */
@@ -64,7 +70,41 @@ type DcimFrontPortTemplatesReadOK struct {
 	Payload *models.FrontPortTemplate
 }
 
+// IsSuccess returns true when this dcim front port templates read o k response has a 2xx status code
+func (o *DcimFrontPortTemplatesReadOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this dcim front port templates read o k response has a 3xx status code
+func (o *DcimFrontPortTemplatesReadOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this dcim front port templates read o k response has a 4xx status code
+func (o *DcimFrontPortTemplatesReadOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this dcim front port templates read o k response has a 5xx status code
+func (o *DcimFrontPortTemplatesReadOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this dcim front port templates read o k response a status code equal to that given
+func (o *DcimFrontPortTemplatesReadOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the dcim front port templates read o k response
+func (o *DcimFrontPortTemplatesReadOK) Code() int {
+	return 200
+}
+
 func (o *DcimFrontPortTemplatesReadOK) Error() string {
+	return fmt.Sprintf("[GET /dcim/front-port-templates/{id}/][%d] dcimFrontPortTemplatesReadOK  %+v", 200, o.Payload)
+}
+
+func (o *DcimFrontPortTemplatesReadOK) String() string {
 	return fmt.Sprintf("[GET /dcim/front-port-templates/{id}/][%d] dcimFrontPortTemplatesReadOK  %+v", 200, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *DcimFrontPortTemplatesReadOK) readResponse(response runtime.ClientRespo
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDcimFrontPortTemplatesReadDefault creates a DcimFrontPortTemplatesReadDefault with default headers values
+func NewDcimFrontPortTemplatesReadDefault(code int) *DcimFrontPortTemplatesReadDefault {
+	return &DcimFrontPortTemplatesReadDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+DcimFrontPortTemplatesReadDefault describes a response with status code -1, with default header values.
+
+DcimFrontPortTemplatesReadDefault dcim front port templates read default
+*/
+type DcimFrontPortTemplatesReadDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this dcim front port templates read default response has a 2xx status code
+func (o *DcimFrontPortTemplatesReadDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this dcim front port templates read default response has a 3xx status code
+func (o *DcimFrontPortTemplatesReadDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this dcim front port templates read default response has a 4xx status code
+func (o *DcimFrontPortTemplatesReadDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this dcim front port templates read default response has a 5xx status code
+func (o *DcimFrontPortTemplatesReadDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this dcim front port templates read default response a status code equal to that given
+func (o *DcimFrontPortTemplatesReadDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the dcim front port templates read default response
+func (o *DcimFrontPortTemplatesReadDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *DcimFrontPortTemplatesReadDefault) Error() string {
+	return fmt.Sprintf("[GET /dcim/front-port-templates/{id}/][%d] dcim_front-port-templates_read default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimFrontPortTemplatesReadDefault) String() string {
+	return fmt.Sprintf("[GET /dcim/front-port-templates/{id}/][%d] dcim_front-port-templates_read default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimFrontPortTemplatesReadDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *DcimFrontPortTemplatesReadDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

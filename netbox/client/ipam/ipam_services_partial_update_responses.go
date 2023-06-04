@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // IpamServicesPartialUpdateReader is a Reader for the IpamServicesPartialUpdate structure.
@@ -45,9 +44,15 @@ func (o *IpamServicesPartialUpdateReader) ReadResponse(response runtime.ClientRe
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewIpamServicesPartialUpdateDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewIpamServicesPartialUpdateOK() *IpamServicesPartialUpdateOK {
 	return &IpamServicesPartialUpdateOK{}
 }
 
-/*IpamServicesPartialUpdateOK handles this case with default header values.
+/*
+IpamServicesPartialUpdateOK describes a response with status code 200, with default header values.
 
 IpamServicesPartialUpdateOK ipam services partial update o k
 */
@@ -64,7 +70,41 @@ type IpamServicesPartialUpdateOK struct {
 	Payload *models.Service
 }
 
+// IsSuccess returns true when this ipam services partial update o k response has a 2xx status code
+func (o *IpamServicesPartialUpdateOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this ipam services partial update o k response has a 3xx status code
+func (o *IpamServicesPartialUpdateOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this ipam services partial update o k response has a 4xx status code
+func (o *IpamServicesPartialUpdateOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this ipam services partial update o k response has a 5xx status code
+func (o *IpamServicesPartialUpdateOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this ipam services partial update o k response a status code equal to that given
+func (o *IpamServicesPartialUpdateOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the ipam services partial update o k response
+func (o *IpamServicesPartialUpdateOK) Code() int {
+	return 200
+}
+
 func (o *IpamServicesPartialUpdateOK) Error() string {
+	return fmt.Sprintf("[PATCH /ipam/services/{id}/][%d] ipamServicesPartialUpdateOK  %+v", 200, o.Payload)
+}
+
+func (o *IpamServicesPartialUpdateOK) String() string {
 	return fmt.Sprintf("[PATCH /ipam/services/{id}/][%d] ipamServicesPartialUpdateOK  %+v", 200, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *IpamServicesPartialUpdateOK) readResponse(response runtime.ClientRespon
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewIpamServicesPartialUpdateDefault creates a IpamServicesPartialUpdateDefault with default headers values
+func NewIpamServicesPartialUpdateDefault(code int) *IpamServicesPartialUpdateDefault {
+	return &IpamServicesPartialUpdateDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+IpamServicesPartialUpdateDefault describes a response with status code -1, with default header values.
+
+IpamServicesPartialUpdateDefault ipam services partial update default
+*/
+type IpamServicesPartialUpdateDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this ipam services partial update default response has a 2xx status code
+func (o *IpamServicesPartialUpdateDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this ipam services partial update default response has a 3xx status code
+func (o *IpamServicesPartialUpdateDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this ipam services partial update default response has a 4xx status code
+func (o *IpamServicesPartialUpdateDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this ipam services partial update default response has a 5xx status code
+func (o *IpamServicesPartialUpdateDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this ipam services partial update default response a status code equal to that given
+func (o *IpamServicesPartialUpdateDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the ipam services partial update default response
+func (o *IpamServicesPartialUpdateDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *IpamServicesPartialUpdateDefault) Error() string {
+	return fmt.Sprintf("[PATCH /ipam/services/{id}/][%d] ipam_services_partial_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *IpamServicesPartialUpdateDefault) String() string {
+	return fmt.Sprintf("[PATCH /ipam/services/{id}/][%d] ipam_services_partial_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *IpamServicesPartialUpdateDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *IpamServicesPartialUpdateDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

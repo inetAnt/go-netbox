@@ -22,10 +22,10 @@ package dcim
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/go-openapi/runtime"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
 // DcimFrontPortTemplatesDeleteReader is a Reader for the DcimFrontPortTemplatesDelete structure.
@@ -42,9 +42,15 @@ func (o *DcimFrontPortTemplatesDeleteReader) ReadResponse(response runtime.Clien
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewDcimFrontPortTemplatesDeleteDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -53,18 +59,123 @@ func NewDcimFrontPortTemplatesDeleteNoContent() *DcimFrontPortTemplatesDeleteNoC
 	return &DcimFrontPortTemplatesDeleteNoContent{}
 }
 
-/*DcimFrontPortTemplatesDeleteNoContent handles this case with default header values.
+/*
+DcimFrontPortTemplatesDeleteNoContent describes a response with status code 204, with default header values.
 
 DcimFrontPortTemplatesDeleteNoContent dcim front port templates delete no content
 */
 type DcimFrontPortTemplatesDeleteNoContent struct {
 }
 
+// IsSuccess returns true when this dcim front port templates delete no content response has a 2xx status code
+func (o *DcimFrontPortTemplatesDeleteNoContent) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this dcim front port templates delete no content response has a 3xx status code
+func (o *DcimFrontPortTemplatesDeleteNoContent) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this dcim front port templates delete no content response has a 4xx status code
+func (o *DcimFrontPortTemplatesDeleteNoContent) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this dcim front port templates delete no content response has a 5xx status code
+func (o *DcimFrontPortTemplatesDeleteNoContent) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this dcim front port templates delete no content response a status code equal to that given
+func (o *DcimFrontPortTemplatesDeleteNoContent) IsCode(code int) bool {
+	return code == 204
+}
+
+// Code gets the status code for the dcim front port templates delete no content response
+func (o *DcimFrontPortTemplatesDeleteNoContent) Code() int {
+	return 204
+}
+
 func (o *DcimFrontPortTemplatesDeleteNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /dcim/front-port-templates/{id}/][%d] dcimFrontPortTemplatesDeleteNoContent ", 204)
 }
 
+func (o *DcimFrontPortTemplatesDeleteNoContent) String() string {
+	return fmt.Sprintf("[DELETE /dcim/front-port-templates/{id}/][%d] dcimFrontPortTemplatesDeleteNoContent ", 204)
+}
+
 func (o *DcimFrontPortTemplatesDeleteNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewDcimFrontPortTemplatesDeleteDefault creates a DcimFrontPortTemplatesDeleteDefault with default headers values
+func NewDcimFrontPortTemplatesDeleteDefault(code int) *DcimFrontPortTemplatesDeleteDefault {
+	return &DcimFrontPortTemplatesDeleteDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+DcimFrontPortTemplatesDeleteDefault describes a response with status code -1, with default header values.
+
+DcimFrontPortTemplatesDeleteDefault dcim front port templates delete default
+*/
+type DcimFrontPortTemplatesDeleteDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this dcim front port templates delete default response has a 2xx status code
+func (o *DcimFrontPortTemplatesDeleteDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this dcim front port templates delete default response has a 3xx status code
+func (o *DcimFrontPortTemplatesDeleteDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this dcim front port templates delete default response has a 4xx status code
+func (o *DcimFrontPortTemplatesDeleteDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this dcim front port templates delete default response has a 5xx status code
+func (o *DcimFrontPortTemplatesDeleteDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this dcim front port templates delete default response a status code equal to that given
+func (o *DcimFrontPortTemplatesDeleteDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the dcim front port templates delete default response
+func (o *DcimFrontPortTemplatesDeleteDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *DcimFrontPortTemplatesDeleteDefault) Error() string {
+	return fmt.Sprintf("[DELETE /dcim/front-port-templates/{id}/][%d] dcim_front-port-templates_delete default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimFrontPortTemplatesDeleteDefault) String() string {
+	return fmt.Sprintf("[DELETE /dcim/front-port-templates/{id}/][%d] dcim_front-port-templates_delete default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimFrontPortTemplatesDeleteDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *DcimFrontPortTemplatesDeleteDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
 
 	return nil
 }

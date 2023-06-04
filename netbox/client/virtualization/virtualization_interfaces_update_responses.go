@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // VirtualizationInterfacesUpdateReader is a Reader for the VirtualizationInterfacesUpdate structure.
@@ -45,9 +44,15 @@ func (o *VirtualizationInterfacesUpdateReader) ReadResponse(response runtime.Cli
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewVirtualizationInterfacesUpdateDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,28 +61,133 @@ func NewVirtualizationInterfacesUpdateOK() *VirtualizationInterfacesUpdateOK {
 	return &VirtualizationInterfacesUpdateOK{}
 }
 
-/*VirtualizationInterfacesUpdateOK handles this case with default header values.
+/*
+VirtualizationInterfacesUpdateOK describes a response with status code 200, with default header values.
 
 VirtualizationInterfacesUpdateOK virtualization interfaces update o k
 */
 type VirtualizationInterfacesUpdateOK struct {
-	Payload *models.VirtualMachineInterface
+	Payload *models.VMInterface
+}
+
+// IsSuccess returns true when this virtualization interfaces update o k response has a 2xx status code
+func (o *VirtualizationInterfacesUpdateOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this virtualization interfaces update o k response has a 3xx status code
+func (o *VirtualizationInterfacesUpdateOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this virtualization interfaces update o k response has a 4xx status code
+func (o *VirtualizationInterfacesUpdateOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this virtualization interfaces update o k response has a 5xx status code
+func (o *VirtualizationInterfacesUpdateOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this virtualization interfaces update o k response a status code equal to that given
+func (o *VirtualizationInterfacesUpdateOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the virtualization interfaces update o k response
+func (o *VirtualizationInterfacesUpdateOK) Code() int {
+	return 200
 }
 
 func (o *VirtualizationInterfacesUpdateOK) Error() string {
 	return fmt.Sprintf("[PUT /virtualization/interfaces/{id}/][%d] virtualizationInterfacesUpdateOK  %+v", 200, o.Payload)
 }
 
-func (o *VirtualizationInterfacesUpdateOK) GetPayload() *models.VirtualMachineInterface {
+func (o *VirtualizationInterfacesUpdateOK) String() string {
+	return fmt.Sprintf("[PUT /virtualization/interfaces/{id}/][%d] virtualizationInterfacesUpdateOK  %+v", 200, o.Payload)
+}
+
+func (o *VirtualizationInterfacesUpdateOK) GetPayload() *models.VMInterface {
 	return o.Payload
 }
 
 func (o *VirtualizationInterfacesUpdateOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.VirtualMachineInterface)
+	o.Payload = new(models.VMInterface)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewVirtualizationInterfacesUpdateDefault creates a VirtualizationInterfacesUpdateDefault with default headers values
+func NewVirtualizationInterfacesUpdateDefault(code int) *VirtualizationInterfacesUpdateDefault {
+	return &VirtualizationInterfacesUpdateDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+VirtualizationInterfacesUpdateDefault describes a response with status code -1, with default header values.
+
+VirtualizationInterfacesUpdateDefault virtualization interfaces update default
+*/
+type VirtualizationInterfacesUpdateDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this virtualization interfaces update default response has a 2xx status code
+func (o *VirtualizationInterfacesUpdateDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this virtualization interfaces update default response has a 3xx status code
+func (o *VirtualizationInterfacesUpdateDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this virtualization interfaces update default response has a 4xx status code
+func (o *VirtualizationInterfacesUpdateDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this virtualization interfaces update default response has a 5xx status code
+func (o *VirtualizationInterfacesUpdateDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this virtualization interfaces update default response a status code equal to that given
+func (o *VirtualizationInterfacesUpdateDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the virtualization interfaces update default response
+func (o *VirtualizationInterfacesUpdateDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *VirtualizationInterfacesUpdateDefault) Error() string {
+	return fmt.Sprintf("[PUT /virtualization/interfaces/{id}/][%d] virtualization_interfaces_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *VirtualizationInterfacesUpdateDefault) String() string {
+	return fmt.Sprintf("[PUT /virtualization/interfaces/{id}/][%d] virtualization_interfaces_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *VirtualizationInterfacesUpdateDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *VirtualizationInterfacesUpdateDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

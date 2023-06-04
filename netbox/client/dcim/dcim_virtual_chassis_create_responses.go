@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // DcimVirtualChassisCreateReader is a Reader for the DcimVirtualChassisCreate structure.
@@ -45,9 +44,15 @@ func (o *DcimVirtualChassisCreateReader) ReadResponse(response runtime.ClientRes
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewDcimVirtualChassisCreateDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewDcimVirtualChassisCreateCreated() *DcimVirtualChassisCreateCreated {
 	return &DcimVirtualChassisCreateCreated{}
 }
 
-/*DcimVirtualChassisCreateCreated handles this case with default header values.
+/*
+DcimVirtualChassisCreateCreated describes a response with status code 201, with default header values.
 
 DcimVirtualChassisCreateCreated dcim virtual chassis create created
 */
@@ -64,7 +70,41 @@ type DcimVirtualChassisCreateCreated struct {
 	Payload *models.VirtualChassis
 }
 
+// IsSuccess returns true when this dcim virtual chassis create created response has a 2xx status code
+func (o *DcimVirtualChassisCreateCreated) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this dcim virtual chassis create created response has a 3xx status code
+func (o *DcimVirtualChassisCreateCreated) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this dcim virtual chassis create created response has a 4xx status code
+func (o *DcimVirtualChassisCreateCreated) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this dcim virtual chassis create created response has a 5xx status code
+func (o *DcimVirtualChassisCreateCreated) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this dcim virtual chassis create created response a status code equal to that given
+func (o *DcimVirtualChassisCreateCreated) IsCode(code int) bool {
+	return code == 201
+}
+
+// Code gets the status code for the dcim virtual chassis create created response
+func (o *DcimVirtualChassisCreateCreated) Code() int {
+	return 201
+}
+
 func (o *DcimVirtualChassisCreateCreated) Error() string {
+	return fmt.Sprintf("[POST /dcim/virtual-chassis/][%d] dcimVirtualChassisCreateCreated  %+v", 201, o.Payload)
+}
+
+func (o *DcimVirtualChassisCreateCreated) String() string {
 	return fmt.Sprintf("[POST /dcim/virtual-chassis/][%d] dcimVirtualChassisCreateCreated  %+v", 201, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *DcimVirtualChassisCreateCreated) readResponse(response runtime.ClientRe
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDcimVirtualChassisCreateDefault creates a DcimVirtualChassisCreateDefault with default headers values
+func NewDcimVirtualChassisCreateDefault(code int) *DcimVirtualChassisCreateDefault {
+	return &DcimVirtualChassisCreateDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+DcimVirtualChassisCreateDefault describes a response with status code -1, with default header values.
+
+DcimVirtualChassisCreateDefault dcim virtual chassis create default
+*/
+type DcimVirtualChassisCreateDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this dcim virtual chassis create default response has a 2xx status code
+func (o *DcimVirtualChassisCreateDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this dcim virtual chassis create default response has a 3xx status code
+func (o *DcimVirtualChassisCreateDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this dcim virtual chassis create default response has a 4xx status code
+func (o *DcimVirtualChassisCreateDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this dcim virtual chassis create default response has a 5xx status code
+func (o *DcimVirtualChassisCreateDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this dcim virtual chassis create default response a status code equal to that given
+func (o *DcimVirtualChassisCreateDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the dcim virtual chassis create default response
+func (o *DcimVirtualChassisCreateDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *DcimVirtualChassisCreateDefault) Error() string {
+	return fmt.Sprintf("[POST /dcim/virtual-chassis/][%d] dcim_virtual-chassis_create default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimVirtualChassisCreateDefault) String() string {
+	return fmt.Sprintf("[POST /dcim/virtual-chassis/][%d] dcim_virtual-chassis_create default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimVirtualChassisCreateDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *DcimVirtualChassisCreateDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

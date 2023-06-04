@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // DcimConsolePortsTraceReader is a Reader for the DcimConsolePortsTrace structure.
@@ -45,9 +44,15 @@ func (o *DcimConsolePortsTraceReader) ReadResponse(response runtime.ClientRespon
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewDcimConsolePortsTraceDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewDcimConsolePortsTraceOK() *DcimConsolePortsTraceOK {
 	return &DcimConsolePortsTraceOK{}
 }
 
-/*DcimConsolePortsTraceOK handles this case with default header values.
+/*
+DcimConsolePortsTraceOK describes a response with status code 200, with default header values.
 
 DcimConsolePortsTraceOK dcim console ports trace o k
 */
@@ -64,7 +70,41 @@ type DcimConsolePortsTraceOK struct {
 	Payload *models.ConsolePort
 }
 
+// IsSuccess returns true when this dcim console ports trace o k response has a 2xx status code
+func (o *DcimConsolePortsTraceOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this dcim console ports trace o k response has a 3xx status code
+func (o *DcimConsolePortsTraceOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this dcim console ports trace o k response has a 4xx status code
+func (o *DcimConsolePortsTraceOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this dcim console ports trace o k response has a 5xx status code
+func (o *DcimConsolePortsTraceOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this dcim console ports trace o k response a status code equal to that given
+func (o *DcimConsolePortsTraceOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the dcim console ports trace o k response
+func (o *DcimConsolePortsTraceOK) Code() int {
+	return 200
+}
+
 func (o *DcimConsolePortsTraceOK) Error() string {
+	return fmt.Sprintf("[GET /dcim/console-ports/{id}/trace/][%d] dcimConsolePortsTraceOK  %+v", 200, o.Payload)
+}
+
+func (o *DcimConsolePortsTraceOK) String() string {
 	return fmt.Sprintf("[GET /dcim/console-ports/{id}/trace/][%d] dcimConsolePortsTraceOK  %+v", 200, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *DcimConsolePortsTraceOK) readResponse(response runtime.ClientResponse, 
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDcimConsolePortsTraceDefault creates a DcimConsolePortsTraceDefault with default headers values
+func NewDcimConsolePortsTraceDefault(code int) *DcimConsolePortsTraceDefault {
+	return &DcimConsolePortsTraceDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+DcimConsolePortsTraceDefault describes a response with status code -1, with default header values.
+
+DcimConsolePortsTraceDefault dcim console ports trace default
+*/
+type DcimConsolePortsTraceDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this dcim console ports trace default response has a 2xx status code
+func (o *DcimConsolePortsTraceDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this dcim console ports trace default response has a 3xx status code
+func (o *DcimConsolePortsTraceDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this dcim console ports trace default response has a 4xx status code
+func (o *DcimConsolePortsTraceDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this dcim console ports trace default response has a 5xx status code
+func (o *DcimConsolePortsTraceDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this dcim console ports trace default response a status code equal to that given
+func (o *DcimConsolePortsTraceDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the dcim console ports trace default response
+func (o *DcimConsolePortsTraceDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *DcimConsolePortsTraceDefault) Error() string {
+	return fmt.Sprintf("[GET /dcim/console-ports/{id}/trace/][%d] dcim_console-ports_trace default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimConsolePortsTraceDefault) String() string {
+	return fmt.Sprintf("[GET /dcim/console-ports/{id}/trace/][%d] dcim_console-ports_trace default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimConsolePortsTraceDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *DcimConsolePortsTraceDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

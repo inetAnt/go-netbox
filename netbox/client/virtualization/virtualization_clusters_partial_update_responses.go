@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // VirtualizationClustersPartialUpdateReader is a Reader for the VirtualizationClustersPartialUpdate structure.
@@ -45,9 +44,15 @@ func (o *VirtualizationClustersPartialUpdateReader) ReadResponse(response runtim
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewVirtualizationClustersPartialUpdateDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewVirtualizationClustersPartialUpdateOK() *VirtualizationClustersPartialUp
 	return &VirtualizationClustersPartialUpdateOK{}
 }
 
-/*VirtualizationClustersPartialUpdateOK handles this case with default header values.
+/*
+VirtualizationClustersPartialUpdateOK describes a response with status code 200, with default header values.
 
 VirtualizationClustersPartialUpdateOK virtualization clusters partial update o k
 */
@@ -64,7 +70,41 @@ type VirtualizationClustersPartialUpdateOK struct {
 	Payload *models.Cluster
 }
 
+// IsSuccess returns true when this virtualization clusters partial update o k response has a 2xx status code
+func (o *VirtualizationClustersPartialUpdateOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this virtualization clusters partial update o k response has a 3xx status code
+func (o *VirtualizationClustersPartialUpdateOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this virtualization clusters partial update o k response has a 4xx status code
+func (o *VirtualizationClustersPartialUpdateOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this virtualization clusters partial update o k response has a 5xx status code
+func (o *VirtualizationClustersPartialUpdateOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this virtualization clusters partial update o k response a status code equal to that given
+func (o *VirtualizationClustersPartialUpdateOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the virtualization clusters partial update o k response
+func (o *VirtualizationClustersPartialUpdateOK) Code() int {
+	return 200
+}
+
 func (o *VirtualizationClustersPartialUpdateOK) Error() string {
+	return fmt.Sprintf("[PATCH /virtualization/clusters/{id}/][%d] virtualizationClustersPartialUpdateOK  %+v", 200, o.Payload)
+}
+
+func (o *VirtualizationClustersPartialUpdateOK) String() string {
 	return fmt.Sprintf("[PATCH /virtualization/clusters/{id}/][%d] virtualizationClustersPartialUpdateOK  %+v", 200, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *VirtualizationClustersPartialUpdateOK) readResponse(response runtime.Cl
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewVirtualizationClustersPartialUpdateDefault creates a VirtualizationClustersPartialUpdateDefault with default headers values
+func NewVirtualizationClustersPartialUpdateDefault(code int) *VirtualizationClustersPartialUpdateDefault {
+	return &VirtualizationClustersPartialUpdateDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+VirtualizationClustersPartialUpdateDefault describes a response with status code -1, with default header values.
+
+VirtualizationClustersPartialUpdateDefault virtualization clusters partial update default
+*/
+type VirtualizationClustersPartialUpdateDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this virtualization clusters partial update default response has a 2xx status code
+func (o *VirtualizationClustersPartialUpdateDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this virtualization clusters partial update default response has a 3xx status code
+func (o *VirtualizationClustersPartialUpdateDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this virtualization clusters partial update default response has a 4xx status code
+func (o *VirtualizationClustersPartialUpdateDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this virtualization clusters partial update default response has a 5xx status code
+func (o *VirtualizationClustersPartialUpdateDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this virtualization clusters partial update default response a status code equal to that given
+func (o *VirtualizationClustersPartialUpdateDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the virtualization clusters partial update default response
+func (o *VirtualizationClustersPartialUpdateDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *VirtualizationClustersPartialUpdateDefault) Error() string {
+	return fmt.Sprintf("[PATCH /virtualization/clusters/{id}/][%d] virtualization_clusters_partial_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *VirtualizationClustersPartialUpdateDefault) String() string {
+	return fmt.Sprintf("[PATCH /virtualization/clusters/{id}/][%d] virtualization_clusters_partial_update default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *VirtualizationClustersPartialUpdateDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *VirtualizationClustersPartialUpdateDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

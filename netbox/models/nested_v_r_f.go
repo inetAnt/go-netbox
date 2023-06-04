@@ -21,24 +21,30 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
-// NestedVRF Vrf
+// NestedVRF nested v r f
+//
 // swagger:model NestedVRF
 type NestedVRF struct {
 
-	// ID
+	// Display
+	// Read Only: true
+	Display string `json:"display,omitempty"`
+
+	// Id
 	// Read Only: true
 	ID int64 `json:"id,omitempty"`
 
 	// Name
 	// Required: true
-	// Max Length: 50
+	// Max Length: 100
 	// Min Length: 1
 	Name *string `json:"name"`
 
@@ -47,6 +53,8 @@ type NestedVRF struct {
 	PrefixCount int64 `json:"prefix_count,omitempty"`
 
 	// Route distinguisher
+	//
+	// Unique route distinguisher (as defined in RFC 4364)
 	// Max Length: 21
 	Rd *string `json:"rd,omitempty"`
 
@@ -84,11 +92,11 @@ func (m *NestedVRF) validateName(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("name", "body", string(*m.Name), 1); err != nil {
+	if err := validate.MinLength("name", "body", *m.Name, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("name", "body", string(*m.Name), 50); err != nil {
+	if err := validate.MaxLength("name", "body", *m.Name, 100); err != nil {
 		return err
 	}
 
@@ -96,12 +104,11 @@ func (m *NestedVRF) validateName(formats strfmt.Registry) error {
 }
 
 func (m *NestedVRF) validateRd(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Rd) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("rd", "body", string(*m.Rd), 21); err != nil {
+	if err := validate.MaxLength("rd", "body", *m.Rd, 21); err != nil {
 		return err
 	}
 
@@ -109,12 +116,73 @@ func (m *NestedVRF) validateRd(formats strfmt.Registry) error {
 }
 
 func (m *NestedVRF) validateURL(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.URL) { // not required
 		return nil
 	}
 
 	if err := validate.FormatOf("url", "body", "uri", m.URL.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this nested v r f based on the context it is used
+func (m *NestedVRF) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDisplay(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePrefixCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *NestedVRF) contextValidateDisplay(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "display", "body", string(m.Display)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *NestedVRF) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *NestedVRF) contextValidatePrefixCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "prefix_count", "body", int64(m.PrefixCount)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *NestedVRF) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", strfmt.URI(m.URL)); err != nil {
 		return err
 	}
 

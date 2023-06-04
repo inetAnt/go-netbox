@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // DcimRackReservationsReadReader is a Reader for the DcimRackReservationsRead structure.
@@ -45,9 +44,15 @@ func (o *DcimRackReservationsReadReader) ReadResponse(response runtime.ClientRes
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewDcimRackReservationsReadDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewDcimRackReservationsReadOK() *DcimRackReservationsReadOK {
 	return &DcimRackReservationsReadOK{}
 }
 
-/*DcimRackReservationsReadOK handles this case with default header values.
+/*
+DcimRackReservationsReadOK describes a response with status code 200, with default header values.
 
 DcimRackReservationsReadOK dcim rack reservations read o k
 */
@@ -64,7 +70,41 @@ type DcimRackReservationsReadOK struct {
 	Payload *models.RackReservation
 }
 
+// IsSuccess returns true when this dcim rack reservations read o k response has a 2xx status code
+func (o *DcimRackReservationsReadOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this dcim rack reservations read o k response has a 3xx status code
+func (o *DcimRackReservationsReadOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this dcim rack reservations read o k response has a 4xx status code
+func (o *DcimRackReservationsReadOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this dcim rack reservations read o k response has a 5xx status code
+func (o *DcimRackReservationsReadOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this dcim rack reservations read o k response a status code equal to that given
+func (o *DcimRackReservationsReadOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the dcim rack reservations read o k response
+func (o *DcimRackReservationsReadOK) Code() int {
+	return 200
+}
+
 func (o *DcimRackReservationsReadOK) Error() string {
+	return fmt.Sprintf("[GET /dcim/rack-reservations/{id}/][%d] dcimRackReservationsReadOK  %+v", 200, o.Payload)
+}
+
+func (o *DcimRackReservationsReadOK) String() string {
 	return fmt.Sprintf("[GET /dcim/rack-reservations/{id}/][%d] dcimRackReservationsReadOK  %+v", 200, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *DcimRackReservationsReadOK) readResponse(response runtime.ClientRespons
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDcimRackReservationsReadDefault creates a DcimRackReservationsReadDefault with default headers values
+func NewDcimRackReservationsReadDefault(code int) *DcimRackReservationsReadDefault {
+	return &DcimRackReservationsReadDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+DcimRackReservationsReadDefault describes a response with status code -1, with default header values.
+
+DcimRackReservationsReadDefault dcim rack reservations read default
+*/
+type DcimRackReservationsReadDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this dcim rack reservations read default response has a 2xx status code
+func (o *DcimRackReservationsReadDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this dcim rack reservations read default response has a 3xx status code
+func (o *DcimRackReservationsReadDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this dcim rack reservations read default response has a 4xx status code
+func (o *DcimRackReservationsReadDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this dcim rack reservations read default response has a 5xx status code
+func (o *DcimRackReservationsReadDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this dcim rack reservations read default response a status code equal to that given
+func (o *DcimRackReservationsReadDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the dcim rack reservations read default response
+func (o *DcimRackReservationsReadDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *DcimRackReservationsReadDefault) Error() string {
+	return fmt.Sprintf("[GET /dcim/rack-reservations/{id}/][%d] dcim_rack-reservations_read default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimRackReservationsReadDefault) String() string {
+	return fmt.Sprintf("[GET /dcim/rack-reservations/{id}/][%d] dcim_rack-reservations_read default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimRackReservationsReadDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *DcimRackReservationsReadDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

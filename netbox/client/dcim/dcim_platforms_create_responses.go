@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // DcimPlatformsCreateReader is a Reader for the DcimPlatformsCreate structure.
@@ -45,9 +44,15 @@ func (o *DcimPlatformsCreateReader) ReadResponse(response runtime.ClientResponse
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewDcimPlatformsCreateDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewDcimPlatformsCreateCreated() *DcimPlatformsCreateCreated {
 	return &DcimPlatformsCreateCreated{}
 }
 
-/*DcimPlatformsCreateCreated handles this case with default header values.
+/*
+DcimPlatformsCreateCreated describes a response with status code 201, with default header values.
 
 DcimPlatformsCreateCreated dcim platforms create created
 */
@@ -64,7 +70,41 @@ type DcimPlatformsCreateCreated struct {
 	Payload *models.Platform
 }
 
+// IsSuccess returns true when this dcim platforms create created response has a 2xx status code
+func (o *DcimPlatformsCreateCreated) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this dcim platforms create created response has a 3xx status code
+func (o *DcimPlatformsCreateCreated) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this dcim platforms create created response has a 4xx status code
+func (o *DcimPlatformsCreateCreated) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this dcim platforms create created response has a 5xx status code
+func (o *DcimPlatformsCreateCreated) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this dcim platforms create created response a status code equal to that given
+func (o *DcimPlatformsCreateCreated) IsCode(code int) bool {
+	return code == 201
+}
+
+// Code gets the status code for the dcim platforms create created response
+func (o *DcimPlatformsCreateCreated) Code() int {
+	return 201
+}
+
 func (o *DcimPlatformsCreateCreated) Error() string {
+	return fmt.Sprintf("[POST /dcim/platforms/][%d] dcimPlatformsCreateCreated  %+v", 201, o.Payload)
+}
+
+func (o *DcimPlatformsCreateCreated) String() string {
 	return fmt.Sprintf("[POST /dcim/platforms/][%d] dcimPlatformsCreateCreated  %+v", 201, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *DcimPlatformsCreateCreated) readResponse(response runtime.ClientRespons
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDcimPlatformsCreateDefault creates a DcimPlatformsCreateDefault with default headers values
+func NewDcimPlatformsCreateDefault(code int) *DcimPlatformsCreateDefault {
+	return &DcimPlatformsCreateDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+DcimPlatformsCreateDefault describes a response with status code -1, with default header values.
+
+DcimPlatformsCreateDefault dcim platforms create default
+*/
+type DcimPlatformsCreateDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this dcim platforms create default response has a 2xx status code
+func (o *DcimPlatformsCreateDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this dcim platforms create default response has a 3xx status code
+func (o *DcimPlatformsCreateDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this dcim platforms create default response has a 4xx status code
+func (o *DcimPlatformsCreateDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this dcim platforms create default response has a 5xx status code
+func (o *DcimPlatformsCreateDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this dcim platforms create default response a status code equal to that given
+func (o *DcimPlatformsCreateDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the dcim platforms create default response
+func (o *DcimPlatformsCreateDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *DcimPlatformsCreateDefault) Error() string {
+	return fmt.Sprintf("[POST /dcim/platforms/][%d] dcim_platforms_create default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimPlatformsCreateDefault) String() string {
+	return fmt.Sprintf("[POST /dcim/platforms/][%d] dcim_platforms_create default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimPlatformsCreateDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *DcimPlatformsCreateDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

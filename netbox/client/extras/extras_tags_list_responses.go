@@ -21,18 +21,18 @@ package extras
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // ExtrasTagsListReader is a Reader for the ExtrasTagsList structure.
@@ -49,9 +49,15 @@ func (o *ExtrasTagsListReader) ReadResponse(response runtime.ClientResponse, con
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewExtrasTagsListDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -60,7 +66,8 @@ func NewExtrasTagsListOK() *ExtrasTagsListOK {
 	return &ExtrasTagsListOK{}
 }
 
-/*ExtrasTagsListOK handles this case with default header values.
+/*
+ExtrasTagsListOK describes a response with status code 200, with default header values.
 
 ExtrasTagsListOK extras tags list o k
 */
@@ -68,7 +75,41 @@ type ExtrasTagsListOK struct {
 	Payload *ExtrasTagsListOKBody
 }
 
+// IsSuccess returns true when this extras tags list o k response has a 2xx status code
+func (o *ExtrasTagsListOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this extras tags list o k response has a 3xx status code
+func (o *ExtrasTagsListOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this extras tags list o k response has a 4xx status code
+func (o *ExtrasTagsListOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this extras tags list o k response has a 5xx status code
+func (o *ExtrasTagsListOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this extras tags list o k response a status code equal to that given
+func (o *ExtrasTagsListOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the extras tags list o k response
+func (o *ExtrasTagsListOK) Code() int {
+	return 200
+}
+
 func (o *ExtrasTagsListOK) Error() string {
+	return fmt.Sprintf("[GET /extras/tags/][%d] extrasTagsListOK  %+v", 200, o.Payload)
+}
+
+func (o *ExtrasTagsListOK) String() string {
 	return fmt.Sprintf("[GET /extras/tags/][%d] extrasTagsListOK  %+v", 200, o.Payload)
 }
 
@@ -88,7 +129,78 @@ func (o *ExtrasTagsListOK) readResponse(response runtime.ClientResponse, consume
 	return nil
 }
 
-/*ExtrasTagsListOKBody extras tags list o k body
+// NewExtrasTagsListDefault creates a ExtrasTagsListDefault with default headers values
+func NewExtrasTagsListDefault(code int) *ExtrasTagsListDefault {
+	return &ExtrasTagsListDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+ExtrasTagsListDefault describes a response with status code -1, with default header values.
+
+ExtrasTagsListDefault extras tags list default
+*/
+type ExtrasTagsListDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this extras tags list default response has a 2xx status code
+func (o *ExtrasTagsListDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this extras tags list default response has a 3xx status code
+func (o *ExtrasTagsListDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this extras tags list default response has a 4xx status code
+func (o *ExtrasTagsListDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this extras tags list default response has a 5xx status code
+func (o *ExtrasTagsListDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this extras tags list default response a status code equal to that given
+func (o *ExtrasTagsListDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the extras tags list default response
+func (o *ExtrasTagsListDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *ExtrasTagsListDefault) Error() string {
+	return fmt.Sprintf("[GET /extras/tags/][%d] extras_tags_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *ExtrasTagsListDefault) String() string {
+	return fmt.Sprintf("[GET /extras/tags/][%d] extras_tags_list default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *ExtrasTagsListDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *ExtrasTagsListDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+/*
+ExtrasTagsListOKBody extras tags list o k body
 swagger:model ExtrasTagsListOKBody
 */
 type ExtrasTagsListOKBody struct {
@@ -146,7 +258,6 @@ func (o *ExtrasTagsListOKBody) validateCount(formats strfmt.Registry) error {
 }
 
 func (o *ExtrasTagsListOKBody) validateNext(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Next) { // not required
 		return nil
 	}
@@ -159,7 +270,6 @@ func (o *ExtrasTagsListOKBody) validateNext(formats strfmt.Registry) error {
 }
 
 func (o *ExtrasTagsListOKBody) validatePrevious(formats strfmt.Registry) error {
-
 	if swag.IsZero(o.Previous) { // not required
 		return nil
 	}
@@ -186,6 +296,42 @@ func (o *ExtrasTagsListOKBody) validateResults(formats strfmt.Registry) error {
 			if err := o.Results[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("extrasTagsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("extrasTagsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this extras tags list o k body based on the context it is used
+func (o *ExtrasTagsListOKBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := o.contextValidateResults(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (o *ExtrasTagsListOKBody) contextValidateResults(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(o.Results); i++ {
+
+		if o.Results[i] != nil {
+			if err := o.Results[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("extrasTagsListOK" + "." + "results" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("extrasTagsListOK" + "." + "results" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

@@ -25,10 +25,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/inetAnt/go-netbox/netbox/models"
+	"github.com/inetAnt/go-netbox/v3/netbox/models"
 )
 
 // DcimSitesReadReader is a Reader for the DcimSitesRead structure.
@@ -45,9 +44,15 @@ func (o *DcimSitesReadReader) ReadResponse(response runtime.ClientResponse, cons
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewDcimSitesReadDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -56,7 +61,8 @@ func NewDcimSitesReadOK() *DcimSitesReadOK {
 	return &DcimSitesReadOK{}
 }
 
-/*DcimSitesReadOK handles this case with default header values.
+/*
+DcimSitesReadOK describes a response with status code 200, with default header values.
 
 DcimSitesReadOK dcim sites read o k
 */
@@ -64,7 +70,41 @@ type DcimSitesReadOK struct {
 	Payload *models.Site
 }
 
+// IsSuccess returns true when this dcim sites read o k response has a 2xx status code
+func (o *DcimSitesReadOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this dcim sites read o k response has a 3xx status code
+func (o *DcimSitesReadOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this dcim sites read o k response has a 4xx status code
+func (o *DcimSitesReadOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this dcim sites read o k response has a 5xx status code
+func (o *DcimSitesReadOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this dcim sites read o k response a status code equal to that given
+func (o *DcimSitesReadOK) IsCode(code int) bool {
+	return code == 200
+}
+
+// Code gets the status code for the dcim sites read o k response
+func (o *DcimSitesReadOK) Code() int {
+	return 200
+}
+
 func (o *DcimSitesReadOK) Error() string {
+	return fmt.Sprintf("[GET /dcim/sites/{id}/][%d] dcimSitesReadOK  %+v", 200, o.Payload)
+}
+
+func (o *DcimSitesReadOK) String() string {
 	return fmt.Sprintf("[GET /dcim/sites/{id}/][%d] dcimSitesReadOK  %+v", 200, o.Payload)
 }
 
@@ -78,6 +118,76 @@ func (o *DcimSitesReadOK) readResponse(response runtime.ClientResponse, consumer
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDcimSitesReadDefault creates a DcimSitesReadDefault with default headers values
+func NewDcimSitesReadDefault(code int) *DcimSitesReadDefault {
+	return &DcimSitesReadDefault{
+		_statusCode: code,
+	}
+}
+
+/*
+DcimSitesReadDefault describes a response with status code -1, with default header values.
+
+DcimSitesReadDefault dcim sites read default
+*/
+type DcimSitesReadDefault struct {
+	_statusCode int
+
+	Payload interface{}
+}
+
+// IsSuccess returns true when this dcim sites read default response has a 2xx status code
+func (o *DcimSitesReadDefault) IsSuccess() bool {
+	return o._statusCode/100 == 2
+}
+
+// IsRedirect returns true when this dcim sites read default response has a 3xx status code
+func (o *DcimSitesReadDefault) IsRedirect() bool {
+	return o._statusCode/100 == 3
+}
+
+// IsClientError returns true when this dcim sites read default response has a 4xx status code
+func (o *DcimSitesReadDefault) IsClientError() bool {
+	return o._statusCode/100 == 4
+}
+
+// IsServerError returns true when this dcim sites read default response has a 5xx status code
+func (o *DcimSitesReadDefault) IsServerError() bool {
+	return o._statusCode/100 == 5
+}
+
+// IsCode returns true when this dcim sites read default response a status code equal to that given
+func (o *DcimSitesReadDefault) IsCode(code int) bool {
+	return o._statusCode == code
+}
+
+// Code gets the status code for the dcim sites read default response
+func (o *DcimSitesReadDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *DcimSitesReadDefault) Error() string {
+	return fmt.Sprintf("[GET /dcim/sites/{id}/][%d] dcim_sites_read default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimSitesReadDefault) String() string {
+	return fmt.Sprintf("[GET /dcim/sites/{id}/][%d] dcim_sites_read default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *DcimSitesReadDefault) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *DcimSitesReadDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
